@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-label="Physics engineering teaching materials cover">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#0b1218"/><stop offset="1" stop-color="#020407"/></linearGradient>
+  </defs>
+  <rect width="1200" height="900" fill="url(#bg)"/>
+  <g transform="translate(600 455)" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="-360" y="-210" width="720" height="420" rx="8" fill="#101f28" stroke="#8be7dc" stroke-opacity="0.54" stroke-width="4"/>
+    <path d="M-284 92c70-220 140-220 210 0s140 220 210 0 140-220 210 0" stroke="#d6ed6f" stroke-width="5"/>
+    <path d="M-280-100h210M-280-52h150M-280 158h560" stroke="#8be7dc" stroke-opacity="0.35" stroke-width="4"/>
+    <circle cx="238" cy="-78" r="70" stroke="#ff8d61" stroke-opacity="0.8" stroke-width="5"/>
+    <path d="M214-78h48M238-102v48" stroke="#ff8d61" stroke-width="5"/>
+  </g>
+  <text x="94" y="806" fill="#8be7dc" font-family="Arial, sans-serif" font-size="28" font-weight="700">Physics learning tools</text>
+</svg>
