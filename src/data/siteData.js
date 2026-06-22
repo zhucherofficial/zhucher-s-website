@@ -1,3 +1,13 @@
+import automaticWateringCircuit from '../assets/club-media/automatic-watering-circuit.jpg'
+import automaticWateringRobot from '../assets/club-media/automatic-watering-robot.jpg'
+import groupCadWork from '../assets/club-media/group-cad-work.jpg'
+import meLecturing from '../assets/club-media/me-lecturing.jpg'
+import pictureOfMyself from '../assets/club-media/picture-of-myself.jpg'
+import robotFailureShowcase from '../assets/club-media/robot-failure-showcase.mp4'
+import robotFailurePoster from '../assets/club-media/robot-failure-poster.png'
+import robotSuccessPoster from '../assets/club-media/robot-success-poster.png'
+import robotSuccessShowcase from '../assets/club-media/robot-success-showcase.mp4'
+import viceLeaderCindy from '../assets/club-media/vice-leader-cindy.jpg'
 import astragalusCover from '../assets/project-media/fermented-astragalus-feed.jpg'
 import profilePhoto from '../assets/profile-media/profile-photo.jpg'
 import ramanCover from '../assets/project-media/raman-spectra-data.png'
@@ -100,14 +110,37 @@ export const projects = [
     image: robotCover,
     imagePosition: '50% 54%',
     summary:
-      'A long-term individual engineering project for a two-wheeled legged robot capable of balancing, carrying loads, following a target, and automatic obstacle avoidance.',
+      'An engineering project focused on following, control, and automatic obstacle avoidance for a wheeled-legged robot.',
     detail:
-      'The project spans mechanical engineering, embedded systems, control, and deep learning. The current goal is to turn a complex robotics idea into an inspectable engineering workflow that can eventually support practical public-welfare scenarios.',
+      'My long-term goal is to build a two-wheeled legged robot capable of balancing, carrying loads, and automatic following. The project spans mechanical engineering, embedded systems, and deep learning. I hope the project can eventually support public welfare by helping people in practical scenarios.',
     tags: ['Control', 'Embedded', 'Deep Learning', 'Mechanical Design'],
     outcomes: [
-      'Defined a multi-domain robotics roadmap across balance, following, load bearing, and obstacle avoidance.',
+      'Defined a multi-domain robotics roadmap across following, control, balancing, load bearing, and obstacle avoidance.',
       'Connected robotics work to future public-welfare uses and hands-on engineering education.',
-      'Built the first website-ready project narrative for later photos, diagrams, and test videos.',
+      'Collected early test footage that shows both a successful movement trial and a failure case for iteration.',
+    ],
+    media: [
+      {
+        type: 'video',
+        src: robotSuccessShowcase,
+        poster: robotSuccessPoster,
+        title: 'Robot success showcase',
+        caption: 'A movement test showing the robot completing a trial more successfully.',
+      },
+      {
+        type: 'video',
+        src: robotFailureShowcase,
+        poster: robotFailurePoster,
+        title: 'Robot failure showcase',
+        caption: 'A failure case kept in the archive to show the debugging and iteration process.',
+      },
+      {
+        type: 'image',
+        src: pictureOfMyself,
+        title: 'Builder portrait',
+        caption: 'Project owner and engineering lead.',
+        imagePosition: '50% 38%',
+      },
     ],
   },
   {
@@ -180,13 +213,112 @@ export const clubs = [
     role: 'Club leader and physics tutor',
     logoText: 'PC',
     summary:
-      'A student-led physics community for lectures, problem solving, AP support, and advanced topic exploration.',
+      'A student-led physics community for lectures, problem solving, AP support, and hands-on engineering projects.',
     detail:
-      'The club creates a regular space where students interested in physics can discuss ideas, work through difficult problems, and build confidence. As leader, I delivered lectures on interesting physics topics and helped classmates with problems they encountered.',
+      'The club creates a regular space where students interested in physics can discuss ideas, work through difficult problems, build confidence, and turn engineering concepts into real prototypes. As leader, I delivered lectures on interesting physics topics and helped classmates with problems they encountered.',
+    heroImage: meLecturing,
+    cardImage: groupCadWork,
+    featureImage: meLecturing,
+    featureCaption: 'Club lecture session led for members interested in physics and engineering.',
+    gallery: [
+      {
+        src: meLecturing,
+        title: 'Lecture session',
+        caption: 'Explaining physics ideas and problem-solving methods to club members.',
+      },
+      {
+        src: groupCadWork,
+        title: 'CAD work',
+        caption: 'Club members doing CAD work as part of the engineering build process.',
+      },
+      {
+        src: automaticWateringRobot,
+        title: 'Automatic watering robot',
+        caption: "Cindy's prototype for soil-moisture-based irrigation.",
+      },
+      {
+        src: automaticWateringCircuit,
+        title: 'Watering robot circuit',
+        caption: 'Main circuit board for the automatic watering robot.',
+      },
+      {
+        src: viceLeaderCindy,
+        title: 'Vice leader Cindy',
+        caption: 'Cindy, vice leader of the club and project owner of the watering robot.',
+        imagePosition: '50% 32%',
+      },
+      {
+        src: pictureOfMyself,
+        title: 'Club leader',
+        caption: 'Physics club leader and robotics project developer.',
+        imagePosition: '50% 35%',
+      },
+    ],
+    studentProjects: [
+      {
+        id: 'automatic-watering-robot',
+        title: "Cindy's Automatic Watering Robot",
+        owner: 'Vice leader Cindy',
+        role: 'Physics club vice leader / student engineer',
+        summary:
+          'A soil-moisture sensing system that waters plants only when underground humidity falls below a normal threshold.',
+        purpose:
+          'The project helps people take care of plants while away from home, reduces the difficulty of manual watering for older adults, and brings water-saving automation into everyday irrigation.',
+        process: ['Built the main circuit', 'Field testing and experiments'],
+        metrics: [
+          { value: '30%', label: 'target reduction in total water use compared with manual watering' },
+          { value: '1x / week', label: 'maximum expected manual adjustment during normal operation' },
+        ],
+        images: [
+          {
+            src: automaticWateringRobot,
+            alt: "Cindy's automatic watering robot prototype",
+            imagePosition: '50% 50%',
+          },
+          {
+            src: automaticWateringCircuit,
+            alt: 'Circuit board of the automatic watering robot',
+            imagePosition: '50% 50%',
+          },
+          {
+            src: viceLeaderCindy,
+            alt: 'Vice leader Cindy',
+            imagePosition: '50% 32%',
+          },
+        ],
+      },
+      {
+        id: 'wheeled-legged-robot',
+        title: 'Wheeled-Legged Robot',
+        owner: 'Zhu',
+        role: 'Club leader / individual project developer',
+        summary:
+          'A robotics project involving following, control, and automatic obstacle avoidance for a wheeled-legged robot.',
+        purpose:
+          'The long-term goal is to build a two-wheeled legged robot capable of balancing, carrying loads, and automatic following, with future public-welfare applications in practical scenarios.',
+        process: ['Mechanical and control roadmap', 'Embedded test footage', 'Deep-learning direction'],
+        metrics: [
+          { value: '3', label: 'main technical areas: mechanical engineering, embedded systems, deep learning' },
+          { value: '2', label: 'early robot test videos in the club archive' },
+        ],
+        videos: [
+          {
+            src: robotSuccessShowcase,
+            poster: robotSuccessPoster,
+            title: 'Success showcase',
+          },
+          {
+            src: robotFailureShowcase,
+            poster: robotFailurePoster,
+            title: 'Failure showcase',
+          },
+        ],
+      },
+    ],
     actions: [
       'Delivered topic lectures and peer tutoring sessions.',
       'Supported members in strengthening school physics performance.',
-      'Prepared the club to become a future science-outreach platform.',
+      'Documented member engineering work through photos, circuits, CAD sessions, and test videos.',
     ],
   },
 ]

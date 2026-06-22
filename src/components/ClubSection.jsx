@@ -1,8 +1,8 @@
-import { ArrowRight, Atom } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { clubs } from '../data/siteData'
 
-const clubSignals = ['Lecture notes', 'Problem studio', 'Future archive']
+const clubSignals = ['Lectures', 'CAD work', 'Robot archive']
 
 export function ClubSection() {
   const club = clubs[0]
@@ -14,8 +14,8 @@ export function ClubSection() {
           <span>Student Club</span>
           <h2>A school physics club with a technical public identity.</h2>
           <p>
-            A preview of the club page system: learning structure, lecture direction, and quiet
-            space for future photos, notes, or a document page.
+            A living archive for physics lectures, peer problem solving, CAD work, student circuits,
+            and robot tests from the club room.
           </p>
 
           <div className="club-section__signals" aria-label="Physics club focus areas">
@@ -32,13 +32,8 @@ export function ClubSection() {
 
         <div className="club-section__stage">
           <Link className="club-card" to={`/club/${club.id}`} aria-label={`Open ${club.name}`}>
-            <div className="club-card__media" aria-hidden="true">
-              <div className="club-card__grid">
-                <span />
-                <span />
-                <span />
-                <span />
-              </div>
+            <div className="club-card__media">
+              <img src={club.cardImage} alt="" />
               <div className="club-logo">
                 <span>{club.logoText}</span>
               </div>
@@ -55,8 +50,9 @@ export function ClubSection() {
             </div>
           </Link>
 
-          <div className="club-section__page-slot" aria-label="Reserved space for a future club page">
-            <Atom size={28} aria-hidden="true" />
+          <div className="club-section__page-slot">
+            <img src={club.gallery[2].src} alt="" />
+            <span>{club.gallery[2].title}</span>
           </div>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { ArrowLeft, Clock, UserRound } from 'lucide-react'
+import { ArrowLeft, Clock, Play, UserRound } from 'lucide-react'
 import { Link, useParams } from 'react-router-dom'
 import { ReactBitsBackdrop } from '../components/ReactBitsBackdrop'
 import { TargetCursor } from '../components/TargetCursor'
@@ -55,7 +55,7 @@ export function ProjectDetailPage() {
               density={0.72}
               subtle
             />
-            <img src={project.image} alt="" />
+            <img src={project.image} alt="" style={{ objectPosition: project.imagePosition }} />
           </div>
         </div>
       </section>
@@ -82,6 +82,32 @@ export function ProjectDetailPage() {
           </div>
         </aside>
       </section>
+
+      {project.media ? (
+        <section className="project-media-section page-shell" aria-labelledby="project-media-title">
+          <div className="project-media-section__heading">
+            <span className="section-label">Media archive</span>
+            <h2 id="project-media-title">Test footage and supporting project images.</h2>
+          </div>
+
+          <div className="project-media-grid">
+            {project.media.map((item) => (
+              <figure className="project-media-card target-cursor-hit" key={item.title}>
+                {item.type === 'video' ? (
+                  <video src={item.src} controls poster={item.poster} preload="metadata" playsInline />
+                ) : (
+                  <img src={item.src} alt="" style={{ objectPosition: item.imagePosition }} />
+                )}
+                <figcaption>
+                  {item.type === 'video' ? <Play size={15} aria-hidden="true" /> : null}
+                  <strong>{item.title}</strong>
+                  <span>{item.caption}</span>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </section>
+      ) : null}
     </main>
   )
 }
