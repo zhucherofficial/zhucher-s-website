@@ -2,7 +2,7 @@ import { ArrowUpRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { serviceProjects } from '../data/siteData'
 import Folder from './Folder'
-import { ReactBitsBackdrop } from './ReactBitsBackdrop'
+import PixelSnow from './PixelSnow'
 import { SectionHeading } from './SectionHeading'
 
 const buildFolderItems = (service) => [
@@ -21,12 +21,19 @@ const buildFolderItems = (service) => [
 export function ServiceSection() {
   return (
     <section className="service-section page-shell" id="service">
-      <ReactBitsBackdrop
-        className="section-atmosphere section-atmosphere--service"
-        variant="dotfield"
-        palette={['#8be7dc', '#d6ed6f', '#ff8d61']}
-        density={0.76}
-        subtle
+      <PixelSnow
+        className="section-pixel-snow section-pixel-snow--service"
+        color="#fbfdff"
+        flakeSize={0.01}
+        minFlakeSize={1.36}
+        pixelResolution={170}
+        speed={0.88}
+        density={0.82}
+        direction={106}
+        brightness={1.14}
+        depthFade={11}
+        farPlane={21}
+        variant="round"
       />
       <SectionHeading
         label="Public Service"
@@ -37,12 +44,6 @@ export function ServiceSection() {
       <div className="service-grid">
         {serviceProjects.map((service, index) => (
           <article className="service-card service-card--folder target-cursor-hit" key={service.id}>
-            <ReactBitsBackdrop
-              variant={index === 0 ? 'pixelsnow' : 'particles'}
-              palette={index === 0 ? ['#eef5f4', '#8be7dc', '#d6ed6f'] : ['#8be7dc', '#ff8d61', '#d6ed6f']}
-              density={0.42}
-              subtle
-            />
             <div className="service-folder-stage" aria-label={`${service.title} folder`}>
               <Folder
                 className="service-folder"

@@ -1,21 +1,26 @@
-import { lazy, Suspense } from 'react'
 import { Link } from 'react-router-dom'
 import { profile } from '../data/siteData'
 import DecryptedText from './DecryptedText'
+import PixelSnow from './PixelSnow'
 import { SectionHeading } from './SectionHeading'
-
-const FluidGlass = lazy(() => import('./FluidGlass'))
 
 export function ProfileSection() {
   return (
     <section className="profile-section page-shell" id="experience">
-      <div className="profile-fluid-field" aria-hidden="true">
-        <span className="profile-fluid-field__wave profile-fluid-field__wave--a" />
-        <span className="profile-fluid-field__wave profile-fluid-field__wave--b" />
-      </div>
-      <Suspense fallback={null}>
-        <FluidGlass className="profile-fluid-glass" mode="bar" />
-      </Suspense>
+      <PixelSnow
+        className="section-pixel-snow section-pixel-snow--profile"
+        color="#f7fbff"
+        flakeSize={0.01}
+        minFlakeSize={1.34}
+        pixelResolution={170}
+        speed={0.92}
+        density={0.82}
+        direction={118}
+        brightness={1.2}
+        depthFade={11}
+        farPlane={22}
+        variant="snowflake"
+      />
 
       <SectionHeading
         label="Personal Experience"

@@ -1,8 +1,8 @@
 import { ArrowUpRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { projects } from '../data/siteData'
+import PixelSnow from './PixelSnow'
 import PixelCard from './PixelCard'
-import { ReactBitsBackdrop } from './ReactBitsBackdrop'
 import { SectionHeading } from './SectionHeading'
 
 const pixelPalettes = [
@@ -15,12 +15,19 @@ const pixelPalettes = [
 export function ProjectsSection() {
   return (
     <section className="projects-section page-shell" id="projects">
-      <ReactBitsBackdrop
-        className="section-atmosphere section-atmosphere--projects"
-        variant="particles"
-        palette={['#8be7dc', '#d6ed6f', '#ff8d61', '#eef5f4']}
-        density={0.68}
-        subtle
+      <PixelSnow
+        className="section-pixel-snow section-pixel-snow--projects"
+        color="#f8fbff"
+        flakeSize={0.011}
+        minFlakeSize={1.42}
+        pixelResolution={165}
+        speed={1.02}
+        density={0.88}
+        direction={132}
+        brightness={1.18}
+        depthFade={10}
+        farPlane={22}
+        variant="square"
       />
       <SectionHeading
         label="Selected Projects"
