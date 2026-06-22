@@ -2,6 +2,7 @@ import { ArrowUpRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { serviceProjects } from '../data/siteData'
 import Folder from './Folder'
+import { ReactBitsBackdrop } from './ReactBitsBackdrop'
 import { SectionHeading } from './SectionHeading'
 
 const buildFolderItems = (service) => [
@@ -20,15 +21,28 @@ const buildFolderItems = (service) => [
 export function ServiceSection() {
   return (
     <section className="service-section page-shell" id="service">
+      <ReactBitsBackdrop
+        className="section-atmosphere section-atmosphere--service"
+        variant="dotfield"
+        palette={['#8be7dc', '#d6ed6f', '#ff8d61']}
+        density={0.76}
+        subtle
+      />
       <SectionHeading
         label="Public Service"
-        title="Physics outreach as a bridge between technical study and broader access."
-        copy="The service section starts with a clear content page, then can grow into a real resource library."
+        title="Public service boards for science access and early confidence."
+        copy="The service pages are designed as resource paths, not just activity summaries."
       />
 
       <div className="service-grid">
         {serviceProjects.map((service, index) => (
-          <article className="service-card service-card--folder" key={service.id}>
+          <article className="service-card service-card--folder target-cursor-hit" key={service.id}>
+            <ReactBitsBackdrop
+              variant={index === 0 ? 'pixelsnow' : 'particles'}
+              palette={index === 0 ? ['#eef5f4', '#8be7dc', '#d6ed6f'] : ['#8be7dc', '#ff8d61', '#d6ed6f']}
+              density={0.42}
+              subtle
+            />
             <div className="service-folder-stage" aria-label={`${service.title} folder`}>
               <Folder
                 className="service-folder"

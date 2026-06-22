@@ -2,6 +2,7 @@ import { ArrowUpRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { projects } from '../data/siteData'
 import PixelCard from './PixelCard'
+import { ReactBitsBackdrop } from './ReactBitsBackdrop'
 import { SectionHeading } from './SectionHeading'
 
 const pixelPalettes = [
@@ -14,17 +15,24 @@ const pixelPalettes = [
 export function ProjectsSection() {
   return (
     <section className="projects-section page-shell" id="projects">
+      <ReactBitsBackdrop
+        className="section-atmosphere section-atmosphere--projects"
+        variant="particles"
+        palette={['#8be7dc', '#d6ed6f', '#ff8d61', '#eef5f4']}
+        density={0.68}
+        subtle
+      />
       <SectionHeading
         label="Selected Projects"
-        title="Large-format project cards for the work that best explains the technical direction."
-        copy="Each card opens a dedicated project page with role, timeline, outcomes, and tags."
+        title="Selected project boards with the strongest technical signal."
+        copy="Each board opens a focused case page with role, cadence, outcomes, and tags."
       />
 
       <div className="project-grid">
         {projects.map((project, index) => (
           <PixelCard
             as={Link}
-            className={`project-card project-card--${index + 1}`}
+            className={`project-card project-card--${index + 1} target-cursor-hit`}
             key={project.id}
             to={`/projects/${project.id}`}
             variant="kinetic"
@@ -33,13 +41,16 @@ export function ProjectsSection() {
             colors={pixelPalettes[index % pixelPalettes.length]}
             aria-label={`Open project: ${project.title}`}
           >
+            <span className="project-card__index">0{index + 1}</span>
             <div className="project-card__media">
               <img src={project.image} alt="" style={{ objectPosition: project.imagePosition }} />
             </div>
             <div className="project-card__content">
+              <span className="project-card__eyebrow">{project.eyebrow}</span>
               <h3>{project.title}</h3>
               <p>{project.summary}</p>
               <div className="project-card__footer">
+                <span>{project.role}</span>
                 <ArrowUpRight size={19} aria-hidden="true" />
               </div>
             </div>

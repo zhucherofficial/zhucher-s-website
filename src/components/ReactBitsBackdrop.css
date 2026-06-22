@@ -1,0 +1,79 @@
+.reactbits-backdrop {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+  contain: layout style paint;
+}
+
+.reactbits-backdrop canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.reactbits-backdrop::before,
+.reactbits-backdrop::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.reactbits-backdrop::before {
+  background:
+    radial-gradient(circle at 18% 18%, rgba(139, 231, 220, 0.18), transparent 28rem),
+    radial-gradient(circle at 82% 12%, rgba(214, 237, 111, 0.12), transparent 24rem),
+    linear-gradient(180deg, rgba(4, 7, 11, 0.1), rgba(4, 7, 11, 0.54));
+  mix-blend-mode: screen;
+}
+
+.reactbits-backdrop::after {
+  background:
+    linear-gradient(rgba(238, 245, 244, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(238, 245, 244, 0.04) 1px, transparent 1px);
+  background-size: 52px 52px;
+  mask-image: linear-gradient(180deg, transparent, black 18%, black 78%, transparent);
+  opacity: 0.34;
+}
+
+.reactbits-backdrop--subtle::before {
+  opacity: 0.52;
+}
+
+.reactbits-backdrop--subtle::after {
+  opacity: 0.22;
+}
+
+.reactbits-backdrop--dotfield canvas {
+  opacity: 0.84;
+}
+
+.reactbits-backdrop--pixelsnow canvas {
+  opacity: 0.7;
+  mix-blend-mode: screen;
+}
+
+.reactbits-backdrop--particles canvas {
+  opacity: 0.82;
+  mix-blend-mode: screen;
+}
+
+.reactbits-backdrop--pixeltrail canvas {
+  opacity: 0.62;
+  mix-blend-mode: screen;
+}
+
+.reactbits-backdrop--pixeltrail::after {
+  background-size: 30px 30px;
+  opacity: 0.18;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reactbits-backdrop canvas {
+    opacity: 0.35;
+  }
+}

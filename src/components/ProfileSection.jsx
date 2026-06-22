@@ -24,13 +24,17 @@ export function ProfileSection() {
       />
 
       <div className="profile-layout">
-        <Link className="profile-portrait profile-portrait--link" to="/experience" aria-label="Open full experience timeline">
+        <Link
+          className="profile-portrait profile-portrait--link target-cursor-hit"
+          to="/experience"
+          aria-label="Open full experience timeline"
+        >
           <img src={profile.portrait} alt="Portrait" />
           <span className="profile-portrait__glass profile-portrait__glass--top" aria-hidden="true" />
           <span className="profile-portrait__glass profile-portrait__glass--bottom" aria-hidden="true" />
         </Link>
 
-        <div className="profile-copy">
+        <div className="profile-copy target-cursor-hit">
           <span className="profile-copy__glass-edge" aria-hidden="true" />
           <p className="lead-copy">{profile.intro}</p>
           <p>{profile.statement}</p>

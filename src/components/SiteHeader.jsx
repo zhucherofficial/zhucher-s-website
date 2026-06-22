@@ -1,11 +1,18 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { ArrowUpRight, Mail } from 'lucide-react'
 import { navItems, profile } from '../data/siteData'
-import GooeyNav from './GooeyNav'
+import StaggeredMenu from './StaggeredMenu'
 
 function getActiveNavIndex(pathname, hash) {
   if (pathname === '/experience') {
     return navItems.findIndex((item) => item.href === '/#experience')
+  }
+
+  if (pathname.startsWith('/projects/')) {
+    return navItems.findIndex((item) => item.href === '/#projects')
+  }
+
+  if (pathname.startsWith('/service/')) {
+    return navItems.findIndex((item) => item.href === '/service/physics-education')
   }
 
   const exactIndex = navItems.findIndex((item) => item.href === `${pathname}${hash}`)
@@ -26,6 +33,14 @@ export function SiteHeader({ floating = false }) {
   const navigate = useNavigate()
   const activeIndex = getActiveNavIndex(pathname, hash)
   const paperHeader = pathname.startsWith('/club/')
+  const menuItems = navItems.map((item) => ({
+    ...item,
+    ariaLabel: `Go to ${item.label}`,
+  }))
+  const socialItems = profile.socials.map((item) => ({
+    label: item.label,
+    href: item.href,
+  }))
 
   return (
     <header
@@ -38,25 +53,17 @@ export function SiteHeader({ floating = false }) {
         <span className="brand-mark__text">Physics Engineering</span>
       </Link>
 
-      <div className="nav-links">
-        <GooeyNav
-          items={navItems}
-          initialActiveIndex={activeIndex}
-          particleCount={12}
-          particleDistances={[58, 8]}
-          particleR={72}
-          animationTime={520}
-          timeVariance={220}
-          colors={[1, 2, 3, 1, 3, 4, 2, 1]}
-          onNavigate={(href) => navigate(href)}
-        />
-      </div>
-
-      <a className="contact-button" href={`mailto:${profile.email}`}>
-        <Mail size={16} aria-hidden="true" />
-        Contact
-        <ArrowUpRight size={15} aria-hidden="true" />
-      </a>
+      <StaggeredMenu
+        className="site-header__menu"
+        items={menuItems}
+        socialItems={socialItems}
+        activeIndex={activeIndex}
+        colors={['#ff8d61', '#d6ed6f', '#8be7dc', '#eef5f4']}
+        accentColor="#ff5e3a"
+        contactHref={`mailto:${profile.email}`}
+        contactLabel="Contact by email"
+        onNavigate={(href) => navigate(href)}
+      />
     </header>
   )
 }

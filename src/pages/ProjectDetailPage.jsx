@@ -1,5 +1,7 @@
 import { ArrowLeft, Clock, UserRound } from 'lucide-react'
 import { Link, useParams } from 'react-router-dom'
+import { ReactBitsBackdrop } from '../components/ReactBitsBackdrop'
+import { TargetCursor } from '../components/TargetCursor'
 import { getProjectById } from '../data/siteData'
 
 export function ProjectDetailPage() {
@@ -12,12 +14,25 @@ export function ProjectDetailPage() {
 
   return (
     <main className="detail-page">
+      <ReactBitsBackdrop
+        variant="particles"
+        palette={['#8be7dc', '#d6ed6f', '#ff8d61', '#eef5f4']}
+        density={1.1}
+      />
+      <ReactBitsBackdrop
+        className="detail-page__secondary-field"
+        variant="pixeltrail"
+        palette={['#8be7dc', '#ff8d61', '#d6ed6f']}
+        density={0.92}
+        subtle
+      />
+      <TargetCursor activeColor="#b497cf" color="#ffffff" spinDuration={2} />
       <section className="detail-hero page-shell">
-        <Link className="back-link" to="/#projects">
+        <Link className="back-link target-cursor-hit" to="/#projects">
           <ArrowLeft size={17} aria-hidden="true" />
           Back to projects
         </Link>
-        <div className="detail-hero__grid">
+        <div className="detail-hero__grid detail-hero__grid--project">
           <div>
             <span className="section-label">{project.eyebrow}</span>
             <h1>{project.title}</h1>
@@ -33,16 +48,24 @@ export function ProjectDetailPage() {
               </span>
             </div>
           </div>
-          <img src={project.image} alt="" />
+          <div className="detail-media target-cursor-hit">
+            <ReactBitsBackdrop
+              variant="dotfield"
+              palette={['#8be7dc', '#d6ed6f', '#ff8d61']}
+              density={0.72}
+              subtle
+            />
+            <img src={project.image} alt="" />
+          </div>
         </div>
       </section>
 
       <section className="detail-body page-shell">
-        <article>
+        <article className="target-cursor-hit">
           <h2>Project Narrative</h2>
           <p>{project.detail}</p>
         </article>
-        <article>
+        <article className="target-cursor-hit">
           <h2>Outcomes</h2>
           <ul className="outcome-list">
             {project.outcomes.map((outcome) => (
@@ -50,7 +73,7 @@ export function ProjectDetailPage() {
             ))}
           </ul>
         </article>
-        <aside className="tag-panel">
+        <aside className="tag-panel target-cursor-hit">
           <span className="section-label">Tags</span>
           <div>
             {project.tags.map((tag) => (
