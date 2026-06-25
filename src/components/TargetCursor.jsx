@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { gsap } from 'gsap'
 import './TargetCursor.css'
 
@@ -76,20 +76,6 @@ export function TargetCursor({
     []
   )
 
-  const moveCursor = useCallback((x, y) => {
-    if (!cursorRef.current) return
-
-    const { x: offsetX, y: offsetY } = getContainingBlockOffset(containingBlockRef.current)
-
-    gsap.to(cursorRef.current, {
-      x: x - offsetX,
-      y: y - offsetY,
-      duration: 0.1,
-      ease: 'power3.out',
-      overwrite: 'auto',
-    })
-  }, [])
-
   useEffect(() => {
     if (isMobile || !cursorRef.current) return undefined
 
@@ -106,6 +92,10 @@ export function TargetCursor({
     let activeTarget = null
     let currentLeaveHandler = null
     let resumeTimeout = null
+    let pointerFrame = 0
+    const pointerRef = { x: window.innerWidth / 2, y: window.innerHeight / 2 }
+    const cursorQuickX = gsap.quickTo(cursor, 'x', { duration: 0.12, ease: 'power3.out' })
+    const cursorQuickY = gsap.quickTo(cursor, 'y', { duration: 0.12, ease: 'power3.out' })
 
     const getOffset = () => getContainingBlockOffset(containingBlockRef.current)
 
@@ -158,16 +148,13 @@ export function TargetCursor({
         const currentY = gsap.getProperty(corner, 'y')
         const targetX = targetCornerPositionsRef.current[index].x - cursorX
         const targetY = targetCornerPositionsRef.current[index].y - cursorY
-        const finalX = currentX + (targetX - currentX) * strength
-        const finalY = currentY + (targetY - currentY) * strength
-        const duration = strength >= 0.99 ? (parallaxOn ? 0.2 : 0) : 0.05
+        const follow = parallaxOn ? Math.max(0.12, strength * 0.2) : strength
+        const finalX = currentX + (targetX - currentX) * follow
+        const finalY = currentY + (targetY - currentY) * follow
 
-        gsap.to(corner, {
+        gsap.set(corner, {
           x: finalX,
           y: finalY,
-          duration,
-          ease: duration === 0 ? 'none' : 'power1.out',
-          overwrite: 'auto',
         })
       })
     }
@@ -307,8 +294,8 @@ export function TargetCursor({
       target.addEventListener('mouseleave', currentLeaveHandler)
     }
 
-    const syncTargetAtPoint = (event) => {
-      const target = document.elementFromPoint(event.clientX, event.clientY)?.closest?.(targetSelector)
+    const syncTargetAtPoint = (point) => {
+      const target = document.elementFromPoint(point.x, point.y)?.closest?.(targetSelector)
 
       if (target) {
         activateTarget(target)
@@ -317,9 +304,22 @@ export function TargetCursor({
       }
     }
 
+    const applyPointerMove = () => {
+      pointerFrame = 0
+      const { x: offsetX, y: offsetY } = getOffset()
+
+      cursorQuickX(pointerRef.x - offsetX)
+      cursorQuickY(pointerRef.y - offsetY)
+      syncTargetAtPoint(pointerRef)
+    }
+
     const moveHandler = (event) => {
-      moveCursor(event.clientX, event.clientY)
-      syncTargetAtPoint(event)
+      pointerRef.x = event.clientX
+      pointerRef.y = event.clientY
+
+      if (!pointerFrame) {
+        pointerFrame = window.requestAnimationFrame(applyPointerMove)
+      }
     }
 
     window.addEventListener('mousemove', moveHandler, { passive: true })
@@ -395,6 +395,9 @@ export function TargetCursor({
       if (resumeTimeout) {
         window.clearTimeout(resumeTimeout)
       }
+      if (pointerFrame) {
+        window.cancelAnimationFrame(pointerFrame)
+      }
 
       if (activeTarget) {
         cleanupTarget(activeTarget)
@@ -415,7 +418,6 @@ export function TargetCursor({
     hideDefaultCursor,
     hoverDuration,
     isMobile,
-    moveCursor,
     parallaxOn,
     spinDuration,
     targetColor,

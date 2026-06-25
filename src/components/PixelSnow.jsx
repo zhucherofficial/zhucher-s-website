@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   Color,
   Mesh,
@@ -12,6 +12,8 @@ import {
 } from 'three'
 
 import './PixelSnow.css'
+
+const FRAME_INTERVAL = 1000 / 30
 
 const vertexShader = `
 void main() {
@@ -180,6 +182,7 @@ export default function PixelSnow({
   const materialRef = useRef(null)
   const resizeTimeoutRef = useRef(null)
   const reducedMotionRef = useRef(false)
+  const [isReady, setIsReady] = useState(false)
 
   const variantValue = useMemo(() => {
     return variant === 'round' ? 1.0 : variant === 'snowflake' ? 2.0 : 0.0
@@ -209,7 +212,15 @@ export default function PixelSnow({
   }, [])
 
   useEffect(() => {
-    reducedMotionRef.current = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+    reducedMotionRef.current = mediaQuery.matches
+
+    const handleMotionPreference = (event) => {
+      reducedMotionRef.current = event.matches
+    }
+
+    mediaQuery.addEventListener('change', handleMotionPreference)
+    return () => mediaQuery.removeEventListener('change', handleMotionPreference)
   }, [])
 
   useEffect(() => {
@@ -218,9 +229,11 @@ export default function PixelSnow({
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        isVisibleRef.current = entry.isIntersecting
+        if (!entry.isIntersecting) return
+        setIsReady(true)
+        observer.disconnect()
       },
-      { threshold: 0 },
+      { rootMargin: '260px 0px', threshold: 0 },
     )
 
     observer.observe(container)
@@ -229,7 +242,7 @@ export default function PixelSnow({
 
   useEffect(() => {
     const container = containerRef.current
-    if (!container) return undefined
+    if (!container || !isReady) return undefined
 
     const scene = new Scene()
     const camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1)
@@ -276,21 +289,57 @@ export default function PixelSnow({
 
     window.addEventListener('resize', handleResize)
 
+    let isDisposed = false
+    let previousTime = 0
     const startTime = performance.now()
-    const animate = () => {
+
+    const stopAnimation = () => {
+      if (!animationRef.current) return
+      cancelAnimationFrame(animationRef.current)
+      animationRef.current = 0
+    }
+
+    const animate = (time) => {
+      if (isDisposed || !isVisibleRef.current) {
+        animationRef.current = 0
+        return
+      }
+
       animationRef.current = requestAnimationFrame(animate)
 
-      if (isVisibleRef.current) {
-        material.uniforms.uTime.value = reducedMotionRef.current
-          ? 0
-          : (performance.now() - startTime) * 0.001
-        renderer.render(scene, camera)
-      }
+      const timePassed = time - previousTime
+      if (timePassed < FRAME_INTERVAL) return
+      previousTime = time - (timePassed % FRAME_INTERVAL)
+
+      material.uniforms.uTime.value = reducedMotionRef.current ? 0 : (time - startTime) * 0.001
+      renderer.render(scene, camera)
     }
-    animate()
+
+    const startAnimation = () => {
+      if (animationRef.current) return
+      previousTime = performance.now()
+      animationRef.current = requestAnimationFrame(animate)
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisibleRef.current = entry.isIntersecting
+        if (entry.isIntersecting) {
+          startAnimation()
+        } else {
+          stopAnimation()
+        }
+      },
+      { rootMargin: '180px 0px', threshold: 0 },
+    )
+
+    observer.observe(container)
+    startAnimation()
 
     return () => {
-      cancelAnimationFrame(animationRef.current)
+      isDisposed = true
+      observer.disconnect()
+      stopAnimation()
       window.removeEventListener('resize', handleResize)
       if (resizeTimeoutRef.current) {
         clearTimeout(resizeTimeoutRef.current)
@@ -305,7 +354,7 @@ export default function PixelSnow({
       rendererRef.current = null
       materialRef.current = null
     }
-  }, [colorVector, density, depthFade, direction, farPlane, flakeSize, gamma, handleResize, minFlakeSize, pixelResolution, speed, variantValue, brightness])
+  }, [colorVector, density, depthFade, direction, farPlane, flakeSize, gamma, handleResize, isReady, minFlakeSize, pixelResolution, speed, variantValue, brightness])
 
   useEffect(() => {
     const material = materialRef.current

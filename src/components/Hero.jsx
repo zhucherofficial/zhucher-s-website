@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import BorderGlow from './BorderGlow'
 import TrueFocus from './TrueFocus'
 
@@ -38,22 +38,55 @@ const heroBackgroundMedia = [
 
 export function Hero() {
   const [activeMediaIndex, setActiveMediaIndex] = useState(0)
+  const [isVisible, setIsVisible] = useState(true)
+  const sectionRef = useRef(null)
+  const videoRef = useRef(null)
   const activeMedia = heroBackgroundMedia[activeMediaIndex]
 
   useEffect(() => {
+    const section = sectionRef.current
+    if (!section) return undefined
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting)
+      },
+      { threshold: 0.12 },
+    )
+
+    observer.observe(section)
+    return () => observer.disconnect()
+  }, [])
+
+  useEffect(() => {
+    const video = videoRef.current
+    if (!video) return
+
+    if (isVisible) {
+      const playPromise = video.play()
+      playPromise?.catch(() => {})
+    } else {
+      video.pause()
+    }
+  }, [activeMedia.type, isVisible])
+
+  useEffect(() => {
+    if (!isVisible) return undefined
+
     const timer = window.setTimeout(() => {
       setActiveMediaIndex((index) => (index + 1) % heroBackgroundMedia.length)
     }, activeMedia.duration)
 
     return () => window.clearTimeout(timer)
-  }, [activeMedia.duration, activeMediaIndex])
+  }, [activeMedia.duration, activeMediaIndex, isVisible])
 
   return (
-    <section className="hero-section" id="home">
+    <section className="hero-section" id="home" ref={sectionRef}>
       <div className="hero-media-stage" aria-hidden="true">
         {activeMedia.type === 'video' ? (
           <video
             key={activeMedia.src}
+            ref={videoRef}
             className="hero-media hero-media--video"
             autoPlay
             muted

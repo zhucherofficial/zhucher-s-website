@@ -2,6 +2,7 @@ import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 import './ReactBitsBackdrop.css'
 
 const TWO_PI = Math.PI * 2
+const FRAME_INTERVAL = 1000 / 30
 
 const hexToRgb = (hex) => {
   const value = hex.replace('#', '')
@@ -27,7 +28,15 @@ function useCanvasRenderer(draw) {
   const reducedMotionRef = useRef(false)
 
   useEffect(() => {
-    reducedMotionRef.current = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+    reducedMotionRef.current = mediaQuery.matches
+
+    const handleMotionPreference = (event) => {
+      reducedMotionRef.current = event.matches
+    }
+
+    mediaQuery.addEventListener('change', handleMotionPreference)
+    return () => mediaQuery.removeEventListener('change', handleMotionPreference)
   }, [])
 
   useEffect(() => {
@@ -41,6 +50,9 @@ function useCanvasRenderer(draw) {
     let height = 0
     let frame = 0
     let raf = 0
+    let previousTime = 0
+    let isVisible = true
+    let isDisposed = false
     let cleanupDraw
     const dpr = Math.min(window.devicePixelRatio || 1, 2)
 
@@ -58,6 +70,16 @@ function useCanvasRenderer(draw) {
     }
 
     const tick = (time) => {
+      if (isDisposed || !isVisible) {
+        raf = 0
+        return
+      }
+
+      raf = window.requestAnimationFrame(tick)
+      const timePassed = time - previousTime
+      if (timePassed < FRAME_INTERVAL) return
+
+      previousTime = time - (timePassed % FRAME_INTERVAL)
       frame += 1
       draw({
         canvas,
@@ -68,16 +90,41 @@ function useCanvasRenderer(draw) {
         time,
         reducedMotion: reducedMotionRef.current,
       })
+    }
+
+    const startAnimation = () => {
+      if (raf) return
+      previousTime = performance.now()
       raf = window.requestAnimationFrame(tick)
+    }
+
+    const stopAnimation = () => {
+      if (!raf) return
+      window.cancelAnimationFrame(raf)
+      raf = 0
     }
 
     resize()
     window.addEventListener('resize', resize)
-    raf = window.requestAnimationFrame(tick)
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting
+        if (entry.isIntersecting) {
+          startAnimation()
+        } else {
+          stopAnimation()
+        }
+      },
+      { rootMargin: '160px 0px' },
+    )
+    observer.observe(canvas)
+    startAnimation()
 
     return () => {
-      window.cancelAnimationFrame(raf)
+      isDisposed = true
+      stopAnimation()
       window.removeEventListener('resize', resize)
+      observer.disconnect()
       cleanupDraw?.()
     }
   }, [draw])
