@@ -12,6 +12,10 @@ dist
 dist-ssr
 *.local
 
+# Local reference material and original media (keep archive/README.md tracked)
+archive/*
+!archive/README.md
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

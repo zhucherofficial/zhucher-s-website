@@ -1,0 +1,408 @@
+.portfolio-scene {
+  --paper: #fff;
+  --ink: #12131a;
+  --blue: #1546ff;
+  --cyan: #2ce6e8;
+  --green: #b8ff2c;
+  --pink: #ff4fa3;
+  --yellow: #ffd632;
+  position: relative;
+  min-height: 100svh;
+  overflow: hidden;
+  color: var(--ink);
+  background: var(--paper);
+  isolation: isolate;
+}
+
+.portfolio-scene button,
+.portfolio-scene a {
+  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  letter-spacing: 0;
+}
+
+.portfolio-scene__scribbles,
+.portfolio-scene__rings {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.portfolio-scene__stage {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  contain: layout paint;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.portfolio-scene[data-transitioning='true'] .ken-pcb__about-hit,
+.portfolio-scene[data-transitioning='true'] .main-object {
+  pointer-events: none;
+}
+
+.portfolio-scene__scribbles {
+  z-index: -2;
+  fill: none;
+  stroke: var(--blue);
+  stroke-width: 4;
+  stroke-linecap: round;
+  opacity: 0.15;
+}
+
+.portfolio-scene__scribbles path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+
+.portfolio-scene--drawing .portfolio-scene__scribbles path {
+  animation: scene-line-draw 1.5s ease forwards;
+  stroke-dashoffset: 1;
+}
+
+.portfolio-scene--drawing .portfolio-scene__scribbles path:nth-child(2) { animation-delay: 0.45s; stroke: var(--pink); }
+.portfolio-scene--drawing .portfolio-scene__scribbles path:nth-child(3) { animation-delay: 0.82s; stroke: var(--cyan); }
+
+.portfolio-scene__rings {
+  z-index: 0;
+  opacity: 0.82;
+}
+
+.portfolio-scene__toolbar {
+  position: absolute;
+  top: 18px;
+  right: 22px;
+  left: 22px;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.portfolio-scene__toolbar > div { display: flex; align-items: center; gap: 8px; }
+.portfolio-scene__toolbar a,
+.portfolio-scene__toolbar button {
+  display: grid;
+  min-width: 42px;
+  min-height: 42px;
+  padding: 0 11px;
+  place-items: center;
+  border: 3px solid var(--ink);
+  border-radius: 0;
+  color: var(--ink);
+  background: #fff;
+  box-shadow: 4px 4px 0 var(--pink);
+  text-decoration: none;
+}
+.portfolio-scene__toolbar svg { width: 19px; }
+
+.ken-pcb {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 4;
+  width: min(760px, 70vw);
+  aspect-ratio: 720 / 500;
+  transform: translate(-50%, -50%);
+  transform-origin: center;
+  transition: scale 320ms cubic-bezier(.2,.8,.2,1), filter 320ms ease;
+  pointer-events: auto;
+  will-change: transform;
+}
+
+.ken-pcb svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.ken-pcb__construction { fill: none; stroke: var(--cyan); stroke-width: 3; stroke-linecap: round; opacity: 0.3; }
+.ken-pcb__construction path:nth-child(2) { stroke: var(--pink); }
+.ken-pcb__paint { fill: none; stroke: var(--green); stroke-width: 76; stroke-linecap: round; opacity: 0.96; }
+.ken-pcb__paint path:first-child,
+.ken-pcb__paint path:last-child { stroke-width: 58; }
+.ken-pcb__outline,
+.ken-pcb__oled,
+.ken-pcb__components { fill: none; stroke: var(--ink); stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
+.ken-pcb__outline circle { fill: #fff; }
+.ken-pcb__traces { fill: none; stroke: var(--cyan); stroke-width: 4; stroke-linecap: square; stroke-linejoin: round; }
+.ken-pcb__traces path:nth-child(2) { stroke: var(--pink); }
+.ken-pcb__traces path:nth-child(3) { stroke: var(--ink); }
+.ken-pcb__traces circle { fill: var(--pink); stroke: var(--ink); stroke-width: 2; }
+.ken-pcb__oled path { fill: var(--ink); stroke: var(--ink); }
+.ken-pcb__oled rect { fill: #070a0d; stroke: var(--cyan); stroke-width: 5; }
+.ken-pcb__oled circle { fill: var(--yellow); stroke: none; }
+.ken-pcb__ic rect { fill: var(--blue); }
+.ken-pcb__ic circle { fill: var(--yellow); stroke: none; }
+.ken-pcb__header rect { fill: var(--ink); }
+.ken-pcb__header circle { fill: var(--cyan); stroke-width: 2; }
+.ken-pcb__resistor rect { fill: #fff; }
+.ken-pcb__resistor path:nth-last-child(-n + 3) { stroke: var(--pink); stroke-width: 4; }
+.ken-pcb__connector { fill: var(--yellow); }
+.ken-pcb__led circle { fill: var(--pink); }
+
+.ken-pcb__screen {
+  position: absolute;
+  top: 31.5%;
+  left: 28.7%;
+  display: grid;
+  width: 43.2%;
+  height: 30.5%;
+  place-items: center;
+  overflow: hidden;
+  color: var(--green);
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  text-align: left;
+  text-shadow: 0 0 9px rgba(184,255,44,0.45);
+}
+.ken-pcb__power-label { font-size: clamp(12px, 1.35vw, 20px); font-weight: 800; }
+.portfolio-scene--drawing .ken-pcb__power-label { opacity: 0; animation: gate-prompt-in .16s 3.3s ease forwards; }
+.ken-pcb__identity { display: grid; width: 88%; gap: 7px; font-size: clamp(10px, 1.15vw, 17px); }
+.ken-pcb__identity strong { color: #fff; font-size: 1.18em; }
+.ken-pcb__identity strong span { color: var(--cyan); }
+.ken-pcb__identity b { animation: oled-blink 0.72s steps(1) infinite; }
+
+.ken-pcb__power-hit,
+.ken-pcb__about-hit {
+  position: absolute;
+  border: 0;
+  color: transparent;
+  background: transparent;
+  cursor: pointer;
+}
+.ken-pcb__power-hit { top: 28%; left: 25%; width: 50%; height: 38%; }
+.ken-pcb__power-hit span { position: absolute; width: 1px; height: 1px; overflow: hidden; }
+.ken-pcb__about-hit { inset: 8%; }
+.ken-pcb__about-hit span {
+  position: absolute;
+  right: 8%;
+  bottom: 5%;
+  padding: 7px 10px;
+  border: 3px solid var(--ink);
+  color: var(--ink);
+  background: var(--yellow);
+  box-shadow: 4px 4px 0 var(--blue);
+  font-size: clamp(10px, 1vw, 14px);
+  font-weight: 900;
+}
+.ken-pcb__power-hit:focus-visible,
+.ken-pcb__about-hit:focus-visible { outline: 6px solid var(--pink); outline-offset: 5px; }
+
+.portfolio-scene--powering .ken-pcb { animation: pcb-power-on 1.55s cubic-bezier(.18,.85,.25,1) both; }
+.portfolio-scene--main .ken-pcb { transform: translate(calc(-50% - 25vw), calc(-50% + 4vh)) rotate(-2deg) scale(.91); }
+.portfolio-scene--main .ken-pcb:hover,
+.portfolio-scene--main .ken-pcb:focus-within { scale: 1.045; }
+.portfolio-scene--main .ken-pcb:hover .ken-pcb__screen,
+.portfolio-scene--main .ken-pcb:focus-within .ken-pcb__screen { text-shadow: 0 0 15px rgba(184,255,44,.76); }
+
+.portfolio-scene__main-controls { position: absolute; inset: 0; z-index: 6; pointer-events: none; }
+.main-object { position: absolute; padding: 0; border: 0; color: var(--ink); background: transparent; cursor: pointer; pointer-events: auto; transition: transform 360ms cubic-bezier(.2,.8,.2,1); will-change: transform; }
+.main-object:disabled { cursor: default; }
+.main-object > svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.main-object > .main-object__label { position: absolute; padding: 7px 10px; border: 3px solid var(--ink); color: var(--ink); background: #fff; box-shadow: 4px 4px 0 var(--pink); font-size: clamp(10px, 1vw, 14px); font-weight: 900; }
+.main-object--guitar { right: 1.5%; bottom: 2%; width: min(730px, 55vw); aspect-ratio: 760 / 380; transform: rotate(1.5deg); }
+.main-object--guitar > .main-object__label { right: 15%; bottom: 9%; }
+.main-object--guitar:hover,
+.main-object--guitar:focus-visible { transform: translateY(-8px) rotate(5deg) scale(1.025); }
+.main-object--folder { top: 9%; right: 12%; width: min(330px, 25vw); aspect-ratio: 3 / 2; transform: rotate(3deg); }
+.main-object--folder > .main-object__label { right: 3%; bottom: 3%; }
+.main-object--folder:hover,
+.main-object--folder:focus-visible { transform: translateY(-6px) rotate(1deg) scale(1.045); }
+.main-object:focus-visible { outline: 5px solid var(--blue); outline-offset: 6px; }
+
+.main-guitar__notes {
+  position: absolute;
+  top: 2%;
+  left: 37%;
+  width: 34%;
+  height: 38%;
+  pointer-events: none;
+}
+
+.main-guitar__notes svg {
+  position: absolute;
+  width: clamp(22px, 2.7vw, 38px);
+  height: auto;
+  color: var(--pink);
+  opacity: 0;
+}
+
+.main-guitar__notes svg:nth-child(1) { right: 4%; bottom: 2%; color: var(--blue); }
+.main-guitar__notes svg:nth-child(2) { right: 37%; bottom: 8%; color: var(--pink); }
+.main-guitar__notes svg:nth-child(3) { left: 3%; bottom: 0; color: var(--cyan); }
+.main-object--guitar:hover .main-guitar__notes svg,
+.main-object--guitar:focus-visible .main-guitar__notes svg { animation: guitar-note-rise 900ms ease-out infinite; }
+.main-object--guitar:hover .main-guitar__notes svg:nth-child(2),
+.main-object--guitar:focus-visible .main-guitar__notes svg:nth-child(2) { animation-delay: 160ms; }
+.main-object--guitar:hover .main-guitar__notes svg:nth-child(3),
+.main-object--guitar:focus-visible .main-guitar__notes svg:nth-child(3) { animation-delay: 320ms; }
+
+.main-guitar__paint { fill: none; stroke: var(--blue); stroke-width: 72; stroke-linecap: round; }
+.main-guitar__paint path:last-child { stroke: var(--pink); stroke-width: 52; }
+.main-guitar__outline { fill: none; stroke: var(--ink); stroke-width: 7; stroke-linejoin: round; }
+.main-guitar__outline path:nth-child(2) { fill: var(--yellow); }
+.main-guitar__outline path:nth-child(3) { fill: var(--blue); }
+.main-guitar__pickguard { fill: var(--ink); stroke: var(--cyan); stroke-width: 4; }
+.main-guitar__pickups rect { fill: #fff; stroke: var(--ink); stroke-width: 5; }
+.main-guitar__pickups rect:last-child { fill: var(--blue); }
+.main-guitar__controls path { fill: #fff; stroke: var(--ink); stroke-width: 5; }
+.main-guitar__controls circle { fill: var(--pink); stroke: var(--ink); stroke-width: 4; }
+.main-guitar__controls circle:last-child { fill: var(--cyan); }
+.main-guitar__frets { stroke: var(--ink); stroke-width: 3; }
+.main-guitar__strings { stroke: #fff; stroke-width: 3; }
+.main-guitar__tuners { fill: var(--cyan); stroke: var(--ink); stroke-width: 3; }
+
+.physics-folder__papers { fill: #fff; stroke: var(--ink); stroke-width: 5; transform-box: fill-box; transform-origin: center bottom; transition: transform 360ms cubic-bezier(.2,.8,.2,1); }
+.main-object--folder:hover .physics-folder__papers,
+.main-object--folder:focus-visible .physics-folder__papers { transform: translateY(-18px) rotate(-2deg); }
+.physics-folder__back { fill: var(--pink); stroke: var(--ink); stroke-width: 6; }
+.physics-folder__paint { fill: none; stroke: var(--yellow); stroke-width: 45; stroke-linecap: round; }
+.physics-folder__front { fill: none; stroke: var(--ink); stroke-width: 7; }
+.main-object--folder text { fill: var(--ink); font-family: "Marker Felt", cursive; font-size: 30px; font-weight: 800; }
+
+.portfolio-scene__drawing-status {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  margin: 0;
+  transform: translateX(-50%);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.portfolio-scene__guitar { min-height: 100svh; }
+.portfolio-scene__guitar .guitar-selector__instrument { min-height: 100svh; aspect-ratio: 1440 / 820; }
+
+.scene-close {
+  position: fixed;
+  top: 20px;
+  right: 22px;
+  z-index: 50;
+  display: grid;
+  width: 50px;
+  height: 50px;
+  padding: 0;
+  place-items: center;
+  border: 4px solid var(--ink);
+  border-radius: 0;
+  color: var(--ink);
+  background: var(--yellow);
+  box-shadow: 5px 5px 0 var(--pink);
+  cursor: pointer;
+}
+
+.about-desktop { position: absolute; inset: 0; z-index: 40; background: rgba(255,255,255,.62); backdrop-filter: blur(2px); }
+.app-window { position: absolute; border: 5px solid var(--ink); border-radius: 0; background: #fff; box-shadow: 13px 15px 0 var(--blue); }
+.app-window > header { display: flex; align-items: center; gap: 8px; min-height: 42px; padding: 0 13px; border-bottom: 4px solid var(--ink); background: var(--yellow); }
+.app-window > header span { width: 12px; height: 12px; border: 2px solid var(--ink); border-radius: 50%; background: var(--pink); }
+.app-window > header span:nth-child(2) { background: var(--cyan); }
+.app-window > header span:nth-child(3) { background: var(--green); }
+.app-window > header h2,
+.app-window > header figcaption { margin: 0 0 0 7px; font-family: "IBM Plex Mono", monospace; font-size: 14px; font-weight: 900; }
+.app-window--bio { top: 16%; left: 11%; width: min(720px, 55vw); min-height: 440px; transform: rotate(-1deg); }
+.app-window__bio-copy { display: grid; gap: 18px; padding: clamp(28px, 4vw, 58px); font-family: "IBM Plex Mono", monospace; font-size: clamp(15px, 1.45vw, 21px); line-height: 1.48; }
+.app-window__bio-copy p { margin: 0; }
+.app-window__bio-copy button { justify-self: start; min-height: 45px; padding: 0 14px; border: 3px solid var(--ink); border-radius: 0; color: #fff; background: var(--blue); box-shadow: 5px 5px 0 var(--pink); font-weight: 900; }
+.app-window--portrait { top: 24%; right: 9%; width: min(390px, 29vw); margin: 0; transform: rotate(2.5deg); }
+.about-portrait { position: relative; aspect-ratio: 4 / 5; overflow: hidden; background: var(--cyan); }
+.about-portrait::after { position: absolute; inset: 0; border: 18px solid transparent; box-shadow: inset 0 0 0 8px var(--pink); content: ''; mix-blend-mode: multiply; }
+.about-portrait img { width: 100%; height: 100%; object-fit: cover; filter: saturate(1.7) contrast(1.15); mix-blend-mode: multiply; }
+
+.about-desktop--more .app-window--bio { top: 20%; left: -10%; width: 45vw; min-height: 360px; opacity: .42; transform: rotate(-4deg); }
+.about-desktop--more .app-window--bio .app-window__bio-copy { visibility: hidden; }
+.app-window--more { top: 10%; left: 50%; width: min(1050px, 78vw); height: min(720px, 80svh); transform: translateX(-50%) rotate(.35deg); box-shadow: 14px 16px 0 var(--pink); }
+.more-about__layout { display: grid; grid-template-columns: 210px 1fr; height: calc(100% - 42px); min-height: 0; }
+.more-about__layout nav { display: grid; align-content: start; gap: 9px; padding: 24px 17px; border-right: 4px solid var(--ink); background: var(--cyan); }
+.more-about__layout nav button { min-height: 48px; padding: 8px 10px; border: 3px solid var(--ink); border-radius: 0; color: var(--ink); background: #fff; text-align: left; font-weight: 900; }
+.more-about__layout nav button.is-active { color: #fff; background: var(--blue); box-shadow: 4px 4px 0 var(--pink); }
+.more-about__content { overflow: auto; padding: clamp(24px, 3vw, 42px); font-family: "IBM Plex Mono", monospace; }
+.window-kicker { margin: 0 0 5px; color: var(--blue); font-size: 11px; font-weight: 900; }
+.more-about__content h3 { margin: 0 0 22px; font-size: clamp(32px, 4vw, 62px); line-height: 1; }
+.more-about__content ol { display: grid; gap: 13px; margin: 0; padding: 0; list-style: none; }
+.more-about__content li { padding: 14px 16px; border-left: 8px solid var(--green); background: #f3f3ee; line-height: 1.4; }
+.more-about__content time { display: block; color: var(--blue); font-size: 11px; font-weight: 900; }
+.more-about__content li strong,
+.more-about__content li span { display: block; }
+.more-about__content li span { margin-top: 4px; color: #5b5c64; font-size: 12px; }
+.more-about__content li p { margin: 8px 0 0; font-size: 13px; }
+
+.folder-scene { position: absolute; inset: 0; z-index: 40; display: grid; place-items: center; background: rgba(255,255,255,.72); }
+.folder-scene__folder { position: relative; display: grid; gap: 16px; width: min(840px, 82vw); padding: 90px 55px 55px; border: 6px solid var(--ink); background: var(--yellow); box-shadow: 16px 18px 0 var(--pink); transform: rotate(-.6deg); }
+.folder-scene__tab { position: absolute; top: -59px; left: -6px; display: flex; align-items: center; justify-content: space-between; width: 55%; min-height: 60px; padding: 0 20px; border: 6px solid var(--ink); border-bottom: 0; background: var(--yellow); }
+.folder-scene__tab h2 { margin: 0; font: 900 17px/1 "IBM Plex Mono", monospace; }
+.folder-scene__tab span { font: 800 10px/1 "IBM Plex Mono", monospace; }
+.folder-scene__folder > a:not(.folder-scene__lab-link) { display: grid; grid-template-columns: 55px 1fr; gap: 3px 16px; padding: 20px; border: 4px solid var(--ink); color: var(--ink); background: #fff; box-shadow: 7px 7px 0 var(--blue); text-decoration: none; }
+.folder-scene__folder > a:nth-of-type(2) { box-shadow: 7px 7px 0 var(--cyan); transform: rotate(.4deg); }
+.folder-scene__folder > a > span { grid-row: 1 / 3; align-self: center; color: var(--pink); font-size: 28px; font-weight: 900; }
+.folder-scene__folder > a strong { font-size: clamp(18px, 2vw, 28px); }
+.folder-scene__folder > a small { font-size: 12px; }
+.folder-scene__lab-link { display: inline-flex; align-items: center; justify-self: end; gap: 8px; margin-top: 6px; color: var(--ink); font-size: 12px; font-weight: 900; }
+.folder-scene__lab-link svg { width: 18px; }
+
+@keyframes scene-line-draw { to { stroke-dashoffset: 0; } }
+@keyframes gate-prompt-in { to { opacity: 1; } }
+@keyframes oled-blink { 50% { opacity: 0; } }
+@keyframes pcb-power-on {
+  0% { transform: translate(-50%,-50%) rotate(0) scale(1); }
+  19% { transform: translate(-50%,-50%) rotate(25deg) scale(.52); filter: brightness(1.8); }
+  58% { transform: translate(calc(-50% - 25vw), calc(-50% + 4vh)) rotate(-5deg) scale(.98); }
+  100% { transform: translate(calc(-50% - 25vw), calc(-50% + 4vh)) rotate(-2deg) scale(.91); }
+}
+
+@keyframes guitar-note-rise {
+  0% { opacity: 0; transform: translate3d(0, 5px, 0) rotate(-8deg) scale(.75); }
+  24% { opacity: 1; }
+  100% { opacity: 0; transform: translate3d(7px, -48px, 0) rotate(10deg) scale(1.08); }
+}
+
+@media (max-width: 760px) {
+  .portfolio-scene__toolbar { top: 10px; right: 10px; left: 10px; font-size: 9px; }
+  .portfolio-scene__toolbar a,
+  .portfolio-scene__toolbar button { min-width: 38px; min-height: 38px; border-width: 2px; box-shadow: 3px 3px 0 var(--pink); }
+  .portfolio-scene__rings { width: 155%; left: -27.5%; }
+  .ken-pcb { width: min(620px, 96vw); }
+  .portfolio-scene--main .ken-pcb { transform: translate(-50%, calc(-50% - 16vh)) rotate(-1deg); }
+  .portfolio-scene--powering .ken-pcb { animation-name: pcb-power-on-mobile; }
+  .ken-pcb__power-label { font-size: 10px; }
+  .ken-pcb__identity { gap: 3px; font-size: clamp(8px, 2.55vw, 11px); }
+  .ken-pcb__about-hit span { right: 5%; bottom: 1%; border-width: 2px; box-shadow: 3px 3px 0 var(--blue); font-size: 9px; }
+  .main-object--folder { top: 55%; right: 2%; width: 43vw; }
+  .main-object--guitar { right: -35%; bottom: 1%; width: 125vw; }
+  .main-object--folder > .main-object__label { font-size: 8px; }
+  .main-object--guitar > .main-object__label { right: 33%; bottom: 5%; font-size: 8px; }
+  .portfolio-scene__guitar .guitar-selector__instrument { min-height: auto; }
+  .scene-close { top: 12px; right: 12px; width: 44px; height: 44px; border-width: 3px; }
+  .app-window--bio { top: 10%; left: 4%; width: 89vw; min-height: 0; }
+  .app-window__bio-copy { padding: 28px 22px; font-size: 14px; }
+  .app-window--portrait { right: 5%; bottom: 7%; top: auto; width: 43vw; }
+  .about-desktop--more .app-window--bio { display: none; }
+  .app-window--more { top: 8%; left: 3%; width: 94vw; height: 84svh; transform: rotate(.25deg); }
+  .more-about__layout { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+  .more-about__layout nav { grid-template-columns: 1fr 1fr; padding: 12px; border-right: 0; border-bottom: 4px solid var(--ink); }
+  .more-about__layout nav button { min-height: 42px; text-align: center; font-size: 11px; }
+  .more-about__content { padding: 20px 17px; }
+  .more-about__content h3 { font-size: 36px; }
+  .more-about__content li { font-size: 12px; }
+  .folder-scene__folder { width: 90vw; padding: 58px 20px 24px; }
+  .folder-scene__tab { top: -47px; width: 75%; min-height: 48px; padding: 0 11px; }
+  .folder-scene__tab h2 { font-size: 12px; }
+  .folder-scene__folder > a:not(.folder-scene__lab-link) { grid-template-columns: 34px 1fr; padding: 14px; }
+  .folder-scene__folder > a strong { font-size: 15px; }
+  .folder-scene__folder > a small { font-size: 10px; }
+}
+
+@keyframes pcb-power-on-mobile {
+  0% { transform: translate(-50%,-50%) rotate(0) scale(1); }
+  19% { transform: translate(-50%,-50%) rotate(25deg) scale(.52); filter: brightness(1.8); }
+  58% { transform: translate(-50%, calc(-50% - 16vh)) rotate(-4deg) scale(1.06); }
+  100% { transform: translate(-50%, calc(-50% - 16vh)) rotate(-1deg) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-scene *,
+  .portfolio-scene *::before,
+  .portfolio-scene *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}

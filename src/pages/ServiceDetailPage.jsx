@@ -5,7 +5,7 @@ import { TargetCursor } from '../components/TargetCursor'
 import { getServiceById } from '../data/siteData'
 
 export function ServiceDetailPage() {
-  const { id } = useParams()
+  const { id = 'physics-education' } = useParams()
   const service = getServiceById(id)
 
   if (!service) {

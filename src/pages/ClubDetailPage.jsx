@@ -38,7 +38,7 @@ const labTracks = [
 ]
 
 export function ClubDetailPage() {
-  const { id } = useParams()
+  const { id = 'physics-club' } = useParams()
   const club = getClubById(id)
 
   if (!club) {

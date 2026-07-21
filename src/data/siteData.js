@@ -15,11 +15,10 @@ import robotCover from '../assets/project-media/wheeled-legged-robot.jpg'
 import subatomicCover from '../assets/project-media/subatomic.webp'
 
 export const profile = {
-  name: 'Physics & Engineering Student',
-  shortName: 'Zhu',
+  name: 'Ken Zhang',
+  shortName: 'Ken',
   location: 'Jiangsu, China',
   email: 'zcycycycy@gmail.com',
-  phone: 'Phone to be confirmed',
   socials: [
     {
       id: 'bilibili',

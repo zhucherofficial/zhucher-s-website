@@ -1,0 +1,30 @@
+.physics-formula-rings {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  contain: layout paint style;
+  opacity: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+.physics-formula-rings.is-active {
+  opacity: 1;
+}
+
+.physics-formula-rings > div,
+.physics-formula-rings canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.physics-formula-rings canvas {
+  pointer-events: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .physics-formula-rings {
+    opacity: 0.78;
+  }
+}

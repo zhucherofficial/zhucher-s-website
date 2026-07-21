@@ -1,0 +1,584 @@
+.guitar-selector {
+  --guitar-black: #12131a;
+  --guitar-blue: #1546ff;
+  --guitar-cyan: #2ce6e8;
+  --guitar-green: #b8ff2c;
+  --guitar-pink: #ff4fa3;
+  --guitar-yellow: #ffd632;
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--guitar-black);
+  background: #fff;
+  isolation: isolate;
+}
+
+.guitar-selector--inactive {
+  pointer-events: none;
+}
+
+.guitar-selector__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.guitar-selector__scroll {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  overflow: hidden;
+  scrollbar-color: var(--guitar-blue) rgba(18, 19, 26, 0.08);
+  scrollbar-width: thin;
+}
+
+.guitar-selector__formula-rings {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.guitar-selector__instrument {
+  position: relative;
+  width: 100%;
+  min-width: 760px;
+  aspect-ratio: 1440 / 820;
+}
+
+.guitar-selector__art {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.guitar-selector__construction {
+  fill: none;
+  stroke: var(--guitar-cyan);
+  stroke-width: 3;
+  stroke-linecap: round;
+  opacity: 0.25;
+}
+
+.guitar-selector__construction path:last-child {
+  stroke: var(--guitar-pink);
+}
+
+.guitar-selector__neck-paint,
+.guitar-selector__body-paint {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.guitar-selector__neck-paint {
+  stroke: var(--guitar-yellow);
+  stroke-width: 100;
+}
+
+.guitar-selector__neck-paint path:last-child {
+  stroke-width: 75;
+}
+
+.guitar-selector__body-paint {
+  stroke: var(--guitar-blue);
+  stroke-width: 112;
+}
+
+.guitar-selector__body-paint path:first-child,
+.guitar-selector__body-paint path:last-child {
+  stroke-width: 92;
+}
+
+.guitar-selector__body-paint .guitar-selector__body-paint-accent {
+  stroke: var(--guitar-pink);
+  stroke-width: 13;
+}
+
+.guitar-selector__outline {
+  fill: none;
+  stroke: var(--guitar-black);
+  stroke-width: 6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.guitar-selector__outline .guitar-selector__headstock {
+  fill: var(--guitar-blue);
+}
+
+.guitar-selector__outline .guitar-selector__body-highlight {
+  stroke: var(--guitar-cyan);
+  stroke-width: 4;
+}
+
+.guitar-selector__outline .guitar-selector__body-highlight--pink {
+  stroke: var(--guitar-pink);
+  stroke-width: 5;
+}
+
+.guitar-selector__pickguard {
+  fill: var(--guitar-black);
+  stroke: var(--guitar-pink);
+  stroke-width: 4;
+  stroke-linejoin: round;
+}
+
+.guitar-selector__pickup > rect,
+.guitar-selector__pickup > path {
+  fill: #fff;
+  stroke: var(--guitar-black);
+  stroke-width: 5;
+}
+
+.guitar-selector__pickup--bridge > rect {
+  fill: var(--guitar-blue);
+  stroke-width: 4;
+}
+
+.guitar-selector__pickup-poles {
+  fill: var(--guitar-blue);
+}
+
+.guitar-selector__pickup--bridge .guitar-selector__pickup-poles {
+  fill: var(--guitar-yellow);
+}
+
+.guitar-selector__bridge {
+  fill: var(--guitar-yellow);
+  stroke: var(--guitar-black);
+  stroke-width: 2;
+}
+
+.guitar-selector__control-plate > path:first-child {
+  fill: #fff;
+  stroke: var(--guitar-black);
+  stroke-width: 5;
+}
+
+.guitar-selector__control-plate > path:not(:first-child) {
+  fill: none;
+  stroke: var(--guitar-black);
+  stroke-width: 5;
+}
+
+.guitar-selector__switch {
+  fill: var(--guitar-yellow);
+  stroke: var(--guitar-black);
+  stroke-width: 3;
+}
+
+.guitar-selector__knob {
+  stroke: var(--guitar-black);
+  stroke-width: 5;
+}
+
+.guitar-selector__knob--one {
+  fill: var(--guitar-cyan);
+}
+
+.guitar-selector__knob--two {
+  fill: var(--guitar-pink);
+}
+
+.guitar-selector__frets {
+  fill: none;
+  stroke: var(--guitar-black);
+  stroke-width: 3;
+  opacity: 0.9;
+}
+
+.guitar-selector__nut {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 5;
+}
+
+.guitar-selector__tuners {
+  fill: var(--guitar-cyan);
+  stroke: var(--guitar-black);
+  stroke-width: 3;
+}
+
+.guitar-selector__body-label {
+  fill: #fff;
+  font-family: 'Marker Felt', 'Comic Sans MS', cursive;
+  font-size: 43px;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.guitar-selector__strings {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+}
+
+.guitar-selector__string {
+  position: absolute;
+  top: var(--string-y);
+  right: 3.4%;
+  left: 16.5%;
+  display: block;
+  height: clamp(42px, 5.7vw, 74px);
+  padding: 0;
+  border: 0;
+  color: var(--guitar-black);
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  text-decoration: none;
+  transform: translateY(-50%);
+  touch-action: manipulation;
+}
+
+.guitar-selector__string-wire {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  left: 0;
+  height: 3px;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 1px 0 rgba(18, 19, 26, 0.34);
+  transform: translateY(-50%);
+  transform-origin: center;
+}
+
+.guitar-selector__string:nth-child(2) .guitar-selector__string-wire {
+  height: 2.8px;
+}
+
+.guitar-selector__string:nth-child(3) .guitar-selector__string-wire {
+  height: 2.5px;
+}
+
+.guitar-selector__string:nth-child(4) .guitar-selector__string-wire {
+  height: 2.2px;
+}
+
+.guitar-selector__string:nth-child(5) .guitar-selector__string-wire {
+  height: 2px;
+}
+
+.guitar-selector__string:nth-child(6) .guitar-selector__string-wire {
+  height: 1.8px;
+}
+
+.guitar-selector__project-label {
+  position: absolute;
+  top: 50%;
+  left: 35%;
+  display: flex;
+  align-items: center;
+  width: min(49vw, 650px);
+  min-height: clamp(34px, 3.8vw, 50px);
+  padding: 6px 15px 7px;
+  overflow: visible;
+  border-left: 7px solid var(--string-accent);
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 6px 5px 0 rgba(18, 19, 26, 0.12);
+  transform: translateY(-50%) rotate(-0.35deg);
+}
+
+.guitar-selector__project-label::after {
+  position: absolute;
+  right: -8px;
+  bottom: -3px;
+  left: 6px;
+  height: 3px;
+  background: var(--string-accent);
+  content: '';
+  transform: rotate(0.3deg);
+}
+
+.guitar-selector__project-label span {
+  min-width: 0;
+  font-family: 'IBM Plex Mono', 'SFMono-Regular', Menlo, Consolas, monospace;
+  font-size: clamp(12px, 1.25vw, 19px);
+  font-weight: 750;
+  line-height: 1.14;
+  letter-spacing: 0;
+  text-wrap: balance;
+}
+
+.guitar-selector__string:hover .guitar-selector__string-wire,
+.guitar-selector__string:focus-visible .guitar-selector__string-wire,
+.guitar-selector__string--current .guitar-selector__string-wire {
+  background: var(--string-accent);
+  box-shadow: 0 0 0 1px #fff, 0 0 14px color-mix(in srgb, var(--string-accent) 70%, transparent);
+  animation: guitar-string-pluck 360ms cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+
+.guitar-selector__string:hover .guitar-selector__project-label,
+.guitar-selector__string:focus-visible .guitar-selector__project-label,
+.guitar-selector__string--current .guitar-selector__project-label {
+  box-shadow: 9px 8px 0 color-mix(in srgb, var(--string-accent) 28%, transparent);
+  transform: translateY(-50%) rotate(0.25deg) translateX(5px);
+}
+
+.guitar-selector__string:focus-visible {
+  border-radius: 2px;
+  outline: 4px solid var(--guitar-black);
+  outline-offset: 4px;
+}
+
+.guitar-selector__string--empty:focus-visible {
+  outline-color: var(--string-accent);
+}
+
+.guitar-selector__empty-display {
+  position: absolute;
+  bottom: 4.5%;
+  left: 7.2%;
+  z-index: 4;
+  display: grid;
+  gap: 5px;
+  width: min(330px, 24vw);
+  min-width: 245px;
+  padding: 15px 19px;
+  border: 3px solid var(--guitar-cyan);
+  color: #fff;
+  background: var(--guitar-black);
+  box-shadow: -5px -5px 0 var(--guitar-pink);
+  font-family: 'IBM Plex Mono', 'SFMono-Regular', Menlo, Consolas, monospace;
+  letter-spacing: 0;
+  opacity: 0;
+  transform: translateY(12px) rotate(-1deg);
+  transition: opacity 150ms ease, transform 180ms ease;
+  pointer-events: none;
+}
+
+.guitar-selector__empty-display[data-visible='true'] {
+  opacity: 1;
+  transform: translateY(0) rotate(-1deg);
+}
+
+.guitar-selector__empty-display strong {
+  color: var(--guitar-green);
+  font-size: clamp(16px, 1.65vw, 25px);
+  letter-spacing: 0;
+}
+
+.guitar-selector__empty-display span {
+  font-size: clamp(10px, 1vw, 14px);
+  letter-spacing: 0;
+}
+
+.guitar-selector__back {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  z-index: 6;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 3px 9px;
+  border: 0;
+  color: var(--guitar-black);
+  background: rgba(255, 255, 255, 0.84);
+  font-family: 'IBM Plex Mono', 'SFMono-Regular', Menlo, Consolas, monospace;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.guitar-selector__back svg {
+  width: 54px;
+  height: 32px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 5;
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+}
+
+.guitar-selector__back:focus-visible {
+  outline: 3px solid var(--guitar-blue);
+  outline-offset: 3px;
+}
+
+.guitar-pick-cursor {
+  --pick-accent: #1546ff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100000;
+  width: 44px;
+  height: 53px;
+  opacity: 0;
+  transition: opacity 80ms linear, scale 120ms ease;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.guitar-pick-cursor--visible {
+  opacity: 1;
+}
+
+.guitar-pick-cursor--pressed {
+  scale: 0.86;
+}
+
+.guitar-pick-cursor svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.guitar-pick-cursor__shadow {
+  fill: var(--guitar-black);
+  opacity: 0.24;
+  transform: translate(2px, 2px);
+}
+
+.guitar-pick-cursor__body {
+  fill: var(--pick-accent);
+  stroke: var(--guitar-black);
+  stroke-width: 3;
+  stroke-linejoin: round;
+  transition: fill 100ms linear;
+}
+
+.guitar-pick-cursor__paint,
+.guitar-pick-cursor__mark {
+  fill: none;
+  stroke-linecap: round;
+}
+
+.guitar-pick-cursor__paint {
+  stroke: #fff;
+  stroke-width: 5;
+  opacity: 0.72;
+}
+
+.guitar-pick-cursor__mark {
+  stroke: var(--guitar-black);
+  stroke-width: 2;
+  opacity: 0.72;
+}
+
+.guitar-pick-cursor[data-over-string='true'] {
+  scale: 1.08;
+}
+
+body.guitar-pick-scope-active {
+  cursor: auto !important;
+}
+
+body.guitar-pick-scope-active .target-cursor-wrapper {
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+.guitar-selector[data-pick-cursor='true'],
+.guitar-selector[data-pick-cursor='true'] * {
+  cursor: none !important;
+}
+
+.guitar-selector[data-pick-cursor='false'] .guitar-selector__string,
+.guitar-selector[data-pick-cursor='false'] .guitar-selector__back {
+  cursor: pointer !important;
+}
+
+@keyframes guitar-string-pluck {
+  0%,
+  100% {
+    transform: translateY(-50%) skewY(0deg) scaleY(1);
+  }
+  22% {
+    transform: translateY(-50%) skewY(0.75deg) scaleY(1.8);
+  }
+  48% {
+    transform: translateY(-50%) skewY(-0.5deg) scaleY(0.82);
+  }
+  72% {
+    transform: translateY(-50%) skewY(0.25deg) scaleY(1.24);
+  }
+}
+
+@media (max-width: 900px) {
+  .guitar-selector__project-label {
+    left: 33%;
+    width: min(47vw, 520px);
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+
+  .guitar-selector__project-label span {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 700px) {
+  .guitar-selector__scroll {
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: x proximity;
+  }
+
+  .guitar-selector__instrument {
+    width: 820px;
+    min-width: 820px;
+    scroll-snap-align: center;
+  }
+
+  .guitar-selector__string {
+    height: 48px;
+  }
+
+  .guitar-selector__project-label {
+    left: 0;
+    width: calc(100vw - 34px);
+    min-height: 38px;
+  }
+
+  .guitar-selector__project-label span {
+    font-size: 12px;
+  }
+
+  .guitar-selector__empty-display {
+    left: 44px;
+    width: 250px;
+  }
+}
+
+@media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
+  .guitar-pick-cursor {
+    display: none;
+  }
+
+  .guitar-selector,
+  .guitar-selector * {
+    cursor: auto !important;
+  }
+
+  .guitar-selector__string,
+  .guitar-selector__back {
+    cursor: pointer !important;
+  }
+
+  .guitar-selector__string:hover .guitar-selector__string-wire,
+  .guitar-selector__string:focus-visible .guitar-selector__string-wire,
+  .guitar-selector__string--current .guitar-selector__string-wire {
+    animation: none;
+  }
+
+  .guitar-selector__empty-display,
+  .guitar-selector__project-label,
+  .guitar-selector__string-wire {
+    transition: none;
+  }
+}

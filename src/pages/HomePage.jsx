@@ -1,21 +1,12 @@
-import { ClubSection } from '../components/ClubSection'
-import { ContactFinale } from '../components/ContactFinale'
-import { Hero } from '../components/Hero'
-import { ProfileSection } from '../components/ProfileSection'
-import { ProjectsSection } from '../components/ProjectsSection'
-import { ServiceSection } from '../components/ServiceSection'
-import { TargetCursor } from '../components/TargetCursor'
+import { useLocation } from 'react-router-dom'
+import { PortfolioScene } from '../components/PortfolioScene'
 
 export function HomePage() {
+  const location = useLocation()
   return (
-    <main>
-      <TargetCursor activeColor="#b497cf" color="#ffffff" spinDuration={2} />
-      <Hero />
-      <ProfileSection />
-      <ProjectsSection />
-      <ClubSection />
-      <ServiceSection />
-      <ContactFinale />
-    </main>
+    <PortfolioScene
+      initialView={location.state?.openScene}
+      returnFocusId={location.state?.returnFocusId}
+    />
   )
 }
