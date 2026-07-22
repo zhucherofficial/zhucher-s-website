@@ -1,0 +1,12 @@
+- main [ref=e3]:
+  - generic [ref=e4]:
+    - generic [ref=e5]: KEN_ZHANG // PORTFOLIO
+    - generic [ref=e6]:
+      - link "LAB" [ref=e7] [cursor=pointer]:
+        - /url: /lab
+      - button "Enable sound" [ref=e8]
+  - generic [ref=e13]:
+    - img "Hand-drawn green circuit board with an OLED screen, integrated circuit, pin header, resistor, LED, connector, and traces" [ref=e14]
+    - generic [ref=e26]: CLICK TO POWER ON
+    - button "Power on Ken's portfolio" [disabled] [ref=e28] [cursor=pointer]
+  - paragraph [ref=e30]: INITIALIZING KEN_ZHANG...

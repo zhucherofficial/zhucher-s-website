@@ -240,8 +240,80 @@ function PhysicsFolderIcon() {
   )
 }
 
+function SelfConceptStack({ photos, onActivate }) {
+  const [primaryPhoto, ...hiddenPhotos] = photos
+
+  return (
+    <div
+      className="about-portrait"
+      role="button"
+      tabIndex={0}
+      aria-label="Ken Zhang self-concept photo stack. Open it, if you dare."
+      aria-haspopup="dialog"
+      onClick={onActivate}
+      onKeyDown={(event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault()
+          onActivate()
+        }
+      }}
+    >
+      {hiddenPhotos.map((photo, index) => (
+        <div
+          className={`about-photo about-photo--hidden about-photo--hidden-${index + 1}`}
+          key={photo.src}
+        >
+          <img src={photo.src} alt={photo.alt} draggable="false" decoding="async" />
+        </div>
+      ))}
+      <div className="about-photo about-photo--primary">
+        <img src={primaryPhoto.src} alt={primaryPhoto.alt} draggable="false" decoding="async" />
+      </div>
+    </div>
+  )
+}
+
+function WatchingYouOverlay({ meme, onClose, closeRef }) {
+  return (
+    <div
+      className="watching-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="watching-warning"
+      onClick={onClose}
+    >
+      <figure
+        className="app-window watching-window"
+        onClick={(event) => event.stopPropagation()}
+      >
+        <header><span /><span /><span /><figcaption>WARNING.exe</figcaption></header>
+        <div className="watching-window__body">
+          <img src={meme.src} alt={meme.alt} draggable="false" decoding="async" />
+          <p className="watching-window__zh">{meme.warningZh}</p>
+          <p className="watching-window__en" id="watching-warning">{meme.warningEn}</p>
+          <button ref={closeRef} type="button" onClick={onClose}>OK, I GET IT</button>
+        </div>
+      </figure>
+    </div>
+  )
+}
+
 function AboutWindows({ state, panel, dispatch, closeRef, onBack }) {
   const showMore = state === HOME_STATES.ABOUT_MORE
+  const [showMeme, setShowMeme] = useState(false)
+  const memeCloseRef = useRef(null)
+  const openMeme = useCallback(() => setShowMeme(true), [])
+  const closeMeme = useCallback(() => setShowMeme(false), [])
+
+  useEffect(() => {
+    if (!showMeme) return undefined
+    memeCloseRef.current?.focus()
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') setShowMeme(false)
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [showMeme])
 
   return (
     <div className={`about-desktop ${showMore ? 'about-desktop--more' : ''}`}>
@@ -260,8 +332,12 @@ function AboutWindows({ state, panel, dispatch, closeRef, onBack }) {
       {!showMore ? (
         <figure className="app-window app-window--portrait">
           <header><span /><span /><span /><figcaption>SELF_CONCEPT.jpg</figcaption></header>
-          <div className="about-portrait"><img src={profile.portrait} alt="A stylized portrait of Ken Zhang" /></div>
+          <SelfConceptStack photos={profile.selfConceptPhotos} onActivate={openMeme} />
         </figure>
+      ) : null}
+
+      {showMeme ? (
+        <WatchingYouOverlay meme={profile.watchingYouMeme} onClose={closeMeme} closeRef={memeCloseRef} />
       ) : null}
 
       {showMore ? (
@@ -488,13 +564,22 @@ export function PortfolioScene({ initialView = null, returnFocusId = null }) {
     let currentY = 0
     let targetX = 0
     let targetY = 0
+    let velocityX = 0
+    let velocityY = 0
 
     const render = () => {
-      currentX += (targetX - currentX) * 0.075
-      currentY += (targetY - currentY) * 0.075
+      velocityX = (velocityX + (targetX - currentX) * 0.032) * 0.86
+      velocityY = (velocityY + (targetY - currentY) * 0.032) * 0.86
+      currentX += velocityX
+      currentY += velocityY
       stage.style.transform = `translate3d(${currentX.toFixed(2)}px, ${currentY.toFixed(2)}px, 0)`
 
-      if (Math.abs(targetX - currentX) > 0.03 || Math.abs(targetY - currentY) > 0.03) {
+      if (
+        Math.abs(targetX - currentX) > 0.03
+        || Math.abs(targetY - currentY) > 0.03
+        || Math.abs(velocityX) > 0.02
+        || Math.abs(velocityY) > 0.02
+      ) {
         frame = window.requestAnimationFrame(render)
       } else {
         frame = 0
@@ -506,8 +591,8 @@ export function PortfolioScene({ initialView = null, returnFocusId = null }) {
     }
 
     const handlePointerMove = (event) => {
-      targetX = (event.clientX / window.innerWidth - 0.5) * 30
-      targetY = (event.clientY / window.innerHeight - 0.5) * 16
+      targetX = (event.clientX / window.innerWidth - 0.5) * 64
+      targetY = (event.clientY / window.innerHeight - 0.5) * 38
       requestRender()
     }
     const settle = () => {

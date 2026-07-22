@@ -37,6 +37,7 @@ export function TargetCursor({
   targetSelector = '.target-cursor-hit',
   color = '#8be7dc',
   activeColor = '#d6ed6f',
+  blendMode,
   cursorColor,
   cursorColorOnTarget,
   spinDuration = 2.2,
@@ -437,7 +438,12 @@ export function TargetCursor({
   if (isMobile) return null
 
   return (
-    <div className="target-cursor-wrapper" ref={cursorRef} aria-hidden="true">
+    <div
+      className="target-cursor-wrapper"
+      ref={cursorRef}
+      aria-hidden="true"
+      style={blendMode ? { '--target-cursor-blend': blendMode } : undefined}
+    >
       <div className="target-cursor-dot" ref={dotRef} style={{ backgroundColor: baseColor }} />
       <div className="target-cursor-corner corner-tl" style={{ borderColor: baseColor }} />
       <div className="target-cursor-corner corner-tr" style={{ borderColor: baseColor }} />

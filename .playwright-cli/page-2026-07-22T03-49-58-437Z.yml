@@ -1,0 +1,26 @@
+- main [ref=e3]:
+  - generic [ref=e338]:
+    - button "Close About Ken" [ref=e339] [cursor=pointer]
+    - region [ref=e343]:
+      - heading "Ken_Zhang.app" [level=2] [ref=e348]
+      - generic [ref=e349]:
+        - paragraph [ref=e350]: I'm a high school student who dreams of building awesome engineering projects and shipping them into the world.
+        - paragraph [ref=e351]: Together, let's create something that sparks - something that impresses your friends, your family, and maybe even society, and leaves people saying, "woah."
+        - button "MORE_ABOUT_ME" [ref=e352]
+    - figure [ref=e353]:
+      - generic [ref=e354]: SELF_CONCEPT.jpg
+      - button "Ken Zhang self-concept photo stack. Open it, if you dare." [ref=e359] [cursor=pointer]:
+        - generic:
+          - img "Ken Zhang seated in a grassy park"
+        - generic:
+          - img "Ken Zhang relaxing on a grassy hillside"
+        - generic [ref=e360]:
+          - img "Ken Zhang playing an electric guitar outdoors"
+    - dialog [ref=e361]:
+      - figure [ref=e362]:
+        - generic [ref=e363]: WARNING.exe
+        - generic [ref=e368]:
+          - 'img "Warning meme: a figure ominously watching you" [ref=e369]'
+          - paragraph [ref=e370]: 我一直在看着你
+          - paragraph [ref=e371]: I have been watching you
+          - button "OK, I GET IT" [active] [ref=e372] [cursor=pointer]

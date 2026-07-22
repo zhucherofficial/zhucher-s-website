@@ -1,0 +1,14 @@
+- main [ref=e3]:
+  - generic [ref=e198]:
+    - generic [ref=e199]: KEN_ZHANG // PORTFOLIO
+    - generic [ref=e200]:
+      - link "LAB" [ref=e201] [cursor=pointer]:
+        - /url: /lab
+      - button "Enable sound" [ref=e202]
+  - generic [ref=e207]:
+    - img "Hand-drawn green circuit board with an OLED screen, integrated circuit, pin header, resistor, LED, connector, and traces" [ref=e208]
+    - generic [ref=e282]:
+      - strong [ref=e283]: I'm Ken! (he/him)
+      - generic [ref=e284]: I am an experimentalist
+      - generic [ref=e285]: I build playful things_
+    - button "ABOUT_KEN" [disabled]

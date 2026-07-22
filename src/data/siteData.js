@@ -10,6 +10,9 @@ import robotSuccessShowcase from '../assets/club-media/robot-success-showcase.mp
 import viceLeaderCindy from '../assets/club-media/vice-leader-cindy.jpg'
 import astragalusCover from '../assets/project-media/fermented-astragalus-feed.jpg'
 import profilePhoto from '../assets/profile-media/profile-photo.jpg'
+import selfConceptHillside from '../assets/profile-media/self-concept-hillside.jpg'
+import selfConceptPark from '../assets/profile-media/self-concept-park.jpg'
+import watchingYouMeme from '../assets/profile-media/watching-you-meme.jpg'
 import ramanCover from '../assets/project-media/raman-spectra-data.png'
 import robotCover from '../assets/project-media/wheeled-legged-robot.jpg'
 import subatomicCover from '../assets/project-media/subatomic.webp'
@@ -40,6 +43,26 @@ export const profile = {
     },
   ],
   portrait: profilePhoto,
+  selfConceptPhotos: [
+    {
+      src: profilePhoto,
+      alt: 'Ken Zhang playing an electric guitar outdoors',
+    },
+    {
+      src: selfConceptPark,
+      alt: 'Ken Zhang seated in a grassy park',
+    },
+    {
+      src: selfConceptHillside,
+      alt: 'Ken Zhang relaxing on a grassy hillside',
+    },
+  ],
+  watchingYouMeme: {
+    src: watchingYouMeme,
+    alt: 'Warning meme: a figure ominously watching you',
+    warningZh: '我一直在看着你',
+    warningEn: 'I have been watching you',
+  },
   intro:
     'I build at the intersection of physics, engineering, data analysis, and science education. My work ranges from subatomic physics data processing and Raman spectroscopy to robotics, embedded systems, and public-facing physics learning resources.',
   statement:

@@ -1,11 +1,33 @@
-import { Play, X } from 'lucide-react'
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { ArrowUpRight, Play, X } from 'lucide-react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import gsap from 'gsap'
 import { TargetCursor } from '../components/TargetCursor'
 import { getProjectManifestEntry } from '../data/projectManifest'
-import { getProjectById, projects } from '../data/siteData'
+import { getProjectById, profile, projects } from '../data/siteData'
 import './ProjectDetailPage.css'
+
+// Deterministic static-noise texture (random dots + scanlines) for the page background.
+let noiseDataUri
+function getNoiseDataUri() {
+  if (noiseDataUri) return noiseDataUri
+  const size = 160
+  let rects = ''
+  for (let i = 0; i < 340; i += 1) {
+    const x = Math.floor(Math.random() * size)
+    const y = Math.floor(Math.random() * size)
+    const light = Math.random() > 0.45
+    const alpha = (light ? 0.05 + Math.random() * 0.07 : 0.12 + Math.random() * 0.18).toFixed(3)
+    rects += `<rect x='${x}' y='${y}' width='1' height='1' fill='${light ? '#ffffff' : '#000000'}' fill-opacity='${alpha}'/>`
+  }
+  let scanlines = ''
+  for (let y = 0; y < size; y += 4) {
+    scanlines += `<rect x='0' y='${y}' width='${size}' height='1' fill='#ffffff' fill-opacity='0.03'/>`
+  }
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='${size}' height='${size}'><rect width='${size}' height='${size}' fill='#101013'/>${rects}${scanlines}</svg>`
+  noiseDataUri = `url("data:image/svg+xml,${encodeURIComponent(svg)}")`
+  return noiseDataUri
+}
 
 function prefersReducedMotion() {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -44,6 +66,7 @@ export function ProjectDetailPage() {
   const entranceTimelineRef = useRef(null)
   const exitTimelineRef = useRef(null)
   const [leaving, setLeaving] = useState(false)
+  const noiseTexture = useMemo(getNoiseDataUri, [])
 
   useLayoutEffect(() => {
     const root = rootRef.current
@@ -207,15 +230,18 @@ export function ProjectDetailPage() {
   }
 
   const evidenceItems = projectEvidenceItems(project)
+  const titleFontSize = project.title.length > 24
+    ? 'clamp(24px, 1.9vw, 30px)'
+    : 'clamp(28px, 2.5vw, 38px)'
 
   return (
     <main
       className={`project-case ${leaving ? 'project-case--leaving' : ''}`}
       data-transition-origin={transition?.origin ?? 'direct'}
       ref={rootRef}
-      style={{ '--project-accent': accent }}
+      style={{ '--project-accent': accent, '--project-noise-texture': noiseTexture }}
     >
-      <TargetCursor activeColor={accent} color="#ffffff" spinDuration={2.2} />
+      <TargetCursor blendMode="difference" activeColor="#ffffff" color="#ffffff" spinDuration={2.2} />
 
       <div className="project-case__transition-clone" ref={cloneRef} aria-hidden="true">
         <img src={project.image} alt="" style={{ objectPosition: project.imagePosition }} />
@@ -236,7 +262,7 @@ export function ProjectDetailPage() {
           <p>{project.eyebrow}</p>
           <i />
           <i />
-          <h1>{project.title}</h1>
+          <h1 style={{ fontSize: titleFontSize }}>{project.title}</h1>
         </header>
 
         <dl className="project-case__facts">
@@ -366,6 +392,19 @@ export function ProjectDetailPage() {
               </div>
             </section>
           ) : null}
+
+          <section className="project-case__cta">
+            <p className="project-case__section-number">05 / QUESTIONS?</p>
+            <h2>Wanna nerd out about this project?</h2>
+            <p>
+              Happy to talk shop about the build, the data, or the physics behind it.
+              The inbox is always open.
+            </p>
+            <a className="project-case__cta-link target-cursor-hit" href={`mailto:${profile.email}`}>
+              {profile.email}
+              <ArrowUpRight aria-hidden="true" />
+            </a>
+          </section>
 
           {nextProject ? (
             <footer className="project-case__next">
