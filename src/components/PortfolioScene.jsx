@@ -9,7 +9,7 @@ import {
   useState,
 } from 'react'
 import { Link } from 'react-router-dom'
-import { FlaskConical, Music2, Volume2, VolumeX, X } from 'lucide-react'
+import { ArrowUpRight, FlaskConical, Music2, Volume2, VolumeX, X } from 'lucide-react'
 import gsap from 'gsap'
 import { experiences, honors, profile } from '../data/siteData'
 import { GuitarSelector } from './GuitarSelector'
@@ -298,6 +298,98 @@ function WatchingYouOverlay({ meme, onClose, closeRef }) {
   )
 }
 
+function SocialPlatformIcon({ id }) {
+  if (id === 'bilibili') {
+    return (
+      <svg className="more-socials__platform-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M7.4 4.8 5.7 3.1M16.6 4.8l1.7-1.7M5.6 7.2h12.8a2.8 2.8 0 0 1 2.8 2.8v6.2a3.4 3.4 0 0 1-3.4 3.4H6.2a3.4 3.4 0 0 1-3.4-3.4V10a2.8 2.8 0 0 1 2.8-2.8Z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M8.2 13h.1M15.7 13h.1" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" />
+      </svg>
+    )
+  }
+
+  if (id === 'douyin') {
+    return (
+      <svg className="more-socials__platform-icon more-socials__platform-icon--douyin" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M15.2 3.5v10.1a5.2 5.2 0 1 1-3.9-5v3.2a2 2 0 1 0 1.2 1.8V3.5h2.7Z" stroke="#25f4ee" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M15.2 5.2c1 2.6 2.6 4.1 5.1 4.5" stroke="#fe2c55" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    )
+  }
+
+  return (
+    <svg className="more-socials__platform-icon more-socials__platform-icon--youtube" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M4.2 7.4a2.5 2.5 0 0 1 1.9-1.8C7.6 5.2 12 5.2 12 5.2s4.4 0 5.9.4a2.5 2.5 0 0 1 1.9 1.8c.4 1.5.4 4.6.4 4.6s0 3.1-.4 4.6a2.5 2.5 0 0 1-1.9 1.8c-1.5.4-5.9.4-5.9.4s-4.4 0-5.9-.4a2.5 2.5 0 0 1-1.9-1.8c-.4-1.5-.4-4.6-.4-4.6s0-3.1.4-4.6Z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="m10.4 9.3 4.2 2.7-4.2 2.7V9.3Z" fill="currentColor" />
+    </svg>
+  )
+}
+
+function MoreAboutPage({ panel }) {
+  if (panel === 'honors') {
+    return (
+      <div className="more-about__page" data-panel="honors">
+        <p className="window-kicker">AWARDS / COMPETITIONS</p>
+        <h3>Honors</h3>
+        <ol>{honors.map((honor) => <li key={honor}>{honor}</li>)}</ol>
+      </div>
+    )
+  }
+
+  if (panel === 'field-notes') {
+    return (
+      <div className="more-about__page" data-panel="field-notes">
+        <p className="window-kicker">EXPERIENCE / FIELD LOG</p>
+        <h3>Field Notes</h3>
+        <ol>
+          {experiences.map((experience) => (
+            <li key={experience.title}>
+              <time>{experience.year}</time>
+              <strong>{experience.title}</strong>
+              <span>{experience.meta}</span>
+              <p>{experience.description}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    )
+  }
+
+  return (
+    <div className="more-about__page" data-panel="socials">
+      <p className="window-kicker">BUILD LOGS / EXPERIMENT CLIPS</p>
+      <h3>Socials</h3>
+      <p className="more-socials__intro">
+        Follow the workshop in motion: projects, physics, robotics, and everything between prototypes.
+      </p>
+      <ul className="more-socials" role="list">
+        {profile.socials.map((social, index) => (
+          <li key={social.id} data-platform={social.id}>
+            <a
+              href={social.href}
+              target="_blank"
+              rel="noreferrer"
+              aria-label={`${social.label}, ${social.handle} (opens in a new tab)`}
+            >
+              <span className="more-socials__number" aria-hidden="true">
+                {String(index + 1).padStart(2, '0')}
+              </span>
+              <span className="more-socials__identity">
+                <span className="more-socials__label">
+                  <SocialPlatformIcon id={social.id} />
+                  <strong>{social.id === 'youtube' ? 'YouTube' : social.label}</strong>
+                </span>
+                <span>{social.handle}</span>
+              </span>
+              <ArrowUpRight aria-hidden="true" />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
 function AboutWindows({ state, panel, dispatch, closeRef, onBack }) {
   const showMore = state === HOME_STATES.ABOUT_MORE
   const [showMeme, setShowMeme] = useState(false)
@@ -345,19 +437,66 @@ function AboutWindows({ state, panel, dispatch, closeRef, onBack }) {
           <header><span /><span /><span /><h2 id="more-title">MORE_ABOUT_KEN.app</h2></header>
           <div className="more-about__layout">
             <nav aria-label="More about Ken sections">
-              <button className={panel === 'honors' ? 'is-active' : ''} type="button" onClick={() => dispatch({ type: 'ABOUT_PANEL', panel: 'honors' })}>HONORS</button>
-              <button className={panel === 'field-notes' ? 'is-active' : ''} type="button" onClick={() => dispatch({ type: 'ABOUT_PANEL', panel: 'field-notes' })}>FIELD_NOTES</button>
+              <button aria-pressed={panel === 'honors'} className={panel === 'honors' ? 'is-active' : ''} type="button" onClick={() => dispatch({ type: 'ABOUT_PANEL', panel: 'honors' })}>HONORS</button>
+              <button aria-pressed={panel === 'field-notes'} className={panel === 'field-notes' ? 'is-active' : ''} type="button" onClick={() => dispatch({ type: 'ABOUT_PANEL', panel: 'field-notes' })}>FIELD_NOTES</button>
+              <button aria-pressed={panel === 'socials'} className={panel === 'socials' ? 'is-active' : ''} type="button" onClick={() => dispatch({ type: 'ABOUT_PANEL', panel: 'socials' })}>SOCIALS</button>
             </nav>
-            <div className="more-about__content">
-              {panel === 'honors' ? (
-                <><p className="window-kicker">AWARDS / COMPETITIONS</p><h3>Honors</h3><ol>{honors.map((honor) => <li key={honor}>{honor}</li>)}</ol></>
-              ) : (
-                <><p className="window-kicker">EXPERIENCE / FIELD LOG</p><h3>Field Notes</h3><ol>{experiences.map((experience) => <li key={experience.title}><time>{experience.year}</time><strong>{experience.title}</strong><span>{experience.meta}</span><p>{experience.description}</p></li>)}</ol></>
-              )}
+            <div className="more-about__content" aria-live="polite">
+              <MoreAboutPage key={panel} panel={panel} />
             </div>
           </div>
         </section>
       ) : null}
+    </div>
+  )
+}
+
+function SiteCreditDialog({ onClose, closeRef }) {
+  useEffect(() => {
+    closeRef.current?.focus()
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') onClose()
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [onClose, closeRef])
+
+  return (
+    <div
+      className="watching-overlay site-credit-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="site-credit-title"
+      onClick={onClose}
+    >
+      <figure
+        className="app-window site-credit-window"
+        onClick={(event) => event.stopPropagation()}
+      >
+        <header><span /><span /><span /><figcaption id="site-credit-title">ABOUT_THIS_SITE.txt</figcaption></header>
+        <div className="site-credit-window__body">
+          <p>
+            This site is inspired by bryantcodes.art, which is truly amazing. It stands out among
+            today’s homogenized websites and genuinely makes me say "woah."
+          </p>
+          <p>
+            A special thanks to the creator, Bryant, for contributing his code to the open-source
+            community. His work has allowed me to study and create my own version inspired by this
+            site. Thank you again.
+          </p>
+          <a
+            className="site-credit-window__link"
+            href="https://bryantcodes.art"
+            target="_blank"
+            rel="noreferrer"
+          >
+            VISIT_BRYANTCODES.ART
+          </a>
+          <button ref={closeRef} className="site-credit-window__close" type="button" onClick={onClose}>
+            CLOSE
+          </button>
+        </div>
+      </figure>
     </div>
   )
 }
@@ -391,12 +530,17 @@ export function PortfolioScene({ initialView = null, returnFocusId = null }) {
   )
   const [soundOn, setSoundOn] = useState(() => localStorage.getItem('ken-site:sound:v1') === 'on')
   const [transitioning, setTransitioning] = useState(false)
+  const [showSiteCredit, setShowSiteCredit] = useState(false)
   const sceneRef = useRef(null)
   const stageRef = useRef(null)
   const returnFocusRef = useRef(null)
   const closeRef = useRef(null)
+  const siteCreditCloseRef = useRef(null)
   const previousViewRef = useRef(state.view)
   const transitionTimelineRef = useRef(null)
+
+  const openSiteCredit = useCallback(() => setShowSiteCredit(true), [])
+  const closeSiteCredit = useCallback(() => setShowSiteCredit(false), [])
 
   const openScene = useCallback((action, sourceSelector, rotation) => {
     if (transitioning) return
@@ -694,10 +838,22 @@ export function PortfolioScene({ initialView = null, returnFocusId = null }) {
 
       {showToolbar ? (
         <div className="portfolio-scene__toolbar">
-          <span>KEN_ZHANG // PORTFOLIO</span>
+          <div className="portfolio-scene__toolbar-left">
+            <span>KEN_ZHANG // PORTFOLIO</span>
+            <button
+              className="portfolio-scene__about-site"
+              type="button"
+              onClick={openSiteCredit}
+              aria-haspopup="dialog"
+            >
+              ABOUT_SITE
+            </button>
+          </div>
           <div><Link to="/lab">LAB</Link><button type="button" onClick={toggleSound} aria-label={soundOn ? 'Mute sound' : 'Enable sound'}>{soundOn ? <Volume2 aria-hidden="true" /> : <VolumeX aria-hidden="true" />}</button></div>
         </div>
       ) : null}
+
+      {showSiteCredit ? <SiteCreditDialog onClose={closeSiteCredit} closeRef={siteCreditCloseRef} /> : null}
 
       {showRings ? <Suspense fallback={null}><PhysicsFormulaRings className="portfolio-scene__rings" /></Suspense> : null}
 
