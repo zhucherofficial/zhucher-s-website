@@ -9,10 +9,12 @@ import {
   useState,
 } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowUpRight, FlaskConical, Music2, Volume2, VolumeX, X } from 'lucide-react'
+import { ArrowUpRight, FlaskConical, Moon, Music2, Sun, Volume2, VolumeX, X } from 'lucide-react'
 import gsap from 'gsap'
 import { experiences, honors, profile } from '../data/siteData'
+import { useTheme } from '../context/ThemeContext'
 import { GuitarSelector } from './GuitarSelector'
+import { PixelGeometricBackdrop } from './PixelGeometricBackdrop'
 import './PortfolioScene.css'
 
 const loadPhysicsFormulaRings = () =>
@@ -73,13 +75,12 @@ function CircuitBoard({ disabled = false, view, onPower, onOpenAbout }) {
     if (!root || view !== HOME_STATES.DRAWING) return undefined
 
     const context = gsap.context(() => {
-      const construction = gsap.utils.toArray('.ken-pcb__construction > *', root)
       const perimeter = gsap.utils.toArray('.ken-pcb__outline > *', root)
       const oled = gsap.utils.toArray('.ken-pcb__oled > *', root)
       const traces = gsap.utils.toArray('.ken-pcb__traces > *', root)
       const paint = gsap.utils.toArray('.ken-pcb__paint > *', root)
       const componentGroups = gsap.utils.toArray('.ken-pcb__components > g', root)
-      const drawTargets = [...construction, ...perimeter, ...oled, ...traces]
+      const drawTargets = [...perimeter, ...oled, ...traces]
       componentGroups.forEach((group) => drawTargets.push(...group.children))
 
       gsap.set(drawTargets, {
@@ -94,24 +95,22 @@ function CircuitBoard({ disabled = false, view, onPower, onOpenAbout }) {
       })
 
       const timeline = gsap.timeline({ defaults: { ease: 'power2.inOut' } })
-      timeline.to(construction[0], { autoAlpha: 1, strokeDashoffset: 0, duration: 0.72 }, 0.05)
-      timeline.to(construction[1], { autoAlpha: 1, strokeDashoffset: 0, duration: 0.72 }, 0.45)
-      timeline.to(perimeter, { autoAlpha: 1, strokeDashoffset: 0, duration: 0.5, stagger: 0.055 }, 1.14)
-      timeline.to(oled, { autoAlpha: 1, strokeDashoffset: 0, duration: 0.42, stagger: 0.045 }, 1.45)
-      timeline.to(traces, { autoAlpha: 1, strokeDashoffset: 0, duration: 0.38, stagger: 0.065 }, 1.86)
+      timeline.to(perimeter, { autoAlpha: 1, strokeDashoffset: 0, duration: 0.5, stagger: 0.055 }, 0.05)
+      timeline.to(oled, { autoAlpha: 1, strokeDashoffset: 0, duration: 0.42, stagger: 0.045 }, 0.36)
+      timeline.to(traces, { autoAlpha: 1, strokeDashoffset: 0, duration: 0.38, stagger: 0.065 }, 0.77)
 
       componentGroups.forEach((group, index) => {
         timeline.to(
           [...group.children],
           { autoAlpha: 1, strokeDashoffset: 0, duration: 0.28, stagger: 0.025 },
-          2.02 + index * 0.12,
+          0.93 + index * 0.12,
         )
       })
 
       timeline.to(
         paint,
         { autoAlpha: 0.96, strokeDashoffset: 0, duration: 0.42, stagger: 0.055 },
-        2.58,
+        1.49,
       )
     }, root)
 
@@ -121,10 +120,6 @@ function CircuitBoard({ disabled = false, view, onPower, onOpenAbout }) {
   return (
     <div className="ken-pcb" data-view={view} ref={rootRef}>
       <svg viewBox="0 0 720 500" role="img" aria-label="Hand-drawn green circuit board with an OLED screen, integrated circuit, pin header, resistor, LED, connector, and traces">
-        <g className="ken-pcb__construction" aria-hidden="true">
-          <path pathLength="1" d="M34 78C174 22 462 18 675 83M19 409C221 489 510 472 703 393" />
-          <path pathLength="1" d="M71 22C39 151 47 337 86 472M642 25C688 162 681 354 631 479" />
-        </g>
         <g className="ken-pcb__paint" aria-hidden="true">
           <path pathLength="1" d="M88 102H635" />
           <path pathLength="1" d="M69 160H661" />
@@ -516,6 +511,7 @@ function PhysicsFolder({ dispatch, closeRef, onBack }) {
 }
 
 export function PortfolioScene({ initialView = null, returnFocusId = null }) {
+  const { theme, toggleTheme } = useTheme()
   const [state, dispatch] = useReducer(
     sceneReducer,
     undefined,
@@ -531,6 +527,7 @@ export function PortfolioScene({ initialView = null, returnFocusId = null }) {
   const [soundOn, setSoundOn] = useState(() => localStorage.getItem('ken-site:sound:v1') === 'on')
   const [transitioning, setTransitioning] = useState(false)
   const [showSiteCredit, setShowSiteCredit] = useState(false)
+  const [themeFlashing, setThemeFlashing] = useState(false)
   const sceneRef = useRef(null)
   const stageRef = useRef(null)
   const returnFocusRef = useRef(null)
@@ -541,6 +538,36 @@ export function PortfolioScene({ initialView = null, returnFocusId = null }) {
 
   const openSiteCredit = useCallback(() => setShowSiteCredit(true), [])
   const closeSiteCredit = useCallback(() => setShowSiteCredit(false), [])
+
+  const handleThemeToggle = () => {
+    const nextTheme = theme === 'dark' ? 'light' : 'dark'
+    toggleTheme()
+    setThemeFlashing(true)
+    window.setTimeout(() => setThemeFlashing(false), 240)
+
+    if (soundOn) {
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext
+      if (AudioContextClass) {
+        const context = new AudioContextClass()
+        const osc = context.createOscillator()
+        const gain = context.createGain()
+        osc.type = 'triangle'
+        if (nextTheme === 'light') {
+          osc.frequency.setValueAtTime(480, context.currentTime)
+          osc.frequency.exponentialRampToValueAtTime(1400, context.currentTime + 0.08)
+        } else {
+          osc.frequency.setValueAtTime(920, context.currentTime)
+          osc.frequency.exponentialRampToValueAtTime(320, context.currentTime + 0.08)
+        }
+        gain.gain.setValueAtTime(0.09, context.currentTime)
+        gain.gain.exponentialRampToValueAtTime(0.001, context.currentTime + 0.09)
+        osc.connect(gain).connect(context.destination)
+        osc.start()
+        osc.stop(context.currentTime + 0.09)
+        osc.addEventListener('ended', () => context.close())
+      }
+    }
+  }
 
   const openScene = useCallback((action, sourceSelector, rotation) => {
     if (transitioning) return
@@ -632,7 +659,7 @@ export function PortfolioScene({ initialView = null, returnFocusId = null }) {
 
   useEffect(() => {
     if (state.view !== HOME_STATES.DRAWING) return undefined
-    const timer = window.setTimeout(() => dispatch({ type: 'INTRO_DONE' }), 3450)
+    const timer = window.setTimeout(() => dispatch({ type: 'INTRO_DONE' }), 2100)
     return () => window.clearTimeout(timer)
   }, [state.view])
 
@@ -668,27 +695,48 @@ export function PortfolioScene({ initialView = null, returnFocusId = null }) {
       return () => context.revert()
     }
 
-    if (state.view === HOME_STATES.MAIN) {
-      const returningFromPower = previousViewRef.current === HOME_STATES.POWERING
-      const objects = scene.querySelectorAll(returningFromPower ? '.main-object' : '.ken-pcb, .main-object')
-      const rings = scene.querySelector('.portfolio-scene__rings')
+    if (state.view === HOME_STATES.POWERING) {
+      const objects = scene.querySelectorAll('.main-object')
       const context = gsap.context(() => {
         gsap.fromTo(
           objects,
-          { autoAlpha: 0, scale: returningFromPower ? 0.7 : 0.78, rotation: returningFromPower ? -4 : 0 },
+          { autoAlpha: 0, scale: 0.65, rotation: -6 },
           {
             autoAlpha: 1,
             scale: 1,
             rotation: 0,
-            duration: 0.64,
-            stagger: 0.09,
-            ease: 'back.out(1.6)',
+            duration: 0.58,
+            stagger: 0.08,
+            delay: 0.35,
+            ease: 'back.out(1.7)',
             clearProps: 'transform,opacity,visibility',
           },
         )
-        if (rings) gsap.fromTo(rings, { autoAlpha: 0.2 }, { autoAlpha: 0.82, duration: 0.55, clearProps: 'opacity,visibility' })
       }, scene)
       return () => context.revert()
+    }
+
+    if (state.view === HOME_STATES.MAIN) {
+      const returningFromPower = previousViewRef.current === HOME_STATES.POWERING
+      if (!returningFromPower) {
+        const objects = scene.querySelectorAll('.ken-pcb, .main-object')
+        const context = gsap.context(() => {
+          gsap.fromTo(
+            objects,
+            { autoAlpha: 0, scale: 0.78, rotation: 0 },
+            {
+              autoAlpha: 1,
+              scale: 1,
+              rotation: 0,
+              duration: 0.64,
+              stagger: 0.09,
+              ease: 'back.out(1.6)',
+              clearProps: 'transform,opacity,visibility',
+            },
+          )
+        }, scene)
+        return () => context.revert()
+      }
     }
 
     return undefined
@@ -697,11 +745,15 @@ export function PortfolioScene({ initialView = null, returnFocusId = null }) {
   useEffect(() => {
     const stage = stageRef.current
     const scene = sceneRef.current
-    if (!stage || !scene || state.view !== HOME_STATES.MAIN || transitioning) return undefined
+    const parallaxViews = [HOME_STATES.DRAWING, HOME_STATES.GATE, HOME_STATES.MAIN]
+    if (!stage || !scene || !parallaxViews.includes(state.view) || transitioning) return undefined
 
     const canParallax = window.matchMedia('(hover: hover) and (pointer: fine)').matches
       && !window.matchMedia('(prefers-reduced-motion: reduce)').matches
     if (!canParallax) return undefined
+
+    const scribbles = scene.querySelector('.portfolio-scene__scribbles')
+    const rings = scene.querySelector('.portfolio-scene__rings')
 
     let frame = 0
     let currentX = 0
@@ -716,7 +768,13 @@ export function PortfolioScene({ initialView = null, returnFocusId = null }) {
       velocityY = (velocityY + (targetY - currentY) * 0.032) * 0.86
       currentX += velocityX
       currentY += velocityY
-      stage.style.transform = `translate3d(${currentX.toFixed(2)}px, ${currentY.toFixed(2)}px, 0)`
+      stage.style.transform = `translate3d(${(currentX * 32).toFixed(2)}px, ${(currentY * 19).toFixed(2)}px, 0)`
+      if (rings) {
+        rings.style.transform = `translate3d(${(currentX * -18).toFixed(2)}px, ${(currentY * -11).toFixed(2)}px, 0) scale(1.04)`
+      }
+      if (scribbles) {
+        scribbles.style.transform = `translate3d(${(currentX * -10).toFixed(2)}px, ${(currentY * -6).toFixed(2)}px, 0) scale(1.025)`
+      }
 
       if (
         Math.abs(targetX - currentX) > 0.03
@@ -735,8 +793,8 @@ export function PortfolioScene({ initialView = null, returnFocusId = null }) {
     }
 
     const handlePointerMove = (event) => {
-      targetX = (event.clientX / window.innerWidth - 0.5) * 64
-      targetY = (event.clientY / window.innerHeight - 0.5) * 38
+      targetX = event.clientX / window.innerWidth * 2 - 1
+      targetY = event.clientY / window.innerHeight * 2 - 1
       requestRender()
     }
     const settle = () => {
@@ -755,12 +813,14 @@ export function PortfolioScene({ initialView = null, returnFocusId = null }) {
       window.removeEventListener('blur', settle)
       if (frame) window.cancelAnimationFrame(frame)
       stage.style.transform = ''
+      if (rings) rings.style.transform = ''
+      if (scribbles) scribbles.style.transform = ''
     }
   }, [state.view, transitioning])
 
   useEffect(() => {
     if (state.view !== HOME_STATES.POWERING) return undefined
-    const timer = window.setTimeout(() => dispatch({ type: 'POWERED' }), 1600)
+    const timer = window.setTimeout(() => dispatch({ type: 'POWERED' }), 1450)
     return () => window.clearTimeout(timer)
   }, [state.view])
 
@@ -830,16 +890,13 @@ export function PortfolioScene({ initialView = null, returnFocusId = null }) {
       data-transitioning={transitioning ? 'true' : 'false'}
       ref={sceneRef}
     >
-      <svg className="portfolio-scene__scribbles" viewBox="0 0 1440 900" preserveAspectRatio="none" aria-hidden="true">
-        <path pathLength="1" d="M-30 169C188 28 313 206 497 105S798 3 987 111S1266 247 1471 103" />
-        <path pathLength="1" d="M-52 711C129 591 291 806 483 693S805 611 1008 729S1294 829 1490 704" />
-        <path pathLength="1" d="M96 18C187 182 35 294 147 432S305 673 176 912" />
-      </svg>
+      <PixelGeometricBackdrop />
+      {themeFlashing ? <div className="portfolio-scene__theme-flash" aria-hidden="true" /> : null}
 
       {showToolbar ? (
         <div className="portfolio-scene__toolbar">
           <div className="portfolio-scene__toolbar-left">
-            <span>KEN_ZHANG // PORTFOLIO</span>
+            <span className="portfolio-scene__toolbar-title">KEN_ZHANG // PORTFOLIO</span>
             <button
               className="portfolio-scene__about-site"
               type="button"
@@ -849,13 +906,30 @@ export function PortfolioScene({ initialView = null, returnFocusId = null }) {
               ABOUT_SITE
             </button>
           </div>
-          <div><Link to="/lab">LAB</Link><button type="button" onClick={toggleSound} aria-label={soundOn ? 'Mute sound' : 'Enable sound'}>{soundOn ? <Volume2 aria-hidden="true" /> : <VolumeX aria-hidden="true" />}</button></div>
+          <div className="portfolio-scene__toolbar-right">
+            <Link to="/lab">LAB</Link>
+            <button
+              className="portfolio-scene__theme-toggle"
+              type="button"
+              onClick={handleThemeToggle}
+              aria-label={`Switch to ${theme === 'dark' ? 'bright' : 'black'} theme`}
+              title={`Switch to ${theme === 'dark' ? 'bright' : 'black'} theme`}
+            >
+              {theme === 'dark' ? <Sun size={14} aria-hidden="true" /> : <Moon size={14} aria-hidden="true" />}
+              <span>{theme === 'dark' ? 'BRIGHT' : 'BLACK'}</span>
+            </button>
+            <button type="button" onClick={toggleSound} aria-label={soundOn ? 'Mute sound' : 'Enable sound'}>
+              {soundOn ? <Volume2 aria-hidden="true" /> : <VolumeX aria-hidden="true" />}
+            </button>
+          </div>
         </div>
       ) : null}
 
       {showSiteCredit ? <SiteCreditDialog onClose={closeSiteCredit} closeRef={siteCreditCloseRef} /> : null}
 
-      {showRings ? <Suspense fallback={null}><PhysicsFormulaRings className="portfolio-scene__rings" /></Suspense> : null}
+      <Suspense fallback={null}>
+        <PhysicsFormulaRings className="portfolio-scene__rings" active={showRings} />
+      </Suspense>
 
       <div className="portfolio-scene__stage" ref={stageRef}>
         {showBoard ? (
@@ -867,13 +941,13 @@ export function PortfolioScene({ initialView = null, returnFocusId = null }) {
           />
         ) : null}
 
-        {state.view === HOME_STATES.MAIN ? (
+        {[HOME_STATES.POWERING, HOME_STATES.MAIN].includes(state.view) ? (
           <div className="portfolio-scene__main-controls">
             <button
               ref={returnFocusRef}
               className="main-object main-object--guitar"
               type="button"
-              disabled={transitioning}
+              disabled={transitioning || state.view === HOME_STATES.POWERING}
               onClick={() => openScene({ type: 'OPEN_GUITAR' }, '.main-object--guitar', 6)}
             >
               <MainGuitar />
@@ -885,7 +959,7 @@ export function PortfolioScene({ initialView = null, returnFocusId = null }) {
             <button
               className="main-object main-object--folder"
               type="button"
-              disabled={transitioning}
+              disabled={transitioning || state.view === HOME_STATES.POWERING}
               onClick={() => openScene({ type: 'OPEN_FOLDER' }, '.main-object--folder', -5)}
             >
               <PhysicsFolderIcon />

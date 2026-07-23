@@ -1,13 +1,9 @@
-import { lazy, Suspense, useEffect, useId, useRef, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { projects } from '../data/siteData'
 import { projectStringManifest } from '../data/projectManifest'
 import { GuitarPickCursor } from './GuitarPickCursor'
 import './GuitarSelector.css'
-
-const PhysicsFormulaRings = lazy(() =>
-  import('./PhysicsFormulaRings').then((module) => ({ default: module.PhysicsFormulaRings })),
-)
 
 const STRING_POSITIONS = ['29.7%', '38.1%', '46.5%', '54.9%', '63.3%', '71.7%']
 
@@ -110,9 +106,6 @@ export function GuitarSelector({
       ref={scopeRef}
     >
       <GuitarPickCursor active={active} scopeRef={scopeRef} />
-      <Suspense fallback={null}>
-        <PhysicsFormulaRings active={active} className="guitar-selector__formula-rings" />
-      </Suspense>
       <h2 className="guitar-selector__sr-only" id={headingId}>
         Projects guitar
       </h2>

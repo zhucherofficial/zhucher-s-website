@@ -10,7 +10,8 @@
   min-width: 0;
   overflow: hidden;
   color: var(--guitar-black);
-  background: #fff;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(6px);
   isolation: isolate;
 }
 
@@ -285,8 +286,8 @@
   padding: 6px 15px 7px;
   overflow: visible;
   border-left: 7px solid var(--string-accent);
-  background: rgba(255, 255, 255, 0.92);
-  box-shadow: 6px 5px 0 rgba(18, 19, 26, 0.12);
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 6px 6px 0 #000000, 0 10px 20px rgba(0, 0, 0, 0.4);
   transform: translateY(-50%) rotate(-0.35deg);
 }
 
@@ -322,7 +323,7 @@
 .guitar-selector__string:hover .guitar-selector__project-label,
 .guitar-selector__string:focus-visible .guitar-selector__project-label,
 .guitar-selector__string--current .guitar-selector__project-label {
-  box-shadow: 9px 8px 0 color-mix(in srgb, var(--string-accent) 28%, transparent);
+  box-shadow: 8px 8px 0 #000000, 0 14px 28px rgba(0, 0, 0, 0.5);
   transform: translateY(-50%) rotate(0.25deg) translateX(5px);
 }
 

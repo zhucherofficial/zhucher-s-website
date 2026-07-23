@@ -4,12 +4,15 @@
   overflow: hidden;
   contain: layout paint style;
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
   user-select: none;
+  transition: opacity 450ms ease, visibility 450ms ease;
 }
 
 .physics-formula-rings.is-active {
   opacity: 1;
+  visibility: visible;
 }
 
 .physics-formula-rings > div,

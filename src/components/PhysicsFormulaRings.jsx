@@ -2,14 +2,15 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { Cylinder } from '@react-three/drei'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
+import { useTheme } from '../context/ThemeContext'
 import './PhysicsFormulaRings.css'
 
 const FONT_FAMILY = 'Roboto Mono'
-const FONT_SIZE = 26
-const FONT_SPEC = `200 ${FONT_SIZE}px "${FONT_FAMILY}"`
-const CANVAS_FONT = `200 ${FONT_SIZE}px "${FONT_FAMILY}", ui-monospace, monospace`
+const FONT_SIZE = 34
+const FONT_SPEC = `700 ${FONT_SIZE}px "${FONT_FAMILY}"`
+const CANVAS_FONT = `700 ${FONT_SIZE}px "${FONT_FAMILY}", ui-monospace, monospace`
 const TEXTURE_WIDTH = 2048
-const TEXTURE_HEIGHT = 34
+const TEXTURE_HEIGHT = 46
 const OUTER_RADIUS = 3.8
 const RADIUS_TAPER = 0.05
 const UPDATE_INTERVAL = 0.1
@@ -17,27 +18,27 @@ const CARET = '░▒▓██'
 
 const RINGS = [
   {
-    color: '#1546ff',
+    color: '#ffffff',
     content: 'F = ma  /  p = mv  /  τ = r × F  /  Eₖ = ½mv²  /  L = T - V  /  d/dt(∂L/∂q̇) - ∂L/∂q = 0  /  What I cannot create, I do not understand. - Richard Feynman',
   },
   {
-    color: '#1546ff',
+    color: '#ffffff',
     content: '∇·E = ρ/ε₀  /  ∇·B = 0  /  ∇×E = -∂B/∂t  /  ∇×B = μ₀J + μ₀ε₀∂E/∂t  /  F = q(E + v × B)  /  V = IR  /  P = VI  /  ω₀ = 1/√(LC)  /  Nothing is too wonderful to be true. - Michael Faraday',
   },
   {
-    color: '#1546ff',
+    color: '#ffffff',
     content: 'iℏ ∂ψ/∂t = Ĥψ  /  Δx Δp ≥ ℏ/2  /  E = hf  /  p = h/λ  /  E² = p²c² + m²c⁴  /  |ψ|² = ρ  /  Be less curious about people and more curious about ideas. - Marie Curie',
   },
   {
-    color: '#1546ff',
+    color: '#ffffff',
     content: '∂²u/∂t² = c²∇²u  /  c = fλ  /  n₁ sin θ₁ = n₂ sin θ₂  /  d sin θ = mλ  /  F(k) = ∫ f(x)e⁻ⁱᵏˣ dx  /  The most incomprehensible thing about the universe is that it is comprehensible. - Albert Einstein',
   },
   {
-    color: '#1546ff',
+    color: '#ffffff',
     content: 'PV = nRT  /  dU = δQ - δW  /  S = kᴮ ln Ω  /  P + ½ρv² + ρgh = constant  /  Δν = ν₀ - νₛ  /  Eᵥ = (v + ½)ℏω  /  Iᵣ ∝ |∂α/∂Q|²',
   },
   {
-    color: '#1546ff',
+    color: '#ffffff',
     content: 'ẋ = Ax + Bu  /  y = Cx + Du  /  u = -Kx  /  u(t) = Kₚ e(t) + Kᵢ ∫ e(t)dt + Kₑ de(t)/dt  /  τ = Iα  /  V = IR  /  F = ma  /  build  /  test  /  measure  /  learn  /  repeat',
   },
 ]
@@ -54,7 +55,7 @@ const MOBILE_RINGS = [
 
 const DESKTOP_RADII = [3.8, 3.28, 2.76, 2.24, 1.72, 1.2]
 const MOBILE_RADII = [3.8, 3, 2.2, 1.4]
-const MATERIAL_OPACITY = [0.56, 0.51, 0.46, 0.41, 0.36, 0.31]
+const MATERIAL_OPACITY = [0.98, 0.92, 0.86, 0.80, 0.74, 0.68]
 
 function redrawTextTexture(texture, cursorIndex) {
   const { context, textureLine } = texture.userData
@@ -212,7 +213,7 @@ function FormulaRing({ content, color, depth, direction, ellipseScale, index, ra
   )
 }
 
-function FormulaRingScene({ fontVersion, reducedMotion }) {
+function FormulaRingScene({ fontVersion, reducedMotion, theme }) {
   const { size, viewport } = useThree()
   const isMobile = size.width <= 720
   const rings = isMobile ? MOBILE_RINGS : RINGS
@@ -225,6 +226,7 @@ function FormulaRingScene({ fontVersion, reducedMotion }) {
       (viewport.height / (OUTER_RADIUS * 2)) * 1.05,
     )
   const depthStep = isMobile ? -0.28 : -0.14
+  const textColor = theme === 'light' ? '#12131a' : '#ffffff'
 
   return (
     <group
@@ -234,13 +236,13 @@ function FormulaRingScene({ fontVersion, reducedMotion }) {
     >
       {rings.map((ring, index) => (
         <FormulaRing
-          color={ring.color}
+          color={textColor}
           content={ring.content}
           depth={index * depthStep}
           direction={index % 2 === 0 ? -1 : 1}
           ellipseScale={ellipseScale}
           index={index}
-          key={`${fontVersion}-${ring.color}-${index}`}
+          key={`${fontVersion}-${textColor}-${index}`}
           radius={radii[index]}
           reducedMotion={reducedMotion}
           repeats={Math.max(4 - Math.floor(index / 2), 1)}
@@ -257,6 +259,7 @@ const rendererOptions = {
 }
 
 export function PhysicsFormulaRings({ active = true, className = '' }) {
+  const { theme } = useTheme()
   const fontVersion = useRobotoMono()
   const reducedMotion = useReducedMotion()
   const rootClass = ['physics-formula-rings', active ? 'is-active' : '', className]
@@ -265,15 +268,15 @@ export function PhysicsFormulaRings({ active = true, className = '' }) {
 
   return (
     <div className={rootClass} aria-hidden="true">
-      {active && fontVersion > 0 ? (
+      {fontVersion > 0 ? (
         <Canvas
           camera={{ fov: 44, near: 0.1, far: 30, position: [0, 0, 10] }}
           dpr={[1, 1.35]}
           fallback={null}
-          frameloop={reducedMotion ? 'demand' : 'always'}
+          frameloop={!active || reducedMotion ? 'demand' : 'always'}
           gl={rendererOptions}
         >
-          <FormulaRingScene fontVersion={fontVersion} reducedMotion={reducedMotion} />
+          <FormulaRingScene fontVersion={fontVersion} reducedMotion={reducedMotion} theme={theme} />
         </Canvas>
       ) : null}
     </div>
