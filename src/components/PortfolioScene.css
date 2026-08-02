@@ -21,6 +21,30 @@
   letter-spacing: 0;
 }
 
+/* Paper grain over the whole scene. Two layers: fine fibre noise from an inline
+   SVG turbulence, plus a broad vignette so the sheet has a lit centre. */
+.portfolio-scene::after {
+  position: absolute;
+  z-index: 20;
+  content: '';
+  inset: 0;
+  background-image:
+    radial-gradient(125% 95% at 50% 42%, transparent 52%, rgba(0, 0, 0, 0.42) 100%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='170' height='170'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='170' height='170' filter='url(%23g)' opacity='0.42'/%3E%3C/svg%3E");
+  background-size: cover, 170px 170px;
+  mix-blend-mode: soft-light;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+[data-theme='light'] .portfolio-scene::after {
+  background-image:
+    radial-gradient(125% 95% at 50% 42%, transparent 56%, rgba(90, 74, 48, 0.2) 100%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='170' height='170'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.86' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='170' height='170' filter='url(%23g)' opacity='0.5'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
+  opacity: 0.34;
+}
+
 .portfolio-scene__scribbles,
 .portfolio-scene__rings {
   position: absolute;
@@ -65,12 +89,13 @@
 }
 
 .portfolio-scene--drawing .portfolio-scene__scribbles path {
-  animation: scene-line-draw 1.5s ease forwards;
+  /* cubic-bezier here mimics the pen ease used on the board strokes. */
+  animation: scene-line-draw 1.15s cubic-bezier(.16,.72,.3,1) forwards;
   stroke-dashoffset: 1;
 }
 
-.portfolio-scene--drawing .portfolio-scene__scribbles path:nth-child(2) { animation-delay: 0.45s; stroke: var(--pink); }
-.portfolio-scene--drawing .portfolio-scene__scribbles path:nth-child(3) { animation-delay: 0.82s; stroke: var(--cyan); }
+.portfolio-scene--drawing .portfolio-scene__scribbles path:nth-child(2) { animation-delay: 0.34s; stroke: var(--pink); }
+.portfolio-scene--drawing .portfolio-scene__scribbles path:nth-child(3) { animation-delay: 0.63s; stroke: var(--cyan); }
 
 .portfolio-scene__rings {
   z-index: 0;
@@ -349,15 +374,60 @@
   will-change: transform;
 }
 
+/* Once drawn, the board never sits perfectly still. A long, low-amplitude drift
+   keeps it feeling held rather than pasted down. */
+.portfolio-scene--gate .ken-pcb svg,
+.portfolio-scene--main .ken-pcb svg {
+  animation: pen-tremor 9s ease-in-out infinite;
+  transform-origin: 50% 55%;
+}
+
+@keyframes pen-tremor {
+  0%, 100% { transform: rotate(-0.22deg) translate(0, 0); }
+  27% { transform: rotate(0.16deg) translate(1.4px, -1px); }
+  53% { transform: rotate(0.26deg) translate(-0.8px, 1.2px); }
+  78% { transform: rotate(-0.12deg) translate(1px, 0.6px); }
+}
+
 .ken-pcb svg { display: block; width: 100%; height: 100%; overflow: visible; }
 .ken-pcb__construction { fill: none; stroke: var(--cyan); stroke-width: 3; stroke-linecap: round; opacity: 0.3; }
 .ken-pcb__construction path:nth-child(2) { stroke: var(--pink); }
+
+/* Construction guides: pale, thin, and deliberately imprecise. */
+.ken-pcb__guides {
+  fill: none;
+  stroke: var(--cyan);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-dasharray: 7 9;
+  opacity: 0.34;
+}
+.portfolio-scene--drawing .ken-pcb__guides { filter: url(#ken-ink); }
+/* Guides fade out once the real ink is down — they were only scaffolding. */
+.portfolio-scene--gate .ken-pcb__guides,
+.portfolio-scene--powering .ken-pcb__guides,
+.portfolio-scene--main .ken-pcb__guides {
+  opacity: 0;
+  transition: opacity 900ms ease 200ms;
+}
+
+.ken-pcb__nib { fill: var(--ink); stroke: none; opacity: 0; }
+.ken-pcb__nib path { fill: var(--ink); }
+.ken-pcb__nib circle { fill: var(--pink); }
+
 .ken-pcb__paint { fill: none; stroke: var(--green); stroke-width: 76; stroke-linecap: round; opacity: 0.96; }
 .ken-pcb__paint path:first-child,
 .ken-pcb__paint path:last-child { stroke-width: 58; }
 .ken-pcb__outline,
 .ken-pcb__oled,
 .ken-pcb__components { fill: none; stroke: var(--ink); stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
+
+/* The displacement filters are what stop this reading as clean vector art.
+   Applied to the whole group so fills warp along with their outlines. */
+.ken-pcb__outline,
+.ken-pcb__components,
+.ken-pcb__traces { filter: url(#ken-ink); }
+.ken-pcb__paint { filter: url(#ken-marker); }
 .ken-pcb__outline circle { fill: #fff; }
 .ken-pcb__traces { fill: none; stroke: var(--cyan); stroke-width: 4; stroke-linecap: square; stroke-linejoin: round; }
 .ken-pcb__traces path:nth-child(2) { stroke: var(--pink); }
@@ -390,7 +460,7 @@
   text-shadow: 0 0 9px rgba(184,255,44,0.45);
 }
 .ken-pcb__power-label { font-size: clamp(12px, 1.35vw, 20px); font-weight: 800; }
-.portfolio-scene--drawing .ken-pcb__power-label { opacity: 0; animation: gate-prompt-in .16s 3.3s ease forwards; }
+.portfolio-scene--drawing .ken-pcb__power-label { opacity: 0; animation: gate-prompt-in .16s 2.6s ease forwards; }
 .ken-pcb__identity { display: grid; width: 88%; gap: 7px; font-size: clamp(10px, 1.15vw, 17px); }
 .ken-pcb__identity strong { color: #fff; font-size: 1.18em; }
 .ken-pcb__identity strong span { color: var(--cyan); }
@@ -894,4 +964,10 @@
   .portfolio-scene *,
   .portfolio-scene *::before,
   .portfolio-scene *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+
+  /* Keep the paper texture (it is static) but drop the idle drift and the nib,
+     which only make sense as part of the drawing motion. */
+  .ken-pcb svg { animation: none !important; transform: none !important; }
+  .ken-pcb__nib { display: none; }
+  .ken-pcb__guides { opacity: 0; }
 }

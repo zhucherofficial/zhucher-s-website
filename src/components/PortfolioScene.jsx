@@ -11,6 +11,7 @@ import {
 import { Link } from 'react-router-dom'
 import { ArrowUpRight, FlaskConical, Moon, Music2, Sun, Volume2, VolumeX, X } from 'lucide-react'
 import gsap from 'gsap'
+import { CustomEase } from 'gsap/CustomEase'
 import { experiences, honors, profile } from '../data/siteData'
 import { useTheme } from '../context/ThemeContext'
 import { GuitarSelector } from './GuitarSelector'
@@ -20,6 +21,21 @@ import './PortfolioScene.css'
 const loadPhysicsFormulaRings = () =>
   import('./PhysicsFormulaRings').then((module) => ({ default: module.PhysicsFormulaRings }))
 const PhysicsFormulaRings = lazy(loadPhysicsFormulaRings)
+
+gsap.registerPlugin(CustomEase)
+
+// A pen doesn't move at a constant rate. It digs in at the start of a stroke, races
+// through the middle, then decelerates as the hand lifts. These eases approximate
+// that pressure curve so each line has a bit of muscle behind it.
+const PEN_STROKE = CustomEase.create('penStroke', 'M0,0 C0.08,0.28 0.2,0.86 0.42,0.94 0.62,1.01 0.8,1 1,1')
+const PEN_FLICK = CustomEase.create('penFlick', 'M0,0 C0.12,0.42 0.28,0.98 0.55,1.02 0.74,1.04 0.88,1 1,1')
+
+// Deterministic jitter, keyed off an index, so the "hand wobble" is stable between
+// renders instead of re-rolling on every mount.
+function penJitter(index, spread) {
+  const seeded = Math.sin(index * 12.9898) * 43758.5453
+  return ((seeded - Math.floor(seeded)) * 2 - 1) * spread
+}
 
 const HOME_STATES = {
   DRAWING: 'drawing',
@@ -80,38 +96,138 @@ function CircuitBoard({ disabled = false, view, onPower, onOpenAbout }) {
       const traces = gsap.utils.toArray('.ken-pcb__traces > *', root)
       const paint = gsap.utils.toArray('.ken-pcb__paint > *', root)
       const componentGroups = gsap.utils.toArray('.ken-pcb__components > g', root)
+      const guides = gsap.utils.toArray('.ken-pcb__guides > *', root)
+      const nib = root.querySelector('.ken-pcb__nib')
+      const svg = root.querySelector('svg')
       const drawTargets = [...perimeter, ...oled, ...traces]
       componentGroups.forEach((group) => drawTargets.push(...group.children))
 
-      gsap.set(drawTargets, {
+      gsap.set([...drawTargets, ...paint, ...guides], {
         autoAlpha: 0,
         strokeDasharray: 1,
         strokeDashoffset: 1,
       })
-      gsap.set(paint, {
-        autoAlpha: 0,
-        strokeDasharray: 1,
-        strokeDashoffset: 1,
+      gsap.set(nib, { autoAlpha: 0 })
+
+      const timeline = gsap.timeline({ defaults: { ease: PEN_STROKE } })
+
+      // 0. The hand arrives: the whole sheet lifts in slightly off-axis, so the
+      // drawing feels placed rather than switched on.
+      timeline.fromTo(
+        svg,
+        { rotate: -1.4, scale: 0.972, autoAlpha: 0.4, transformOrigin: '50% 55%' },
+        { rotate: 0, scale: 1, autoAlpha: 1, duration: 1.25, ease: 'power2.out' },
+        0,
+      )
+
+      // 1. Light construction guides first — the sketch under the sketch.
+      timeline.to(
+        guides,
+        { autoAlpha: 0.34, strokeDashoffset: 0, duration: 0.34, stagger: 0.05, ease: PEN_FLICK },
+        0,
+      )
+
+      // 2. Outline, drawn edge by edge with a wobble on each stroke's landing.
+      perimeter.forEach((node, index) => {
+        timeline
+          .to(
+            node,
+            {
+              autoAlpha: 1,
+              strokeDashoffset: 0,
+              duration: 0.34 + penJitter(index, 0.05),
+              ease: PEN_STROKE,
+            },
+            0.16 + index * 0.115,
+          )
+          .fromTo(
+            node,
+            { x: penJitter(index + 7, 1.6), y: penJitter(index + 19, 1.6) },
+            { x: 0, y: 0, duration: 0.42, ease: 'elastic.out(1, 0.62)' },
+            '<0.1',
+          )
       })
 
-      const timeline = gsap.timeline({ defaults: { ease: 'power2.inOut' } })
-      timeline.to(perimeter, { autoAlpha: 1, strokeDashoffset: 0, duration: 0.5, stagger: 0.055 }, 0.05)
-      timeline.to(oled, { autoAlpha: 1, strokeDashoffset: 0, duration: 0.42, stagger: 0.045 }, 0.36)
-      timeline.to(traces, { autoAlpha: 1, strokeDashoffset: 0, duration: 0.38, stagger: 0.065 }, 0.77)
-
-      componentGroups.forEach((group, index) => {
+      // 3. Screen housing, then traces routed outward from it.
+      timeline.to(
+        oled,
+        { autoAlpha: 1, strokeDashoffset: 0, duration: 0.3, stagger: 0.07, ease: PEN_STROKE },
+        0.66,
+      )
+      traces.forEach((node, index) => {
         timeline.to(
-          [...group.children],
-          { autoAlpha: 1, strokeDashoffset: 0, duration: 0.28, stagger: 0.025 },
-          0.93 + index * 0.12,
+          node,
+          {
+            autoAlpha: 1,
+            strokeDashoffset: 0,
+            duration: 0.4 + penJitter(index + 3, 0.06),
+            ease: PEN_FLICK,
+          },
+          1.02 + index * 0.1,
         )
       })
 
+      // 4. Components dropped in per group, each with a small settle.
+      componentGroups.forEach((group, index) => {
+        const children = [...group.children]
+        const at = 1.24 + index * 0.135
+        timeline.to(
+          children,
+          { autoAlpha: 1, strokeDashoffset: 0, duration: 0.24, stagger: 0.03, ease: PEN_FLICK },
+          at,
+        )
+        timeline.fromTo(
+          group,
+          { scale: 0.9, rotate: penJitter(index + 31, 3.4), transformOrigin: 'center center' },
+          { scale: 1, rotate: 0, duration: 0.5, ease: 'back.out(2.4)' },
+          at,
+        )
+      })
+
+      // 5. Marker fill last, dragged across in overlapping passes.
+      paint.forEach((node, index) => {
+        timeline.to(
+          node,
+          {
+            autoAlpha: 0.96,
+            strokeDashoffset: 0,
+            duration: 0.34,
+            ease: 'power1.inOut',
+          },
+          1.72 + index * 0.062,
+        )
+      })
+
+      // 6. The nib itself: rides along the outline while it is being drawn, then
+      // flicks away. Purely decorative, hidden from assistive tech.
+      if (nib) {
+        timeline
+          .to(nib, { autoAlpha: 1, duration: 0.12 }, 0.14)
+          .to(
+            nib,
+            {
+              keyframes: [
+                { x: 578, y: -8, duration: 0.34 },
+                { x: 616, y: 375, duration: 0.32 },
+                { x: 30, y: 396, duration: 0.3 },
+                { x: -18, y: 40, duration: 0.28 },
+                { x: 300, y: 150, duration: 0.3 },
+                { x: 420, y: 330, duration: 0.34 },
+              ],
+              ease: 'none',
+            },
+            0.16,
+          )
+          .to(nib, { autoAlpha: 0, scale: 0.6, duration: 0.26, ease: 'power2.in' }, 1.72)
+      }
+
+      // 7. Whole board takes one breath once the ink is down.
       timeline.to(
-        paint,
-        { autoAlpha: 0.96, strokeDashoffset: 0, duration: 0.42, stagger: 0.055 },
-        1.49,
+        svg,
+        { scale: 1.012, duration: 0.22, ease: 'power2.out', transformOrigin: '50% 55%' },
+        2.02,
       )
+      timeline.to(svg, { scale: 1, duration: 0.5, ease: 'elastic.out(1, 0.5)' }, 2.24)
     }, root)
 
     return () => context.revert()
@@ -120,6 +236,29 @@ function CircuitBoard({ disabled = false, view, onPower, onOpenAbout }) {
   return (
     <div className="ken-pcb" data-view={view} ref={rootRef}>
       <svg viewBox="0 0 720 500" role="img" aria-label="Hand-drawn green circuit board with an OLED screen, integrated circuit, pin header, resistor, LED, connector, and traces">
+        <defs>
+          {/* Roughens every edge so strokes read as pen on paper instead of vector-perfect. */}
+          <filter id="ken-ink" x="-12%" y="-12%" width="124%" height="124%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.028 0.036" numOctaves="3" seed="7" result="ink-noise" />
+            <feDisplacementMap in="SourceGraphic" in2="ink-noise" scale="3.2" xChannelSelector="R" yChannelSelector="G" />
+          </filter>
+          {/* Heavier displacement for the marker fill, which bleeds more than the pen. */}
+          <filter id="ken-marker" x="-16%" y="-16%" width="132%" height="132%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.014 0.021" numOctaves="4" seed="19" result="marker-noise" />
+            <feDisplacementMap in="SourceGraphic" in2="marker-noise" scale="7.5" xChannelSelector="R" yChannelSelector="G" result="bled" />
+            <feGaussianBlur in="bled" stdDeviation="0.7" />
+          </filter>
+        </defs>
+
+        {/* Faint construction lines, as if the shape was blocked out before inking. */}
+        <g className="ken-pcb__guides" aria-hidden="true">
+          <path pathLength="1" d="M45 76H684" />
+          <path pathLength="1" d="M45 440H684" />
+          <path pathLength="1" d="M62 40V465" />
+          <path pathLength="1" d="M666 40V465" />
+          <path pathLength="1" d="M45 258H684" />
+        </g>
+
         <g className="ken-pcb__paint" aria-hidden="true">
           <path pathLength="1" d="M88 102H635" />
           <path pathLength="1" d="M69 160H661" />
@@ -172,6 +311,12 @@ function CircuitBoard({ disabled = false, view, onPower, onOpenAbout }) {
             <circle pathLength="1" cx="475" cy="391" r="13" />
             <path pathLength="1" d="M475 378V404M462 391H488" />
           </g>
+        </g>
+
+        {/* The pen tip, chasing the strokes as they appear. */}
+        <g className="ken-pcb__nib" aria-hidden="true">
+          <path d="M0 0L15 34L23 26Z" />
+          <circle cx="1" cy="1" r="3.5" />
         </g>
       </svg>
 
@@ -700,7 +845,8 @@ export function PortfolioScene({ initialView = null, returnFocusId = null }) {
 
   useEffect(() => {
     if (state.view !== HOME_STATES.DRAWING) return undefined
-    const timer = window.setTimeout(() => dispatch({ type: 'INTRO_DONE' }), 2100)
+    // Matches the end of the drawing timeline (ink down ~2.05s, settle ~2.75s).
+    const timer = window.setTimeout(() => dispatch({ type: 'INTRO_DONE' }), 2750)
     return () => window.clearTimeout(timer)
   }, [state.view])
 
