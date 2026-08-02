@@ -16,6 +16,7 @@ import watchingYouMeme from '../assets/profile-media/watching-you-meme.jpg'
 import ramanCover from '../assets/project-media/raman-spectra-data.png'
 import robotCover from '../assets/project-media/wheeled-legged-robot.jpg'
 import subatomicCover from '../assets/project-media/subatomic.webp'
+import spaghettiBridgeCover from '../assets/project-media/spaghetti-bridge/ken-bridge-cover.jpg'
 
 export const profile = {
   name: 'Ken Zhang',
@@ -167,22 +168,22 @@ export const projects = [
   },
   {
     id: 'subatomic-physics',
-    title: 'Experimental Subatomic Physics Data Analysis',
-    eyebrow: 'Physics / Machine Learning',
+    title: 'Jet pT Reconstruction in Heavy-Ion Collisions',
+    eyebrow: 'Subatomic Physics / Machine Learning',
     role: 'Student researcher',
     period: 'Grade 11',
     hours: '5 hours per week, 12 weeks per year',
     image: subatomicCover,
     imagePosition: '50% 50%',
     summary:
-      'Analyzed subatomic experiment data to identify jet resolution under thermal background in single-event hadron collisions.',
+      'Reconstructed true jet transverse momentum after simulated thermal-background contamination, comparing FastJet subtraction with feature and image-based learning.',
     detail:
-      'The research compared convolutional neural network methods with mathematical algorithms and decision-tree-based machine learning models. A second paper draft has been submitted and is awaiting feedback; final paper title is still to be confirmed.',
-    tags: ['Particle Physics', 'CNN', 'Data Processing', 'Research Draft'],
+      'The pipeline generated PYTHIA events, added a multi-species thermal bath with elliptic-flow modulation, clustered anti-kT jets at R = 0.4, and matched reconstructed jets back to truth. Shared held-out indices supported direct comparisons between an area-based correction, feature regressors, a 32 x 32 x 3 CNN regressor, and a separate U-Net image-denoising branch.',
+    tags: ['Heavy-Ion Jets', 'FastJet', 'CNN', 'U-Net'],
     outcomes: [
-      'Explored optimal data-processing solutions for experimental physics data.',
-      'Compared ML-assisted resolution with mathematical and decision-tree-based baselines.',
-      'Prepared work for a draft paper and future academic refinement.',
+      'Processed 10,000 configured PYTHIA events into matched truth and thermal-background jet records.',
+      'Evaluated 2,414 held-out CNN predictions, reaching a current residual resolution of 4.623 GeV/c and R-squared of 0.973.',
+      'Documented U-Net channel diagnostics and the need for uncertainty, detector-response, and independently generated validation studies.',
     ],
   },
   {
@@ -223,6 +224,26 @@ export const projects = [
       'Trained a small machine learning model on provided data.',
       'Reached a demo outcome accuracy of 93.2%.',
       'Connected lab data analysis with practical fermentation monitoring.',
+    ],
+  },
+  {
+    id: 'spaghetti-bridge',
+    title: 'Spaghetti Bridge: From Tests to 6th Place',
+    eyebrow: 'Structural Engineering / Team EZ',
+    role: 'Team EZ / modeling, analysis, and fabrication',
+    period: 'JHU Explore Engineering Innovation / Summer 2026',
+    hours: '3 labs / 8 model iterations',
+    image: spaghettiBridgeCover,
+    imagePosition: '50% 50%',
+    summary:
+      'We tested pasta in tension, bending, and buckling, used the measurements to size a bowstring-Pratt truss, and built the final EZ bridge for a 72-team competition.',
+    detail:
+      'Our team began by measuring how pasta broke and bent. We converted those results into conservative material inputs, screened several truss families, and kept revising around mass, clearance, buckling, and what we could actually build. The final bridge held 16.000 kg and placed 6th out of 72 teams.',
+    tags: ['Structural Testing', 'Truss Modeling', 'Fabrication', 'Team EZ'],
+    outcomes: [
+      'Recorded all 73 measurements from the tension, bending, and buckling labs, then carried conservative material values into the bridge model.',
+      'Developed a four-panel bowstring-Pratt through truss through eight iterations, including an explicit stability audit of the as-built geometry.',
+      'Team EZ held 16.000 kg in the final contest and ranked 6th among 72 teams.',
     ],
   },
 ]

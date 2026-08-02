@@ -1,12 +1,17 @@
 import { ArrowUpRight, Play, X } from 'lucide-react'
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { lazy, Suspense, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import gsap from 'gsap'
 import { TargetCursor } from '../components/TargetCursor'
 import { RamanAnalysis } from '../components/RamanAnalysis'
+import { SubatomicAnalysis } from '../components/SubatomicAnalysis'
 import { getProjectManifestEntry } from '../data/projectManifest'
 import { getProjectById, profile, projects } from '../data/siteData'
 import './ProjectDetailPage.css'
+
+const SpaghettiBridgeAnalysis = lazy(() => import('../components/SpaghettiBridgeAnalysis').then((module) => ({
+  default: module.SpaghettiBridgeAnalysis,
+})))
 
 // Deterministic static-noise texture (random dots + scanlines) for the page background.
 let noiseDataUri
@@ -231,6 +236,12 @@ export function ProjectDetailPage() {
   }
 
   const evidenceItems = projectEvidenceItems(project)
+  const outcomesSectionNumber = project.id === 'raman-spectroscopy'
+    ? '10'
+    : project.id === 'subatomic-physics' ? '07' : project.id === 'spaghetti-bridge' ? '09' : '03'
+  const contactSectionNumber = project.id === 'raman-spectroscopy'
+    ? '11'
+    : project.id === 'subatomic-physics' ? '08' : project.id === 'spaghetti-bridge' ? '10' : '05'
   const titleFontSize = project.title.length > 24
     ? 'clamp(24px, 1.9vw, 30px)'
     : 'clamp(28px, 2.5vw, 38px)'
@@ -354,14 +365,20 @@ export function ProjectDetailPage() {
         <div className="project-case__story">
           <section className="project-case__story-section">
             <p className="project-case__section-number">02 / THE EXPERIMENT</p>
-            <h2>Build the system, then let the evidence argue back.</h2>
+            <h2>{project.id === 'spaghetti-bridge' ? 'Test the material before trusting the bridge.' : 'Build the system, then let the evidence argue back.'}</h2>
             <p>{project.detail}</p>
           </section>
 
           {project.id === 'raman-spectroscopy' ? <RamanAnalysis sourceImage={project.image} /> : null}
+          {project.id === 'subatomic-physics' ? <SubatomicAnalysis /> : null}
+          {project.id === 'spaghetti-bridge' ? (
+            <Suspense fallback={<p className="project-case__analysis-loading">LOADING_BRIDGE_EVIDENCE...</p>}>
+              <SpaghettiBridgeAnalysis />
+            </Suspense>
+          ) : null}
 
           <section className="project-case__story-section project-case__story-outcomes">
-            <p className="project-case__section-number">{project.id === 'raman-spectroscopy' ? '10' : '03'} / WHAT MOVED FORWARD</p>
+            <p className="project-case__section-number">{outcomesSectionNumber} / WHAT MOVED FORWARD</p>
             <h2>Recorded outcomes</h2>
             <ol>
               {project.outcomes.map((outcome, index) => (
@@ -397,7 +414,7 @@ export function ProjectDetailPage() {
           ) : null}
 
           <section className="project-case__cta">
-            <p className="project-case__section-number">{project.id === 'raman-spectroscopy' ? '11' : '05'} / QUESTIONS?</p>
+            <p className="project-case__section-number">{contactSectionNumber} / QUESTIONS?</p>
             <h2>Wanna nerd out about this project?</h2>
             <p>
               Happy to talk shop about the build, the data, or the physics behind it.
