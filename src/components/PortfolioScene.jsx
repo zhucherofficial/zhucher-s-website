@@ -496,6 +496,39 @@ function SiteCreditDialog({ onClose, closeRef }) {
   )
 }
 
+function BlogComingSoonDialog({ onClose, closeRef }) {
+  useEffect(() => {
+    closeRef.current?.focus()
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') onClose()
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [onClose, closeRef])
+
+  return (
+    <div
+      className="watching-overlay blog-coming-soon-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="blog-coming-soon-title"
+      onClick={onClose}
+    >
+      <section
+        className="app-window blog-coming-soon-window"
+        onClick={(event) => event.stopPropagation()}
+      >
+        <header><span /><span /><span /><p>BLOG_STATUS.txt</p></header>
+        <div className="blog-coming-soon-window__body">
+          <h2 id="blog-coming-soon-title">COMING SOON</h2>
+          <p>THE BLOG IS STILL ON THE WORKBENCH.</p>
+          <button ref={closeRef} type="button" onClick={onClose}>CLOSE</button>
+        </div>
+      </section>
+    </div>
+  )
+}
+
 function PhysicsFolder({ dispatch, closeRef, onBack }) {
   return (
     <section className="folder-scene" aria-labelledby="folder-title">
@@ -527,17 +560,25 @@ export function PortfolioScene({ initialView = null, returnFocusId = null }) {
   const [soundOn, setSoundOn] = useState(() => localStorage.getItem('ken-site:sound:v1') === 'on')
   const [transitioning, setTransitioning] = useState(false)
   const [showSiteCredit, setShowSiteCredit] = useState(false)
+  const [showBlogComingSoon, setShowBlogComingSoon] = useState(false)
   const [themeFlashing, setThemeFlashing] = useState(false)
   const sceneRef = useRef(null)
   const stageRef = useRef(null)
   const returnFocusRef = useRef(null)
   const closeRef = useRef(null)
   const siteCreditCloseRef = useRef(null)
+  const blogButtonRef = useRef(null)
+  const blogCloseRef = useRef(null)
   const previousViewRef = useRef(state.view)
   const transitionTimelineRef = useRef(null)
 
   const openSiteCredit = useCallback(() => setShowSiteCredit(true), [])
   const closeSiteCredit = useCallback(() => setShowSiteCredit(false), [])
+  const openBlogComingSoon = useCallback(() => setShowBlogComingSoon(true), [])
+  const closeBlogComingSoon = useCallback(() => {
+    setShowBlogComingSoon(false)
+    window.requestAnimationFrame(() => blogButtonRef.current?.focus())
+  }, [])
 
   const handleThemeToggle = () => {
     const nextTheme = theme === 'dark' ? 'light' : 'dark'
@@ -907,6 +948,18 @@ export function PortfolioScene({ initialView = null, returnFocusId = null }) {
             </button>
           </div>
           <div className="portfolio-scene__toolbar-right">
+            <button
+              ref={blogButtonRef}
+              className="portfolio-scene__blog-preview"
+              type="button"
+              aria-label="Blog unavailable, show coming soon notice"
+              aria-haspopup="dialog"
+              data-unavailable="true"
+              onClick={openBlogComingSoon}
+              title="Blog coming soon"
+            >
+              BLOG
+            </button>
             <Link to="/lab">LAB</Link>
             <button
               className="portfolio-scene__theme-toggle"
@@ -926,6 +979,7 @@ export function PortfolioScene({ initialView = null, returnFocusId = null }) {
       ) : null}
 
       {showSiteCredit ? <SiteCreditDialog onClose={closeSiteCredit} closeRef={siteCreditCloseRef} /> : null}
+      {showBlogComingSoon ? <BlogComingSoonDialog onClose={closeBlogComingSoon} closeRef={blogCloseRef} /> : null}
 
       <Suspense fallback={null}>
         <PhysicsFormulaRings className="portfolio-scene__rings" active={showRings} />

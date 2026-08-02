@@ -3,6 +3,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import gsap from 'gsap'
 import { TargetCursor } from '../components/TargetCursor'
+import { RamanAnalysis } from '../components/RamanAnalysis'
 import { getProjectManifestEntry } from '../data/projectManifest'
 import { getProjectById, profile, projects } from '../data/siteData'
 import './ProjectDetailPage.css'
@@ -66,7 +67,7 @@ export function ProjectDetailPage() {
   const entranceTimelineRef = useRef(null)
   const exitTimelineRef = useRef(null)
   const [leaving, setLeaving] = useState(false)
-  const noiseTexture = useMemo(getNoiseDataUri, [])
+  const noiseTexture = useMemo(() => getNoiseDataUri(), [])
 
   useLayoutEffect(() => {
     const root = rootRef.current
@@ -357,8 +358,10 @@ export function ProjectDetailPage() {
             <p>{project.detail}</p>
           </section>
 
+          {project.id === 'raman-spectroscopy' ? <RamanAnalysis sourceImage={project.image} /> : null}
+
           <section className="project-case__story-section project-case__story-outcomes">
-            <p className="project-case__section-number">03 / WHAT MOVED FORWARD</p>
+            <p className="project-case__section-number">{project.id === 'raman-spectroscopy' ? '10' : '03'} / WHAT MOVED FORWARD</p>
             <h2>Recorded outcomes</h2>
             <ol>
               {project.outcomes.map((outcome, index) => (
@@ -394,7 +397,7 @@ export function ProjectDetailPage() {
           ) : null}
 
           <section className="project-case__cta">
-            <p className="project-case__section-number">05 / QUESTIONS?</p>
+            <p className="project-case__section-number">{project.id === 'raman-spectroscopy' ? '11' : '05'} / QUESTIONS?</p>
             <h2>Wanna nerd out about this project?</h2>
             <p>
               Happy to talk shop about the build, the data, or the physics behind it.
