@@ -196,9 +196,9 @@ export const projects = [
     image: astragalusCover,
     imagePosition: '50% 46%',
     summary:
-      'Led an interdisciplinary project transforming herbal waste into fermented astragalus feed for more efficient livestock feeding.',
+      'Led an interdisciplinary project turning astragalus drug residue into a measurable fermented feed ingredient.',
     detail:
-      'The project combined biology and environmental engineering. Third-party assessment supported the effectiveness of the product, and the result showed lower feed conversion ratio compared with normal feed.',
+      'The supplied research uses a two-stage system: Trametes versicolor or Cordyceps militaris first ferments astragalus residue, then lactic acid bacteria and yeast ferment a mixed feed containing the converted material. The reported lab-scale results include higher astragaloside and total flavonoids, stronger acidification, higher crude protein, and lower detergent fiber in the treatment groups.',
     tags: ['Bioengineering', 'Sustainability', 'Team Leadership', 'CTB'],
     outcomes: [
       "Earned China Thinks Big national conference Editors' Choice with Highest Distinction.",

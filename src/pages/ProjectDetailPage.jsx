@@ -3,6 +3,7 @@ import { lazy, Suspense, useEffect, useLayoutEffect, useMemo, useRef, useState }
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import gsap from 'gsap'
 import { TargetCursor } from '../components/TargetCursor'
+import { AstragalusAnalysis } from '../components/AstragalusAnalysis'
 import { RamanAnalysis } from '../components/RamanAnalysis'
 import { SubatomicAnalysis } from '../components/SubatomicAnalysis'
 import { getProjectManifestEntry } from '../data/projectManifest'
@@ -238,10 +239,10 @@ export function ProjectDetailPage() {
   const evidenceItems = projectEvidenceItems(project)
   const outcomesSectionNumber = project.id === 'raman-spectroscopy'
     ? '10'
-    : project.id === 'subatomic-physics' ? '07' : project.id === 'spaghetti-bridge' ? '09' : '03'
+    : project.id === 'subatomic-physics' ? '07' : project.id === 'spaghetti-bridge' ? '09' : project.id === 'fermented-astragalus-feed' ? '07' : '03'
   const contactSectionNumber = project.id === 'raman-spectroscopy'
     ? '11'
-    : project.id === 'subatomic-physics' ? '08' : project.id === 'spaghetti-bridge' ? '10' : '05'
+    : project.id === 'subatomic-physics' ? '08' : project.id === 'spaghetti-bridge' ? '10' : project.id === 'fermented-astragalus-feed' ? '08' : '05'
   const titleFontSize = project.title.length > 24
     ? 'clamp(24px, 1.9vw, 30px)'
     : 'clamp(28px, 2.5vw, 38px)'
@@ -371,6 +372,7 @@ export function ProjectDetailPage() {
 
           {project.id === 'raman-spectroscopy' ? <RamanAnalysis sourceImage={project.image} /> : null}
           {project.id === 'subatomic-physics' ? <SubatomicAnalysis /> : null}
+          {project.id === 'fermented-astragalus-feed' ? <AstragalusAnalysis /> : null}
           {project.id === 'spaghetti-bridge' ? (
             <Suspense fallback={<p className="project-case__analysis-loading">LOADING_BRIDGE_EVIDENCE...</p>}>
               <SpaghettiBridgeAnalysis />

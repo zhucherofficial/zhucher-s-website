@@ -1143,7 +1143,6 @@ export function PortfolioScene({ initialView = null, returnFocusId = null }) {
       {state.view === HOME_STATES.FOLDER ? <PhysicsFolder dispatch={dispatch} closeRef={closeRef} onBack={closeScene} /> : null}
       {[HOME_STATES.ABOUT_BIO, HOME_STATES.ABOUT_MORE].includes(state.view) ? <AboutWindows state={state.view} panel={state.aboutPanel} dispatch={dispatch} closeRef={closeRef} onBack={closeScene} /> : null}
 
-      {state.view === HOME_STATES.DRAWING ? <p className="portfolio-scene__drawing-status">INITIALIZING KEN_ZHANG...</p> : null}
       {state.view === HOME_STATES.POWERING ? <p className="portfolio-scene__drawing-status">POWERING EXPERIMENTS...</p> : null}
     </main>
   )
