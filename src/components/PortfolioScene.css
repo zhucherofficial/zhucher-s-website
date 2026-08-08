@@ -411,10 +411,6 @@
   transition: opacity 900ms ease 200ms;
 }
 
-.ken-pcb__nib { fill: var(--ink); stroke: none; opacity: 0; }
-.ken-pcb__nib path { fill: var(--ink); }
-.ken-pcb__nib circle { fill: var(--pink); }
-
 .ken-pcb__paint { fill: none; stroke: var(--green); stroke-width: 76; stroke-linecap: round; opacity: 0.96; }
 .ken-pcb__paint path:first-child,
 .ken-pcb__paint path:last-child { stroke-width: 58; }
@@ -965,9 +961,8 @@
   .portfolio-scene *::before,
   .portfolio-scene *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 
-  /* Keep the paper texture (it is static) but drop the idle drift and the nib,
-     which only make sense as part of the drawing motion. */
+  /* Keep the paper texture (it is static) but drop the idle drift, which only
+     makes sense as part of the drawing motion. */
   .ken-pcb svg { animation: none !important; transform: none !important; }
-  .ken-pcb__nib { display: none; }
   .ken-pcb__guides { opacity: 0; }
 }

@@ -97,7 +97,6 @@ function CircuitBoard({ disabled = false, view, onPower, onOpenAbout }) {
       const paint = gsap.utils.toArray('.ken-pcb__paint > *', root)
       const componentGroups = gsap.utils.toArray('.ken-pcb__components > g', root)
       const guides = gsap.utils.toArray('.ken-pcb__guides > *', root)
-      const nib = root.querySelector('.ken-pcb__nib')
       const svg = root.querySelector('svg')
       const drawTargets = [...perimeter, ...oled, ...traces]
       componentGroups.forEach((group) => drawTargets.push(...group.children))
@@ -107,7 +106,6 @@ function CircuitBoard({ disabled = false, view, onPower, onOpenAbout }) {
         strokeDasharray: 1,
         strokeDashoffset: 1,
       })
-      gsap.set(nib, { autoAlpha: 0 })
 
       const timeline = gsap.timeline({ defaults: { ease: PEN_STROKE } })
 
@@ -198,30 +196,7 @@ function CircuitBoard({ disabled = false, view, onPower, onOpenAbout }) {
         )
       })
 
-      // 6. The nib itself: rides along the outline while it is being drawn, then
-      // flicks away. Purely decorative, hidden from assistive tech.
-      if (nib) {
-        timeline
-          .to(nib, { autoAlpha: 1, duration: 0.12 }, 0.14)
-          .to(
-            nib,
-            {
-              keyframes: [
-                { x: 578, y: -8, duration: 0.34 },
-                { x: 616, y: 375, duration: 0.32 },
-                { x: 30, y: 396, duration: 0.3 },
-                { x: -18, y: 40, duration: 0.28 },
-                { x: 300, y: 150, duration: 0.3 },
-                { x: 420, y: 330, duration: 0.34 },
-              ],
-              ease: 'none',
-            },
-            0.16,
-          )
-          .to(nib, { autoAlpha: 0, scale: 0.6, duration: 0.26, ease: 'power2.in' }, 1.72)
-      }
-
-      // 7. Whole board takes one breath once the ink is down.
+      // 6. Whole board takes one breath once the ink is down.
       timeline.to(
         svg,
         { scale: 1.012, duration: 0.22, ease: 'power2.out', transformOrigin: '50% 55%' },
@@ -313,11 +288,6 @@ function CircuitBoard({ disabled = false, view, onPower, onOpenAbout }) {
           </g>
         </g>
 
-        {/* The pen tip, chasing the strokes as they appear. */}
-        <g className="ken-pcb__nib" aria-hidden="true">
-          <path d="M0 0L15 34L23 26Z" />
-          <circle cx="1" cy="1" r="3.5" />
-        </g>
       </svg>
 
       <div className="ken-pcb__screen" aria-live="polite">
