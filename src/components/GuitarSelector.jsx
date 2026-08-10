@@ -6,6 +6,13 @@ import { GuitarPickCursor } from './GuitarPickCursor'
 import './GuitarSelector.css'
 
 const STRING_POSITIONS = ['29.7%', '38.1%', '46.5%', '54.9%', '63.3%', '71.7%']
+const STRING_HARMONICS = [
+  { ratio: 1, level: 1, duration: 1.35, type: 'triangle' },
+  { ratio: 2, level: 0.28, duration: 0.92, type: 'sine' },
+  { ratio: 3, level: 0.12, duration: 0.64, type: 'sine' },
+]
+
+let guitarAudioContext = null
 
 const projectById = new Map(projects.map((project) => [project.id, project]))
 
@@ -14,6 +21,42 @@ const strings = projectStringManifest.map((entry, index) => ({
   index,
   project: entry.id ? projectById.get(entry.id) : null,
 }))
+
+function playGuitarString(frequency) {
+  const AudioContextClass = window.AudioContext || window.webkitAudioContext
+  if (!AudioContextClass) return
+
+  if (!guitarAudioContext || guitarAudioContext.state === 'closed') {
+    guitarAudioContext = new AudioContextClass()
+  }
+  if (guitarAudioContext.state === 'suspended') void guitarAudioContext.resume()
+
+  const context = guitarAudioContext
+  const now = context.currentTime
+  const output = context.createGain()
+  const tone = context.createBiquadFilter()
+
+  tone.type = 'lowpass'
+  tone.Q.setValueAtTime(1.4, now)
+  tone.frequency.setValueAtTime(Math.min(5200, frequency * 14), now)
+  tone.frequency.exponentialRampToValueAtTime(Math.max(420, frequency * 2.4), now + 1.1)
+  output.gain.setValueAtTime(0.0001, now)
+  output.gain.exponentialRampToValueAtTime(0.18, now + 0.008)
+  output.gain.exponentialRampToValueAtTime(0.0001, now + 1.35)
+  output.connect(tone).connect(context.destination)
+
+  STRING_HARMONICS.forEach(({ ratio, level, duration, type }) => {
+    const oscillator = context.createOscillator()
+    const partial = context.createGain()
+    oscillator.type = type
+    oscillator.frequency.setValueAtTime(frequency * ratio, now)
+    partial.gain.setValueAtTime(level, now)
+    partial.gain.exponentialRampToValueAtTime(0.0001, now + duration)
+    oscillator.connect(partial).connect(output)
+    oscillator.start(now)
+    oscillator.stop(now + duration)
+  })
+}
 
 function rectToPayload(rect) {
   return {
@@ -36,6 +79,7 @@ export function GuitarSelector({
   onBack,
   onEmptyString,
   onRouteStart,
+  soundEnabled = false,
 }) {
   const navigate = useNavigate()
   const headingId = useId()
@@ -72,6 +116,8 @@ export function GuitarSelector({
       return
     }
 
+    if (soundEnabled) playGuitarString(slot.frequency)
+
     const rect = event.currentTarget.getBoundingClientRect()
     const payload = {
       accent: slot.accent,
@@ -93,6 +139,7 @@ export function GuitarSelector({
 
   const handleEmptyClick = (slot) => {
     if (!active) return
+    if (soundEnabled) playGuitarString(slot.frequency)
     setActiveString(slot.index)
     onEmptyString?.(slot.index + 1)
   }
@@ -127,11 +174,6 @@ export function GuitarSelector({
             role="img"
             aria-label="A hand-drawn solid-body Telecaster guitar with two pickups, six strings, and six inline tuning pegs."
           >
-            <g className="guitar-selector__construction" aria-hidden="true">
-              <path d="M34 163C179 108 365 109 541 168M42 739C224 790 411 764 571 686" />
-              <path d="M485 180C790 150 1112 167 1408 145M505 693C816 717 1129 700 1412 719" />
-            </g>
-
             <g className="guitar-selector__neck-paint" aria-hidden="true">
               <path d="M534 251C785 235 1038 234 1318 248" />
               <path d="M525 356C790 345 1050 344 1320 354" />
@@ -238,6 +280,9 @@ export function GuitarSelector({
               const sharedProps = {
                 className: `guitar-selector__string ${slot.project ? 'guitar-selector__string--assigned' : 'guitar-selector__string--empty'} ${activeString === slot.index ? 'guitar-selector__string--current' : ''}`,
                 'data-pick-accent': slot.accent,
+                'data-string-frequency': slot.frequency,
+                'data-string-note': slot.note,
+                'data-string-number': slot.stringNumber,
                 onBlur: () => setActiveString(null),
                 onFocus: () => setActiveString(slot.index),
                 onPointerEnter: () => setActiveString(slot.index),
@@ -257,7 +302,7 @@ export function GuitarSelector({
                     </span>
                   ) : (
                     <span className="guitar-selector__sr-only">
-                      Future project string {slot.index + 1}, unassigned
+                      Future project string {slot.stringNumber}, unassigned
                     </span>
                   )}
                 </>
@@ -267,7 +312,7 @@ export function GuitarSelector({
                 return (
                   <Link
                     {...sharedProps}
-                    aria-label={`Open project: ${slot.project.title}`}
+                    aria-label={`Open project: ${slot.project.title}, guitar string ${slot.stringNumber}, ${slot.note}`}
                     data-project-id={slot.project.id}
                     key={slot.project.id}
                     onClick={(event) => handleProjectClick(event, slot)}
@@ -281,7 +326,7 @@ export function GuitarSelector({
               return (
                 <button
                   {...sharedProps}
-                  aria-label={`Future project string ${slot.index + 1}, unassigned`}
+                  aria-label={`Future project on guitar string ${slot.stringNumber}, ${slot.note}, unassigned`}
                   key={`future-${slot.index + 1}`}
                   onClick={() => handleEmptyClick(slot)}
                   type="button"

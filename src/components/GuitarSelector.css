@@ -62,18 +62,6 @@
   overflow: visible;
 }
 
-.guitar-selector__construction {
-  fill: none;
-  stroke: var(--guitar-cyan);
-  stroke-width: 3;
-  stroke-linecap: round;
-  opacity: 0.25;
-}
-
-.guitar-selector__construction path:last-child {
-  stroke: var(--guitar-pink);
-}
-
 .guitar-selector__neck-paint,
 .guitar-selector__body-paint {
   fill: none;
@@ -249,7 +237,7 @@
   left: 0;
   height: 3px;
   border-radius: 999px;
-  background: #fff;
+  background: var(--string-accent);
   box-shadow: 0 1px 0 rgba(18, 19, 26, 0.34);
   transform: translateY(-50%);
   transform-origin: center;

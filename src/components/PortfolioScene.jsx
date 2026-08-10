@@ -1139,7 +1139,7 @@ export function PortfolioScene({ initialView = null, returnFocusId = null }) {
         ) : null}
       </div>
 
-      {state.view === HOME_STATES.GUITAR ? <GuitarSelector className="portfolio-scene__guitar" initialFocusId={returnFocusId} onBack={closeScene} /> : null}
+      {state.view === HOME_STATES.GUITAR ? <GuitarSelector className="portfolio-scene__guitar" initialFocusId={returnFocusId} onBack={closeScene} soundEnabled={soundOn} /> : null}
       {state.view === HOME_STATES.FOLDER ? <PhysicsFolder dispatch={dispatch} closeRef={closeRef} onBack={closeScene} /> : null}
       {[HOME_STATES.ABOUT_BIO, HOME_STATES.ABOUT_MORE].includes(state.view) ? <AboutWindows state={state.view} panel={state.aboutPanel} dispatch={dispatch} closeRef={closeRef} onBack={closeScene} /> : null}
 

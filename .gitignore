@@ -12,6 +12,10 @@ dist
 dist-ssr
 *.local
 
+# Local development and browser-QA output
+.claude/
+.playwright-cli/
+
 # Local reference material and original media (keep archive/README.md tracked)
 archive/*
 !archive/README.md
