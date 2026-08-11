@@ -23,7 +23,12 @@ npm run dev
 npm run build
 npm run lint
 npm run preview
+npm run deploy -- --dry-run
 ```
+
+Cloudflare publishes the generated `dist/` directory using the pinned Wrangler
+version and `wrangler.jsonc`. The deployment dry run validates that configuration
+without uploading anything.
 
 The image tools use Pillow in an isolated Python environment:
 
@@ -41,7 +46,7 @@ Run `scripts/optimize-images.py` without flags for a dry run; add `--apply` only
 npm run lint
 npm run build
 git status --short
-git add -A -- .github .gitignore README.md archive/README.md docs eslint.config.js index.html package.json package-lock.json public scripts src vite.config.js
+git add -A -- .github .gitignore README.md archive/README.md docs eslint.config.js index.html package.json package-lock.json public scripts src vite.config.js wrangler.jsonc
 git diff --cached --stat
 git diff --cached
 git commit -m "Update portfolio website"
