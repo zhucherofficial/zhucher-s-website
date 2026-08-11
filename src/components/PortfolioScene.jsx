@@ -12,6 +12,7 @@ import { Link } from 'react-router-dom'
 import { ArrowUpRight, FlaskConical, Moon, Music2, Sun, Volume2, VolumeX, X } from 'lucide-react'
 import gsap from 'gsap'
 import { CustomEase } from 'gsap/CustomEase'
+import toolWrench from '../assets/ui/tool-wrench.webp'
 import { experiences, honors, profile } from '../data/siteData'
 import { useTheme } from '../context/theme'
 import { GuitarSelector } from './GuitarSelector'
@@ -1122,6 +1123,27 @@ export function PortfolioScene({ initialView = null, returnFocusId = null }) {
               <PhysicsFolderIcon />
               <span className="main-object__label">PHYSICS_ARCHIVE</span>
             </button>
+            <a
+              className="main-object main-object--tool"
+              href="https://tool.zhucher.com"
+              aria-label="Open Ken Zhang's tools"
+              aria-disabled={transitioning || state.view === HOME_STATES.POWERING}
+              tabIndex={transitioning || state.view === HOME_STATES.POWERING ? -1 : undefined}
+              title="Open tools"
+              onClick={(event) => {
+                if (transitioning || state.view === HOME_STATES.POWERING) event.preventDefault()
+              }}
+            >
+              <img
+                src={toolWrench}
+                alt=""
+                width="70"
+                height="96"
+                decoding="async"
+                aria-hidden="true"
+              />
+              <span className="main-object__label">TOOLS</span>
+            </a>
           </div>
         ) : null}
       </div>
