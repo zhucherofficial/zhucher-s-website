@@ -20,6 +20,7 @@ import {
   ramanSubclassOutcomes,
 } from '../data/ramanData'
 import './RamanAnalysis.css'
+import { AssetImage } from './AssetImage'
 
 // Lieflat selection audit: F8 Plumb Scatter is the closest honest template for
 // five parameter records; L3 Barcode Lollipop needs a time series, while F9
@@ -306,7 +307,7 @@ const percent = (value) => `${value.toFixed(1)}%`
 const signed = (value) => value.toFixed(3)
 
 function AtlasFigure({ src, alt, caption, className = '' }) {
-  return <figure className={`raman-analysis__atlas-figure ${className}`}><img src={src} alt={alt} loading="lazy" /><figcaption>{caption}</figcaption></figure>
+  return <figure className={`raman-analysis__atlas-figure ${className}`}><AssetImage src={src} alt={alt} /><figcaption>{caption}</figcaption></figure>
 }
 
 export function RamanAnalysis({ sourceImage }) {
@@ -359,7 +360,7 @@ export function RamanAnalysis({ sourceImage }) {
           </ul>
         </div>
         <figure className="raman-analysis__source-figure">
-          <img src={sourceImage} alt="Four-panel Raman denoising analysis showing raw, processed, candidate denoisers, best setting, and final spectrum" />
+          <AssetImage src={sourceImage} alt="Four-panel Raman denoising analysis showing raw, processed, candidate denoisers, best setting, and final spectrum" />
           <figcaption>Supplied four-panel analysis · Raman shift range shown in the source image: approximately 200-2600 cm^-1</figcaption>
         </figure>
       </div>

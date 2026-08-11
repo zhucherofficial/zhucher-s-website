@@ -8,16 +8,16 @@ import {
   RotateCcw,
   Trophy,
 } from 'lucide-react'
-import assembledBridge from '../assets/project-media/spaghetti-bridge/assembled-bridge.jpg'
-import contestLeaderboard from '../assets/project-media/spaghetti-bridge/contest-leaderboard.jpg'
-import ezTeamFinal from '../assets/project-media/spaghetti-bridge/ez-team-final.jpg'
+import assembledBridge from '../assets/project-media/spaghetti-bridge/assembled-bridge.webp'
+import contestLeaderboard from '../assets/project-media/spaghetti-bridge/contest-leaderboard.webp'
+import ezTeamFinal from '../assets/project-media/spaghetti-bridge/ez-team-final.webp'
 import iteration05Model from '../assets/project-media/spaghetti-bridge/iteration-05-model.png'
-import iteration07Model from '../assets/project-media/spaghetti-bridge/iteration-07-model.png'
-import iteration07Response from '../assets/project-media/spaghetti-bridge/iteration-07-response.png'
-import iteration07Stability from '../assets/project-media/spaghetti-bridge/iteration-07-stability.png'
-import pairedSideTrusses from '../assets/project-media/spaghetti-bridge/paired-side-trusses.jpg'
-import sideTrussLeft from '../assets/project-media/spaghetti-bridge/side-truss-left.jpg'
-import sideTrussRight from '../assets/project-media/spaghetti-bridge/side-truss-right.jpg'
+import iteration07Model from '../assets/project-media/spaghetti-bridge/iteration-07-model.webp'
+import iteration07Response from '../assets/project-media/spaghetti-bridge/iteration-07-response.webp'
+import iteration07Stability from '../assets/project-media/spaghetti-bridge/iteration-07-stability.webp'
+import pairedSideTrusses from '../assets/project-media/spaghetti-bridge/paired-side-trusses.webp'
+import sideTrussLeft from '../assets/project-media/spaghetti-bridge/side-truss-left.webp'
+import sideTrussRight from '../assets/project-media/spaghetti-bridge/side-truss-right.webp'
 import {
   bendingSeries,
   bridgeIterations,
@@ -28,6 +28,7 @@ import {
   tensionTrials,
 } from '../data/spaghettiBridgeData'
 import './SpaghettiBridgeAnalysis.css'
+import { AssetImage } from './AssetImage'
 
 const PAPER = '#F0EFEB'
 const INK = '#1C1C1A'
@@ -575,11 +576,11 @@ export function SpaghettiBridgeAnalysis() {
 
         <div className="spaghetti-analysis__model-figures">
           <figure>
-            <img src={iteration05Model} alt="Iteration 05 three-dimensional bowstring-Pratt bridge model at the 50 kg load case" />
+            <AssetImage src={iteration05Model} alt="Iteration 05 three-dimensional bowstring-Pratt bridge model at the 50 kg load case" />
             <figcaption><strong>ITERATION 05 / RECOMMENDED BUILD</strong><span>67.21 kg conservative modeled capacity, 248.68 g estimated mass, 3.48 mm predicted deflection at 50 kg.</span></figcaption>
           </figure>
           <figure>
-            <img src={iteration07Model} alt="Iteration 07 revised three-dimensional bridge model with load rails and full-span ties" />
+            <AssetImage src={iteration07Model} alt="Iteration 07 revised three-dimensional bridge model with load rails and full-span ties" />
             <figcaption><strong>ITERATION 07 / AS-BUILT GEOMETRY</strong><span>We removed 15 bracing members, then added two 10-strand loading rails and two 3-strand full-span bottom ties.</span></figcaption>
           </figure>
         </div>
@@ -592,11 +593,11 @@ export function SpaghettiBridgeAnalysis() {
 
         <div className="spaghetti-analysis__assessment-grid">
           <figure>
-            <img src={iteration07Stability} alt="Stability diagnostic showing a representative zero-energy lateral mechanism and rank deficiency of seven" />
+            <AssetImage src={iteration07Stability} alt="Stability diagnostic showing a representative zero-energy lateral mechanism and rank deficiency of seven" />
             <figcaption><strong>UNRESTRAINED MODEL / FAIL</strong><span>52 free degrees of freedom, stiffness rank 45, rank deficiency 7.</span></figcaption>
           </figure>
           <figure>
-            <img src={iteration07Response} alt="Planar-restraint proxy response under a 50 kg asymmetric center load" />
+            <AssetImage src={iteration07Response} alt="Planar-restraint proxy response under a 50 kg asymmetric center load" />
             <figcaption><strong>PLANAR PROXY / CONDITIONAL</strong><span>65.48 kg capacity only with lateral restraint and full intermediate bonds on the bottom ties.</span></figcaption>
           </figure>
         </div>
@@ -613,10 +614,10 @@ export function SpaghettiBridgeAnalysis() {
         </SectionHeading>
 
         <div className="spaghetti-analysis__build-grid">
-          <figure><img src={sideTrussLeft} alt="First pasta side truss curing on a paper-covered workbench" /><figcaption><strong>SIDE A</strong><span>Bundled top chord, thin bottom tie, verticals, and diagonals laid flat.</span></figcaption></figure>
-          <figure><img src={sideTrussRight} alt="Second pasta side truss beside a ruler and scissors during fabrication" /><figcaption><strong>SIDE B</strong><span>The ruler kept station spacing visible while joints cured.</span></figcaption></figure>
-          <figure><img src={pairedSideTrusses} alt="Two completed pasta side trusses placed together before final assembly" /><figcaption><strong>PAIRING</strong><span>Both load paths were checked together before the deck joined them.</span></figcaption></figure>
-          <figure className="spaghetti-analysis__build-wide"><img src={assembledBridge} alt="Assembled yellow pasta bridge on the team workbench" /><figcaption><strong>ASSEMBLY</strong><span>The bowstring-Pratt form, center platform, road deck, and paired side planes are visible in the final workbench build.</span></figcaption></figure>
+          <figure><AssetImage src={sideTrussLeft} alt="First pasta side truss curing on a paper-covered workbench" /><figcaption><strong>SIDE A</strong><span>Bundled top chord, thin bottom tie, verticals, and diagonals laid flat.</span></figcaption></figure>
+          <figure><AssetImage src={sideTrussRight} alt="Second pasta side truss beside a ruler and scissors during fabrication" /><figcaption><strong>SIDE B</strong><span>The ruler kept station spacing visible while joints cured.</span></figcaption></figure>
+          <figure><AssetImage src={pairedSideTrusses} alt="Two completed pasta side trusses placed together before final assembly" /><figcaption><strong>PAIRING</strong><span>Both load paths were checked together before the deck joined them.</span></figcaption></figure>
+          <figure className="spaghetti-analysis__build-wide"><AssetImage src={assembledBridge} alt="Assembled yellow pasta bridge on the team workbench" /><figcaption><strong>ASSEMBLY</strong><span>The bowstring-Pratt form, center platform, road deck, and paired side planes are visible in the final workbench build.</span></figcaption></figure>
         </div>
       </section>
 
@@ -627,11 +628,11 @@ export function SpaghettiBridgeAnalysis() {
 
         <div className="spaghetti-analysis__contest-grid">
           <figure className="spaghetti-analysis__team-photo">
-            <img src={ezTeamFinal} alt="Four members of team EZ holding their completed pasta bridge after the contest" />
+            <AssetImage src={ezTeamFinal} alt="Four members of team EZ holding their completed pasta bridge after the contest" />
             <figcaption><strong>TEAM EZ / FINAL BRIDGE</strong><span>Four builders, one bridge, and a result earned on the competition floor.</span></figcaption>
           </figure>
           <figure className="spaghetti-analysis__leaderboard">
-            <img src={contestLeaderboard} alt="Competition leaderboard showing team EZ with a score of 16.000" />
+            <AssetImage src={contestLeaderboard} alt="Competition leaderboard showing team EZ with a score of 16.000" />
             <figcaption>
               <div><strong>{contestResult.loadKg.toFixed(3)} kg</strong><span>supported load</span></div>
               <div><strong>{contestResult.rank} / {contestResult.fieldSize}</strong><span>final rank</span></div>

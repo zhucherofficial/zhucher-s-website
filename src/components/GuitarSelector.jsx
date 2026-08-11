@@ -2,6 +2,7 @@ import { useEffect, useId, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { projects } from '../data/siteData'
 import { projectStringManifest } from '../data/projectManifest'
+import { prefetchProjectDetail } from '../pages/projectDetailChunks'
 import { GuitarPickCursor } from './GuitarPickCursor'
 import './GuitarSelector.css'
 
@@ -85,6 +86,7 @@ export function GuitarSelector({
   const headingId = useId()
   const scopeRef = useRef(null)
   const scrollRef = useRef(null)
+  const warmedRoutesRef = useRef(new Set())
   const [activeString, setActiveString] = useState(null)
 
   useEffect(() => {
@@ -110,6 +112,14 @@ export function GuitarSelector({
 
   const emptyStringIsActive = activeString !== null && !strings[activeString]?.project
 
+  // Hovering or focusing a string starts the route chunk download, so the click that
+  // follows usually finds it already cached instead of waiting on the network.
+  const warmProjectRoute = (slot) => {
+    if (!slot.project || warmedRoutesRef.current.has(slot.project.id)) return
+    warmedRoutesRef.current.add(slot.project.id)
+    prefetchProjectDetail(slot.project.id, slot.project.image)
+  }
+
   const handleProjectClick = (event, slot) => {
     event.preventDefault()
     if (!active) {
@@ -117,6 +127,8 @@ export function GuitarSelector({
     }
 
     if (soundEnabled) playGuitarString(slot.frequency)
+    // Touch and keyboard activation can skip hover entirely, so warm here too.
+    warmProjectRoute(slot)
 
     const rect = event.currentTarget.getBoundingClientRect()
     const payload = {
@@ -284,8 +296,14 @@ export function GuitarSelector({
                 'data-string-note': slot.note,
                 'data-string-number': slot.stringNumber,
                 onBlur: () => setActiveString(null),
-                onFocus: () => setActiveString(slot.index),
-                onPointerEnter: () => setActiveString(slot.index),
+                onFocus: () => {
+                  setActiveString(slot.index)
+                  warmProjectRoute(slot)
+                },
+                onPointerEnter: () => {
+                  setActiveString(slot.index)
+                  warmProjectRoute(slot)
+                },
                 onPointerLeave: (event) => {
                   if (!event.currentTarget.matches(':focus')) setActiveString(null)
                 },

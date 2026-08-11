@@ -6,10 +6,11 @@ import { SiteHeader } from './components/SiteHeader'
 import { ClubDetailPage } from './pages/ClubDetailPage'
 import { ExperiencePage } from './pages/ExperiencePage'
 import { HomePage } from './pages/HomePage'
+import { loadProjectDetailPage } from './pages/projectDetailChunks'
 import { ServiceDetailPage } from './pages/ServiceDetailPage'
 
 const LabPage = lazy(() => import('./pages/LabPage').then((module) => ({ default: module.LabPage })))
-const ProjectDetailPage = lazy(() => import('./pages/ProjectDetailPage').then((module) => ({ default: module.ProjectDetailPage })))
+const ProjectDetailPage = lazy(loadProjectDetailPage)
 
 export default function App() {
   const { pathname } = useLocation()

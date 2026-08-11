@@ -1,13 +1,14 @@
 import { Atom, Binary, Boxes, Cpu, Database, ScanSearch } from 'lucide-react'
 import katex from 'katex'
 import 'katex/dist/katex.min.css'
-import cnnPrediction from '../assets/project-media/subatomic/original-cnn-prediction-vs-truth.png'
-import residualHistogram from '../assets/project-media/subatomic/original-residuals-histogram.png'
-import resolutionOverlay from '../assets/project-media/subatomic/original-resolution-overlay.png'
-import unetSummary from '../assets/project-media/subatomic/original-unet-total-pt-summary.png'
-import eventMap from '../assets/project-media/subatomic/event-0-rapidity-phi.png'
+import cnnPrediction from '../assets/project-media/subatomic/original-cnn-prediction-vs-truth.webp'
+import residualHistogram from '../assets/project-media/subatomic/original-residuals-histogram.webp'
+import resolutionOverlay from '../assets/project-media/subatomic/original-resolution-overlay.webp'
+import unetSummary from '../assets/project-media/subatomic/original-unet-total-pt-summary.webp'
+import eventMap from '../assets/project-media/subatomic/event-0-rapidity-phi.webp'
 import unetEvent from '../assets/project-media/subatomic/unet-total-pt-event-0.png'
 import './SubatomicAnalysis.css'
+import { AssetImage } from './AssetImage'
 
 const formulas = [
   {
@@ -40,7 +41,7 @@ function OriginalResultFigure({ src, alt, title, description, source }) {
   return (
     <figure className="subatomic-result-figure">
       <div className="subatomic-result-figure__media">
-        <img src={src} alt={alt} loading="lazy" />
+        <AssetImage src={src} alt={alt} />
       </div>
       <figcaption>
         <strong>{title}</strong>
@@ -93,11 +94,11 @@ export function SubatomicAnalysis() {
 
         <div className="subatomic-analysis__evidence-grid">
           <figure>
-            <img src={eventMap} alt="Signal-only Pythia event in rapidity and azimuth, weighted by transverse momentum" />
+            <AssetImage src={eventMap} alt="Signal-only Pythia event in rapidity and azimuth, weighted by transverse momentum" />
             <figcaption><strong>EVENT 0 / SIGNAL GEOMETRY</strong><span>Rapidity x azimuth map before the thermal overlay. The concentrated deposits define the structure the reconstruction must preserve.</span></figcaption>
           </figure>
           <figure className="subatomic-analysis__evidence-wide">
-            <img src={unetEvent} alt="U-Net total transverse momentum channel showing input, prediction, truth, and residual" />
+            <AssetImage src={unetEvent} alt="U-Net total transverse momentum channel showing input, prediction, truth, and residual" />
             <figcaption><strong>U-NET / TOTAL pT CHANNEL</strong><span>Input, prediction, truth, and residual remain side by side. Total pT is the strongest image channel; multiplicity and charged pT remain harder.</span></figcaption>
           </figure>
         </div>

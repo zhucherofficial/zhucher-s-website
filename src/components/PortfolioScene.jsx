@@ -13,7 +13,7 @@ import { ArrowUpRight, FlaskConical, Moon, Music2, Sun, Volume2, VolumeX, X } fr
 import gsap from 'gsap'
 import { CustomEase } from 'gsap/CustomEase'
 import { experiences, honors, profile } from '../data/siteData'
-import { useTheme } from '../context/ThemeContext'
+import { useTheme } from '../context/theme'
 import { GuitarSelector } from './GuitarSelector'
 import { PixelGeometricBackdrop } from './PixelGeometricBackdrop'
 import './PortfolioScene.css'
@@ -96,12 +96,11 @@ function CircuitBoard({ disabled = false, view, onPower, onOpenAbout }) {
       const traces = gsap.utils.toArray('.ken-pcb__traces > *', root)
       const paint = gsap.utils.toArray('.ken-pcb__paint > *', root)
       const componentGroups = gsap.utils.toArray('.ken-pcb__components > g', root)
-      const guides = gsap.utils.toArray('.ken-pcb__guides > *', root)
       const svg = root.querySelector('svg')
       const drawTargets = [...perimeter, ...oled, ...traces]
       componentGroups.forEach((group) => drawTargets.push(...group.children))
 
-      gsap.set([...drawTargets, ...paint, ...guides], {
+      gsap.set([...drawTargets, ...paint], {
         autoAlpha: 0,
         strokeDasharray: 1,
         strokeDashoffset: 1,
@@ -118,14 +117,7 @@ function CircuitBoard({ disabled = false, view, onPower, onOpenAbout }) {
         0,
       )
 
-      // 1. Light construction guides first — the sketch under the sketch.
-      timeline.to(
-        guides,
-        { autoAlpha: 0.34, strokeDashoffset: 0, duration: 0.34, stagger: 0.05, ease: PEN_FLICK },
-        0,
-      )
-
-      // 2. Outline, drawn edge by edge with a wobble on each stroke's landing.
+      // 1. Outline, drawn edge by edge with a wobble on each stroke's landing.
       perimeter.forEach((node, index) => {
         timeline
           .to(
@@ -146,7 +138,7 @@ function CircuitBoard({ disabled = false, view, onPower, onOpenAbout }) {
           )
       })
 
-      // 3. Screen housing, then traces routed outward from it.
+      // 2. Screen housing, then traces routed outward from it.
       timeline.to(
         oled,
         { autoAlpha: 1, strokeDashoffset: 0, duration: 0.3, stagger: 0.07, ease: PEN_STROKE },
@@ -165,7 +157,7 @@ function CircuitBoard({ disabled = false, view, onPower, onOpenAbout }) {
         )
       })
 
-      // 4. Components dropped in per group, each with a small settle.
+      // 3. Components dropped in per group, each with a small settle.
       componentGroups.forEach((group, index) => {
         const children = [...group.children]
         const at = 1.24 + index * 0.135
@@ -182,7 +174,7 @@ function CircuitBoard({ disabled = false, view, onPower, onOpenAbout }) {
         )
       })
 
-      // 5. Marker fill last, dragged across in overlapping passes.
+      // 4. Marker fill last, dragged across in overlapping passes.
       paint.forEach((node, index) => {
         timeline.to(
           node,
@@ -196,7 +188,7 @@ function CircuitBoard({ disabled = false, view, onPower, onOpenAbout }) {
         )
       })
 
-      // 6. Whole board takes one breath once the ink is down.
+      // 5. Whole board takes one breath once the ink is down.
       timeline.to(
         svg,
         { scale: 1.012, duration: 0.22, ease: 'power2.out', transformOrigin: '50% 55%' },
@@ -224,15 +216,6 @@ function CircuitBoard({ disabled = false, view, onPower, onOpenAbout }) {
             <feGaussianBlur in="bled" stdDeviation="0.7" />
           </filter>
         </defs>
-
-        {/* Faint construction lines, as if the shape was blocked out before inking. */}
-        <g className="ken-pcb__guides" aria-hidden="true">
-          <path pathLength="1" d="M45 76H684" />
-          <path pathLength="1" d="M45 440H684" />
-          <path pathLength="1" d="M62 40V465" />
-          <path pathLength="1" d="M666 40V465" />
-          <path pathLength="1" d="M45 258H684" />
-        </g>
 
         <g className="ken-pcb__paint" aria-hidden="true">
           <path pathLength="1" d="M88 102H635" />
@@ -911,6 +894,10 @@ export function PortfolioScene({ initialView = null, returnFocusId = null }) {
 
     const scribbles = scene.querySelector('.portfolio-scene__scribbles')
     const rings = scene.querySelector('.portfolio-scene__rings')
+    const mainParallax = state.view === HOME_STATES.MAIN
+    const stageDepth = mainParallax ? { x: 64, y: 38 } : { x: 32, y: 19 }
+    const ringDepth = mainParallax ? { x: -34, y: -22 } : { x: -18, y: -11 }
+    const scribbleDepth = mainParallax ? { x: -20, y: -12 } : { x: -10, y: -6 }
 
     let frame = 0
     let currentX = 0
@@ -925,12 +912,12 @@ export function PortfolioScene({ initialView = null, returnFocusId = null }) {
       velocityY = (velocityY + (targetY - currentY) * 0.032) * 0.86
       currentX += velocityX
       currentY += velocityY
-      stage.style.transform = `translate3d(${(currentX * 32).toFixed(2)}px, ${(currentY * 19).toFixed(2)}px, 0)`
+      stage.style.transform = `translate3d(${(currentX * stageDepth.x).toFixed(2)}px, ${(currentY * stageDepth.y).toFixed(2)}px, 0)`
       if (rings) {
-        rings.style.transform = `translate3d(${(currentX * -18).toFixed(2)}px, ${(currentY * -11).toFixed(2)}px, 0) scale(1.04)`
+        rings.style.transform = `translate3d(${(currentX * ringDepth.x).toFixed(2)}px, ${(currentY * ringDepth.y).toFixed(2)}px, 0) scale(1.04)`
       }
       if (scribbles) {
-        scribbles.style.transform = `translate3d(${(currentX * -10).toFixed(2)}px, ${(currentY * -6).toFixed(2)}px, 0) scale(1.025)`
+        scribbles.style.transform = `translate3d(${(currentX * scribbleDepth.x).toFixed(2)}px, ${(currentY * scribbleDepth.y).toFixed(2)}px, 0) scale(1.025)`
       }
 
       if (

@@ -1,5 +1,5 @@
 import { memo, useEffect, useRef } from 'react'
-import { useTheme } from '../context/ThemeContext'
+import { useTheme } from '../context/theme'
 import './PixelGeometricBackdrop.css'
 
 const DARK_COLORS = {

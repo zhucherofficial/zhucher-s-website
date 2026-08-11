@@ -7,15 +7,16 @@ import {
   Scale,
   Sprout,
 } from 'lucide-react'
-import cultureSequence from '../assets/project-media/astragalus/culture-sequence.png'
-import fermentedDregsPairs from '../assets/project-media/astragalus/fermented-dregs-pairs.jpeg'
-import fermentedFeedBags from '../assets/project-media/astragalus/fermented-feed-bags.jpg'
-import astragalosideChart from '../assets/project-media/astragalus/astragaloside-chart.png'
-import sugarChart from '../assets/project-media/astragalus/sugar-chart.png'
-import cellulaseChart from '../assets/project-media/astragalus/cellulase-chart.png'
-import liveCountChart from '../assets/project-media/astragalus/live-count-chart.png'
-import labBench from '../assets/project-media/astragalus/lab-bench.jpg'
+import cultureSequence from '../assets/project-media/astragalus/culture-sequence.webp'
+import fermentedDregsPairs from '../assets/project-media/astragalus/fermented-dregs-pairs.webp'
+import fermentedFeedBags from '../assets/project-media/astragalus/fermented-feed-bags.webp'
+import astragalosideChart from '../assets/project-media/astragalus/astragaloside-chart.webp'
+import sugarChart from '../assets/project-media/astragalus/sugar-chart.webp'
+import cellulaseChart from '../assets/project-media/astragalus/cellulase-chart.webp'
+import liveCountChart from '../assets/project-media/astragalus/live-count-chart.webp'
+import labBench from '../assets/project-media/astragalus/lab-bench.webp'
 import './AstragalusAnalysis.css'
+import { AssetImage } from './AssetImage'
 
 const processSteps = [
   { icon: Leaf, number: '01', label: 'RESIDUE', detail: 'Astragalus dregs are dried, milled to 10–40 mesh, and adjusted to about 50% moisture.' },
@@ -42,7 +43,7 @@ function SourceFigure({ src, alt, label, children, className = '' }) {
   return (
     <figure className={`astragalus-analysis__figure ${className}`}>
       <div className="astragalus-analysis__figure-media">
-        <img src={src} alt={alt} loading="lazy" />
+        <AssetImage src={src} alt={alt} />
       </div>
       <figcaption>
         <strong>{label}</strong>

@@ -7,7 +7,9 @@ React + Vite portfolio site for physics, engineering, robotics, research, and se
 - `src/` - application source code.
 - `src/assets/` - imported images and SVGs used by React components.
 - `public/` - static files served directly by Vite, including hero media.
+- `scripts/` - image optimization and intrinsic-dimension maintenance tools.
 - `docs/` - durable design and implementation decisions.
+- `.github/workflows/` - automated lint and production-build checks.
 - `archive/` - local-only original media, examples, generated files, and retired code.
 - `dist/` - generated production build output.
 - `node_modules/` - installed dependencies.
@@ -23,16 +25,27 @@ npm run lint
 npm run preview
 ```
 
+The image tools use Pillow in an isolated Python environment:
+
+```sh
+python3 -m venv .venv
+.venv/bin/pip install -r scripts/requirements.txt
+.venv/bin/python scripts/generate-image-dimensions.py
+```
+
+Run `scripts/optimize-images.py` without flags for a dry run; add `--apply` only after reviewing its proposed conversions.
+
 ## GitHub Workflow
 
 ```sh
+npm run lint
+npm run build
 git status --short
-git add -u
-git add .gitignore README.md archive/README.md docs/REDESIGN_BRIEF.md eslint.config.js index.html package.json package-lock.json vite.config.js public/ src/
+git add -A -- .github .gitignore README.md archive/README.md docs eslint.config.js index.html package.json package-lock.json public scripts src vite.config.js
 git diff --cached --stat
 git diff --cached
 git commit -m "Update portfolio website"
 git push origin main
 ```
 
-Run `npm run lint` and `npm run build` before committing. Review the staged diff before the commit; files inside `archive/`, `.playwright-cli/`, and `.claude/` are intentionally excluded from GitHub.
+The explicit staging allowlist keeps local archives, browser-QA output, editor files, build output, and installed dependencies out of commits. Review the staged diff before committing. GitHub Actions repeats the lint and production-build checks on pull requests and pushes to `main`.

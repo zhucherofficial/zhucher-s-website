@@ -390,26 +390,6 @@
 }
 
 .ken-pcb svg { display: block; width: 100%; height: 100%; overflow: visible; }
-.ken-pcb__construction { fill: none; stroke: var(--cyan); stroke-width: 3; stroke-linecap: round; opacity: 0.3; }
-.ken-pcb__construction path:nth-child(2) { stroke: var(--pink); }
-
-/* Construction guides: pale, thin, and deliberately imprecise. */
-.ken-pcb__guides {
-  fill: none;
-  stroke: var(--cyan);
-  stroke-width: 1.6;
-  stroke-linecap: round;
-  stroke-dasharray: 7 9;
-  opacity: 0.34;
-}
-.portfolio-scene--drawing .ken-pcb__guides { filter: url(#ken-ink); }
-/* Guides fade out once the real ink is down — they were only scaffolding. */
-.portfolio-scene--gate .ken-pcb__guides,
-.portfolio-scene--powering .ken-pcb__guides,
-.portfolio-scene--main .ken-pcb__guides {
-  opacity: 0;
-  transition: opacity 900ms ease 200ms;
-}
 
 .ken-pcb__paint { fill: none; stroke: var(--green); stroke-width: 76; stroke-linecap: round; opacity: 0.96; }
 .ken-pcb__paint path:first-child,
@@ -964,5 +944,4 @@
   /* Keep the paper texture (it is static) but drop the idle drift, which only
      makes sense as part of the drawing motion. */
   .ken-pcb svg { animation: none !important; transform: none !important; }
-  .ken-pcb__guides { opacity: 0; }
 }

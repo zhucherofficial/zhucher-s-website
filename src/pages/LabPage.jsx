@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { ArrowLeft, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, FlaskConical, List, X } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import labMap from '../assets/physics-lab-map.png'
+import labMap from '../assets/physics-lab-map.webp'
 import './LabPage.css'
 
 const STATIONS = [

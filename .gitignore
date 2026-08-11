@@ -16,6 +16,12 @@ dist-ssr
 .claude/
 .playwright-cli/
 
+# Local Python tooling output
+__pycache__/
+*.py[cod]
+.venv/
+*.tmp.webp
+
 # Local reference material and original media (keep archive/README.md tracked)
 archive/*
 !archive/README.md

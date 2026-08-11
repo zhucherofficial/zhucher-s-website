@@ -2,17 +2,19 @@ import { ArrowUpRight, Play, X } from 'lucide-react'
 import { lazy, Suspense, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import gsap from 'gsap'
+import { AssetImage } from '../components/AssetImage'
 import { TargetCursor } from '../components/TargetCursor'
-import { AstragalusAnalysis } from '../components/AstragalusAnalysis'
-import { RamanAnalysis } from '../components/RamanAnalysis'
-import { SubatomicAnalysis } from '../components/SubatomicAnalysis'
 import { getProjectManifestEntry } from '../data/projectManifest'
 import { getProjectById, profile, projects } from '../data/siteData'
+import { analysisLoaders } from './projectDetailChunks'
 import './ProjectDetailPage.css'
 
-const SpaghettiBridgeAnalysis = lazy(() => import('../components/SpaghettiBridgeAnalysis').then((module) => ({
-  default: module.SpaghettiBridgeAnalysis,
-})))
+// Each project's analysis section is its own chunk, so opening one project does not
+// download the JS + CSS for every other project's analysis.
+const AstragalusAnalysis = lazy(analysisLoaders['fermented-astragalus-feed'])
+const RamanAnalysis = lazy(analysisLoaders['raman-spectroscopy'])
+const SubatomicAnalysis = lazy(analysisLoaders['subatomic-physics'])
+const SpaghettiBridgeAnalysis = lazy(analysisLoaders['spaghetti-bridge'])
 
 // Deterministic static-noise texture (random dots + scanlines) for the page background.
 let noiseDataUri
@@ -52,6 +54,21 @@ function rectToObject(rect) {
 function projectEvidenceItems(project) {
   if (project.media?.length) return project.media.map((item) => item.title)
   return project.outcomes
+}
+
+function getAnalysisSection(project) {
+  switch (project.id) {
+    case 'raman-spectroscopy':
+      return { element: <RamanAnalysis sourceImage={project.image} />, fallback: 'LOADING_SPECTRAL_EVIDENCE...' }
+    case 'subatomic-physics':
+      return { element: <SubatomicAnalysis />, fallback: 'LOADING_JET_EVIDENCE...' }
+    case 'fermented-astragalus-feed':
+      return { element: <AstragalusAnalysis />, fallback: 'LOADING_FERMENTATION_EVIDENCE...' }
+    case 'spaghetti-bridge':
+      return { element: <SpaghettiBridgeAnalysis />, fallback: 'LOADING_BRIDGE_EVIDENCE...' }
+    default:
+      return null
+  }
 }
 
 export function ProjectDetailPage() {
@@ -236,6 +253,7 @@ export function ProjectDetailPage() {
       .to(cloneImage, { autoAlpha: 0, scale: 1.06, duration: 0.25 }, 0.4)
   }
 
+  const analysisSection = getAnalysisSection(project)
   const evidenceItems = projectEvidenceItems(project)
   const outcomesSectionNumber = project.id === 'raman-spectroscopy'
     ? '10'
@@ -257,7 +275,7 @@ export function ProjectDetailPage() {
       <TargetCursor blendMode="difference" activeColor="#ffffff" color="#ffffff" spinDuration={2.2} />
 
       <div className="project-case__transition-clone" ref={cloneRef} aria-hidden="true">
-        <img src={project.image} alt="" style={{ objectPosition: project.imagePosition }} />
+        <AssetImage priority src={project.image} alt="" style={{ objectPosition: project.imagePosition }} />
       </div>
 
       <Link
@@ -320,7 +338,8 @@ export function ProjectDetailPage() {
 
           <div className="project-case__evidence-surface">
             <figure className="project-case__hero-media" ref={mediaRef}>
-              <img
+              <AssetImage
+                priority
                 src={project.image}
                 alt={project.title}
                 style={{ objectPosition: project.imagePosition }}
@@ -370,12 +389,9 @@ export function ProjectDetailPage() {
             <p>{project.detail}</p>
           </section>
 
-          {project.id === 'raman-spectroscopy' ? <RamanAnalysis sourceImage={project.image} /> : null}
-          {project.id === 'subatomic-physics' ? <SubatomicAnalysis /> : null}
-          {project.id === 'fermented-astragalus-feed' ? <AstragalusAnalysis /> : null}
-          {project.id === 'spaghetti-bridge' ? (
-            <Suspense fallback={<p className="project-case__analysis-loading">LOADING_BRIDGE_EVIDENCE...</p>}>
-              <SpaghettiBridgeAnalysis />
+          {analysisSection ? (
+            <Suspense fallback={<p className="project-case__analysis-loading">{analysisSection.fallback}</p>}>
+              {analysisSection.element}
             </Suspense>
           ) : null}
 
@@ -402,7 +418,7 @@ export function ProjectDetailPage() {
                     {item.type === 'video' ? (
                       <video src={item.src} controls poster={item.poster} preload="metadata" playsInline />
                     ) : (
-                      <img src={item.src} alt={item.title} style={{ objectPosition: item.imagePosition }} />
+                      <AssetImage src={item.src} alt={item.title} style={{ objectPosition: item.imagePosition }} />
                     )}
                     <figcaption>
                       {item.type === 'video' ? <Play aria-hidden="true" /> : null}

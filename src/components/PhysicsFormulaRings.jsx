@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { Cylinder } from '@react-three/drei'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
-import { useTheme } from '../context/ThemeContext'
+import { useTheme } from '../context/theme'
 import './PhysicsFormulaRings.css'
 
 const FONT_FAMILY = 'Roboto Mono'
