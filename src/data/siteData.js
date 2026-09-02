@@ -78,8 +78,8 @@ export const navItems = [
   { label: 'Home', href: '/' },
   { label: 'Experience', href: '/#experience' },
   { label: 'Projects', href: '/#projects' },
-  { label: 'Club', href: '/club/physics-club' },
-  { label: 'Service', href: '/service/physics-education' },
+  { label: 'Club', href: '/physics-club' },
+  { label: 'Service', href: '/physics-education' },
 ]
 
 export const honors = [
@@ -254,15 +254,44 @@ export const clubs = [
     name: 'Physics Club',
     school: 'Jiangsu Tianyi High School',
     role: 'Club leader and physics tutor',
+    period: '2024-2026',
+    // Position inside the home-scene PHYSICS_ARCHIVE folder (01 = PHYSICS_EDU).
+    sheet: '02',
+    sheetCount: '02',
+    eyebrow: 'Physics Archive / Sheet 02',
     logoText: 'PC',
     summary:
       'A student-led physics community for lectures, problem solving, AP support, and hands-on engineering projects.',
     detail:
       'The club creates a regular space where students interested in physics can discuss ideas, work through difficult problems, build confidence, and turn engineering concepts into real prototypes. As leader, I delivered lectures on interesting physics topics and helped classmates with problems they encountered.',
     heroImage: meLecturing,
+    heroImagePosition: '50% 44%',
+    heroCaption:
+      'Lecture in progress. The screen shows the project archive from this site: the wheeled-legged robot, subatomic physics data analysis, fermented astragalus feed, and Raman spectroscopy projects.',
     cardImage: groupCadWork,
-    featureImage: meLecturing,
-    featureCaption: 'Club lecture session led for members interested in physics and engineering.',
+    signals: [
+      'AP and school physics support',
+      'Advanced topic lectures',
+      'CAD and circuit prototyping',
+      'Robot test archive',
+    ],
+    tracks: [
+      {
+        id: 'concepts',
+        title: 'Concepts',
+        copy: 'Turn mechanics, electromagnetism, waves, and modern physics into discussable models.',
+      },
+      {
+        id: 'practice',
+        title: 'Practice',
+        copy: 'Work through hard problems in a shared room where methods are explained, not hidden.',
+      },
+      {
+        id: 'build',
+        title: 'Build',
+        copy: 'Turn physics ideas into circuits, CAD models, irrigation devices, and robot test footage.',
+      },
+    ],
     gallery: [
       {
         src: meLecturing,
@@ -301,12 +330,14 @@ export const clubs = [
       {
         id: 'automatic-watering-robot',
         title: "Cindy's Automatic Watering Robot",
-        owner: 'Vice leader Cindy',
+        eyebrow: 'Irrigation Automation / Embedded Sensing',
+        owner: 'Cindy',
         role: 'Physics club vice leader / student engineer',
         summary:
           'A soil-moisture sensing system that waters plants only when underground humidity falls below a normal threshold.',
-        purpose:
+        detail:
           'The project helps people take care of plants while away from home, reduces the difficulty of manual watering for older adults, and brings water-saving automation into everyday irrigation.',
+        tags: ['Soil Moisture', 'Irrigation', 'Circuit Build', 'Field Test'],
         process: ['Built the main circuit', 'Field testing and experiments'],
         metrics: [
           { value: '30%', label: 'target reduction in total water use compared with manual watering' },
@@ -316,45 +347,30 @@ export const clubs = [
           {
             src: automaticWateringRobot,
             alt: "Cindy's automatic watering robot prototype",
+            title: 'Prototype',
+            caption: 'The assembled watering robot before a field test.',
             imagePosition: '50% 50%',
           },
           {
             src: automaticWateringCircuit,
             alt: 'Circuit board of the automatic watering robot',
+            title: 'Main circuit',
+            caption: 'The sensing and switching board Cindy built for the prototype.',
             imagePosition: '50% 50%',
-          },
-          {
-            src: viceLeaderCindy,
-            alt: 'Vice leader Cindy',
-            imagePosition: '50% 32%',
           },
         ],
       },
       {
         id: 'wheeled-legged-robot',
-        title: 'Wheeled-Legged Robot',
-        owner: 'Zhu',
+        // Title, eyebrow, role, tags, outcomes, and test footage come from this
+        // project entry so the club page never drifts from the case study.
+        projectId: 'wheeled-legged-robot',
+        owner: 'Ken Zhang',
         role: 'Club leader / individual project developer',
-        summary:
-          'A robotics project involving following, control, and automatic obstacle avoidance for a wheeled-legged robot.',
-        purpose:
-          'The long-term goal is to build a two-wheeled legged robot capable of balancing, carrying loads, and automatic following, with future public-welfare applications in practical scenarios.',
         process: ['Mechanical and control roadmap', 'Embedded test footage', 'Deep-learning direction'],
         metrics: [
           { value: '3', label: 'main technical areas: mechanical engineering, embedded systems, deep learning' },
           { value: '2', label: 'early robot test videos in the club archive' },
-        ],
-        videos: [
-          {
-            src: robotSuccessShowcase,
-            poster: robotSuccessPoster,
-            title: 'Success showcase',
-          },
-          {
-            src: robotFailureShowcase,
-            poster: robotFailurePoster,
-            title: 'Failure showcase',
-          },
         ],
       },
     ],

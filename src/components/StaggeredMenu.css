@@ -335,17 +335,6 @@
   background: var(--sm-accent, #ff5e3a);
 }
 
-.site-header--paper .staggered-menu__toggle {
-  border-color: rgba(26, 26, 26, 0.18);
-  color: #1a1a1a;
-  background: rgba(26, 26, 26, 0.04);
-}
-
-.site-header--paper .staggered-menu[data-open] .staggered-menu__toggle {
-  color: #f6f7f1;
-  background: #1a1a1a;
-}
-
 @media (max-width: 1180px) {
   .staggered-menu {
     display: inline-flex;

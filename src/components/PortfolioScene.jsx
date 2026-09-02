@@ -648,8 +648,10 @@ export function PortfolioScene({ initialView = null, returnFocusId = null }) {
     sceneReducer,
     undefined,
     () => ({
-      view: initialView === HOME_STATES.GUITAR
-        ? HOME_STATES.GUITAR
+      // Detail pages hand back the scene they were opened from so closing them
+      // lands on the open guitar or folder instead of replaying the intro.
+      view: initialView === HOME_STATES.GUITAR || initialView === HOME_STATES.FOLDER
+        ? initialView
         : prefersReducedMotion()
           ? HOME_STATES.GATE
           : HOME_STATES.DRAWING,

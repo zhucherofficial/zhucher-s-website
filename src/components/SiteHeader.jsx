@@ -11,10 +11,6 @@ function getActiveNavIndex(pathname, hash) {
     return navItems.findIndex((item) => item.href === '/#projects')
   }
 
-  if (pathname.startsWith('/service/')) {
-    return navItems.findIndex((item) => item.href === '/service/physics-education')
-  }
-
   const exactIndex = navItems.findIndex((item) => item.href === `${pathname}${hash}`)
   if (exactIndex >= 0) return exactIndex
 
@@ -32,7 +28,6 @@ export function SiteHeader({ floating = false }) {
   const { pathname, hash } = useLocation()
   const navigate = useNavigate()
   const activeIndex = getActiveNavIndex(pathname, hash)
-  const paperHeader = pathname.startsWith('/club/')
   const menuItems = navItems.map((item) => ({
     ...item,
     ariaLabel: `Go to ${item.label}`,
@@ -43,11 +38,7 @@ export function SiteHeader({ floating = false }) {
   }))
 
   return (
-    <header
-      className={`site-header ${floating ? 'site-header--floating' : ''} ${
-        paperHeader ? 'site-header--paper' : ''
-      }`}
-    >
+    <header className={`site-header ${floating ? 'site-header--floating' : ''}`}>
       <Link className="brand-mark" to="/" aria-label="Go to homepage">
         <span className="brand-mark__glyph">ZE</span>
         <span className="brand-mark__text">Physics Engineering</span>
