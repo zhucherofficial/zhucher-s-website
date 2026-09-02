@@ -189,17 +189,17 @@ export const projects = [
   {
     id: 'fermented-astragalus-feed',
     title: 'Fermented Astragalus Feed Research',
-    eyebrow: 'China Thinks Big / Environmental Engineering',
+    eyebrow: 'Traditional Chinese Medicine / Circular Bioengineering',
     role: 'Team leader',
     period: 'Grade 10',
     hours: '5 hours per week, 10 weeks per year',
     image: astragalusCover,
     imagePosition: '50% 46%',
     summary:
-      'Led an interdisciplinary project turning astragalus drug residue into a measurable fermented feed ingredient.',
+      'Led a two-stage bioprocess that recovers value from Astragalus medicine residue and converts it into fermented feed.',
     detail:
-      'The supplied research uses a two-stage system: Trametes versicolor or Cordyceps militaris first ferments astragalus residue, then lactic acid bacteria and yeast ferment a mixed feed containing the converted material. The reported lab-scale results include higher astragaloside and total flavonoids, stronger acidification, higher crude protein, and lower detergent fiber in the treatment groups.',
-    tags: ['Bioengineering', 'Sustainability', 'Team Leadership', 'CTB'],
+      'The archived patent describes a two-stage route. Trametes versicolor first ferments milled Astragalus extraction residue; the treated material is then blended with corn meal and soybean meal and fermented with Lactiplantibacillus plantarum, Enterococcus faecium, and Saccharomyces cerevisiae. The preferred embodiment raised soluble sugar, astragaloside IV, and total flavonoids before producing a more acidic feed with higher protein and lower detergent fiber than the untreated-residue control.',
+    tags: ['Bioprocess', 'Circular Feed', 'Patent Research', 'Team Leadership'],
     outcomes: [
       "Earned China Thinks Big national conference Editors' Choice with Highest Distinction.",
       'Received Global Round Team Showcase 3rd Place and Individual Academic Challenge 2nd Place recognition.',
