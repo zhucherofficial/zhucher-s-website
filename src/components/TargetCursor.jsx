@@ -207,7 +207,12 @@ export function TargetCursor({
 
       resumeTimeout = window.setTimeout(() => {
         if (!activeTarget && spinTimelineRef.current) {
-          spinTimelineRef.current.restart()
+          // activateTarget() killed the timeline's child rotation tween, so
+          // restart() on that timeline is a no-op; build a fresh spin instead.
+          spinTimelineRef.current.kill()
+          spinTimelineRef.current = gsap
+            .timeline({ repeat: -1 })
+            .to(cursor, { rotation: '+=360', duration: spinDuration, ease: 'none' })
         }
 
         resumeTimeout = null

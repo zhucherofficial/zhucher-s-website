@@ -9,6 +9,14 @@ import robotSuccessPoster from '../assets/club-media/robot-success-poster.webp'
 import robotSuccessShowcase from '../assets/club-media/robot-success-showcase.mp4'
 import viceLeaderCindy from '../assets/club-media/vice-leader-cindy.webp'
 import astragalusCover from '../assets/project-media/fermented-astragalus-feed.webp'
+import astragalusCultureSequence from '../assets/project-media/astragalus/culture-sequence.webp'
+import astragalusFermentedDregsPairs from '../assets/project-media/astragalus/fermented-dregs-pairs.webp'
+import astragalusFermentedFeedBags from '../assets/project-media/astragalus/fermented-feed-bags.webp'
+import astragalusLabBench from '../assets/project-media/astragalus/lab-bench.webp'
+import astragalusAstragalosideChart from '../assets/project-media/astragalus/astragaloside-chart.webp'
+import astragalusCellulaseChart from '../assets/project-media/astragalus/cellulase-chart.webp'
+import astragalusSugarChart from '../assets/project-media/astragalus/sugar-chart.webp'
+import astragalusLiveCountChart from '../assets/project-media/astragalus/live-count-chart.webp'
 import profilePhoto from '../assets/profile-media/profile-photo.webp'
 import selfConceptHillside from '../assets/profile-media/self-concept-hillside.webp'
 import selfConceptPark from '../assets/profile-media/self-concept-park.webp'
@@ -204,6 +212,64 @@ export const projects = [
       "Earned China Thinks Big national conference Editors' Choice with Highest Distinction.",
       'Received Global Round Team Showcase 3rd Place and Individual Academic Challenge 2nd Place recognition.',
       'Turned waste-resource reuse into a testable environmental engineering proposal.',
+    ],
+    media: [
+      {
+        title: 'Laboratory setup',
+        caption: 'Benchtop workspace for culture preparation and fermentation monitoring',
+        src: astragalusLabBench,
+        type: 'image',
+        imagePosition: '50% 50%',
+      },
+      {
+        title: 'Culture preparation sequence',
+        caption: 'Trametes versicolor inoculation and primary fermentation stages',
+        src: astragalusCultureSequence,
+        type: 'image',
+        imagePosition: '50% 50%',
+      },
+      {
+        title: 'Fermentation progression',
+        caption: 'Astragalus residue before and after two-stage bioprocess treatment',
+        src: astragalusFermentedDregsPairs,
+        type: 'image',
+        imagePosition: '50% 50%',
+      },
+      {
+        title: 'Final feed product',
+        caption: 'Packaged fermented feed after secondary fermentation with probiotic consortium',
+        src: astragalusFermentedFeedBags,
+        type: 'image',
+        imagePosition: '50% 50%',
+      },
+      {
+        title: 'Astragaloside IV concentration',
+        caption: 'Day 5 bioactive compound accumulation during primary fermentation',
+        src: astragalusAstragalosideChart,
+        type: 'image',
+        imagePosition: '50% 50%',
+      },
+      {
+        title: 'Cellulase activity',
+        caption: 'Enzyme production curve showing peak activity at day 5',
+        src: astragalusCellulaseChart,
+        type: 'image',
+        imagePosition: '50% 50%',
+      },
+      {
+        title: 'Soluble sugar release',
+        caption: 'Reducing sugar yield from lignocellulosic degradation',
+        src: astragalusSugarChart,
+        type: 'image',
+        imagePosition: '50% 50%',
+      },
+      {
+        title: 'Probiotic viability',
+        caption: 'Live bacterial count during secondary fermentation phase',
+        src: astragalusLiveCountChart,
+        type: 'image',
+        imagePosition: '50% 50%',
+      },
     ],
   },
   {
