@@ -44,11 +44,12 @@
   width: 56px;
   height: 56px;
   place-items: center;
-  border: 1px solid var(--project-line);
+  border: 2px solid var(--project-cyan);
   color: var(--project-ink);
   background: var(--project-bg);
   text-decoration: none;
-  transition: background-color 160ms ease, transform 160ms ease;
+  box-shadow: 0 4px 12px rgba(0, 179, 196, 0.3);
+  transition: background-color 160ms ease, transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
 }
 
 .project-case__close svg {
@@ -59,7 +60,9 @@
 
 .project-case__close:hover,
 .project-case__close:focus-visible {
-  background: var(--project-accent);
+  background: var(--project-cyan);
+  border-color: var(--project-cyan);
+  box-shadow: 0 6px 20px rgba(0, 179, 196, 0.5);
   transform: rotate(90deg);
 }
 
