@@ -1,8 +1,9 @@
-import { ArrowUpRight, Play, X } from 'lucide-react'
+import { ArrowUpRight, X } from 'lucide-react'
 import { lazy, Suspense, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import gsap from 'gsap'
 import { AssetImage } from '../components/AssetImage'
+import { EvidenceGallery } from '../components/EvidenceGallery'
 import { TargetCursor } from '../components/TargetCursor'
 import { getProjectManifestEntry } from '../data/projectManifest'
 import { getProjectById, profile, projects } from '../data/siteData'
@@ -258,7 +259,10 @@ export function ProjectDetailPage() {
   const outcomesSectionNumber = project.id === 'raman-spectroscopy'
     ? '10'
     : project.id === 'subatomic-physics' ? '07' : project.id === 'spaghetti-bridge' ? '09' : project.id === 'fermented-astragalus-feed' ? '07' : '03'
-  const contactSectionNumber = project.id === 'raman-spectroscopy'
+  const archiveSectionNumber = String(Number(outcomesSectionNumber) + 1).padStart(2, '0')
+  const contactSectionNumber = project.media?.length
+    ? String(Number(archiveSectionNumber) + 1).padStart(2, '0')
+    : project.id === 'raman-spectroscopy'
     ? '11'
     : project.id === 'subatomic-physics' ? '08' : project.id === 'spaghetti-bridge' ? '10' : project.id === 'fermented-astragalus-feed' ? '08' : '05'
   const titleFontSize = project.title.length > 24
@@ -385,7 +389,7 @@ export function ProjectDetailPage() {
         <div className="project-case__story">
           <section className="project-case__story-section">
             <p className="project-case__section-number">02 / THE EXPERIMENT</p>
-            <h2>{project.id === 'spaghetti-bridge' ? 'Test the material before trusting the bridge.' : 'Build the system, then let the evidence argue back.'}</h2>
+            <h2>{project.id === 'spaghetti-bridge' ? 'Test the material before trusting the bridge.' : project.id === 'fermented-astragalus-feed' ? 'Can extraction residue become a useful feed ingredient?' : 'Build the system, then let the evidence argue back.'}</h2>
             <p>{project.detail}</p>
           </section>
 
@@ -408,26 +412,11 @@ export function ProjectDetailPage() {
             </ol>
           </section>
 
-          {project.media ? (
+          {project.media?.length ? (
             <section className="project-case__story-section project-case__archive">
-              <p className="project-case__section-number">04 / FIELD ARCHIVE</p>
-              <h2>Test footage and supporting evidence</h2>
-              <div className="project-case__media-grid">
-                {project.media.map((item) => (
-                  <figure key={item.title}>
-                    {item.type === 'video' ? (
-                      <video src={item.src} controls poster={item.poster} preload="metadata" playsInline />
-                    ) : (
-                      <AssetImage src={item.src} alt={item.title} style={{ objectPosition: item.imagePosition }} />
-                    )}
-                    <figcaption>
-                      {item.type === 'video' ? <Play aria-hidden="true" /> : null}
-                      <strong>{item.title}</strong>
-                      <span>{item.caption}</span>
-                    </figcaption>
-                  </figure>
-                ))}
-              </div>
+              <p className="project-case__section-number">{archiveSectionNumber} / FIELD ARCHIVE</p>
+              <h2>{project.id === 'fermented-astragalus-feed' ? 'Laboratory records and original study figures' : 'Test footage and supporting evidence'}</h2>
+              <EvidenceGallery key={project.id} items={project.media} groups={project.mediaGroups} />
             </section>
           ) : null}
 

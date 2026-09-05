@@ -599,31 +599,6 @@
   transform: translate(2px, -2px);
 }
 
-/* ---- 06 / field archive ---- */
-
-.club-case__media-grid {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-.club-case__media-grid figure:first-child:last-child,
-.club-case__media-grid figure:nth-child(3) {
-  grid-column: auto;
-}
-
-.club-case__media-grid img {
-  height: auto;
-  aspect-ratio: 4 / 3;
-}
-
-/* The shell reserves a first column for a play icon; photo captions stack instead. */
-.club-case__media-grid figcaption {
-  grid-template-columns: 1fr;
-}
-
-.club-case__media-grid figcaption strong {
-  text-transform: uppercase;
-}
-
 /* ---- responsive ---- */
 
 @media (max-width: 1100px) {
@@ -669,9 +644,6 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .club-case__media-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
 }
 
 @media (max-width: 720px) {
@@ -731,7 +703,4 @@
     display: none;
   }
 
-  .club-case__media-grid {
-    grid-template-columns: 1fr;
-  }
 }

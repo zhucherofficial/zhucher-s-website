@@ -507,69 +507,6 @@
   line-height: 1.7;
 }
 
-/* ---- field archive ---- */
-
-.project-case__archive .project-case__media-grid {
-  grid-column: 2;
-}
-
-.project-case__media-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
-  margin-top: 30px;
-}
-
-.project-case__media-grid figure {
-  margin: 0;
-  border: 1px solid var(--project-line);
-  background: var(--project-panel);
-  transition: box-shadow 160ms ease, transform 160ms ease;
-}
-
-.project-case__media-grid figure:hover {
-  box-shadow: 6px 6px 0 var(--project-accent);
-  transform: translate(-2px, -2px);
-}
-
-.project-case__media-grid figure:first-child:last-child,
-.project-case__media-grid figure:nth-child(3) {
-  grid-column: 1 / -1;
-}
-
-.project-case__media-grid video,
-.project-case__media-grid img {
-  display: block;
-  width: 100%;
-  aspect-ratio: 16 / 10;
-  border-bottom: 1px solid var(--project-line);
-  object-fit: cover;
-  background: var(--project-soft-line);
-}
-
-.project-case__media-grid figcaption {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 5px 10px;
-  padding: 14px;
-}
-
-.project-case__media-grid figcaption svg {
-  grid-row: 1 / 3;
-  width: 18px;
-  color: var(--project-cobalt);
-}
-
-.project-case__media-grid figcaption strong {
-  font-size: 11px;
-}
-
-.project-case__media-grid figcaption span {
-  color: var(--project-muted);
-  font-size: 11px;
-  line-height: 1.45;
-}
-
 /* ---- contact CTA + next project ---- */
 
 .project-case__cta {
@@ -813,16 +750,7 @@
     font-size: 28px;
   }
 
-  .project-case__story-outcomes ol,
-  .project-case__archive .project-case__media-grid {
-    grid-column: auto;
-  }
-
-  .project-case__media-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .project-case__media-grid figure:nth-child(3) {
+  .project-case__story-outcomes ol {
     grid-column: auto;
   }
 

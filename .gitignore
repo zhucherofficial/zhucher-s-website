@@ -1,5 +1,21 @@
+# Dependencies and production builds
+node_modules/
+/dist/
+/dist-ssr/
+
+# Local environment and Cloudflare state
+.env
+.env.*
+!.env.example
+!.env.*.example
+.dev.vars
+.dev.vars.*
+!.dev.vars.example
+!.dev.vars.*.example
+/.wrangler/
+
 # Logs
-logs
+logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
@@ -7,23 +23,27 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
+# Local tooling, temporary files, and generated QA output
+/.claude/
+/.playwright-cli/
+/output/
+/tmp/
+/coverage/
+/playwright-report/
+/test-results/
 *.local
-
-# Local development and browser-QA output
-.claude/
-.playwright-cli/
 
 # Local Python tooling output
 __pycache__/
 *.py[cod]
 .venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
 *.tmp.webp
 
 # Local reference material and original media (keep archive/README.md tracked)
-archive/*
+/archive/*
 !archive/README.md
 
 # Editor directories and files

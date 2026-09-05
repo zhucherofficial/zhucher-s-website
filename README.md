@@ -1,20 +1,37 @@
-# Personal Portfolio Website
+<div style="font-family: 'Times New Roman', Times, serif;">
 
-React + Vite portfolio site for physics, engineering, robotics, research, and service work.
+# Ken Zhang's Portfolio
 
-## Project Layout
+React 19 + Vite 8 portfolio for physics, engineering, robotics, research, and service work. Project case studies include original evidence, interactive analyses, and downloadable research material. Cloudflare Workers serves the production build with single-page application routing.
 
-- `src/` - application source code.
-- `src/assets/` - imported images and SVGs used by React components.
-- `public/` - static files served directly by Vite, including hero media.
-- `scripts/` - image optimization and intrinsic-dimension maintenance tools.
-- `docs/` - durable design and implementation decisions.
-- `.github/workflows/` - automated lint and production-build checks.
-- `archive/` - local-only original media, examples, generated files, and retired code.
-- `dist/` - generated production build output.
-- `node_modules/` - installed dependencies.
+## Quick Start
 
-Only the active website, durable project documentation, and `archive/README.md` are tracked. The rest of `archive/`, browser-QA output, local tool configuration, build output, and installed dependencies stay local so they are not accidentally pushed to GitHub.
+Use Node.js 22.13 or newer in the Node 22 release line, with npm. CI also uses Node 22.
+
+```sh
+npm ci
+npm run dev
+```
+
+Open the local URL printed by Vite, normally `http://localhost:5173`. The Astragalus case study is at `/projects/fermented-astragalus-feed`.
+
+## Folder Layout
+
+- `src/pages/` - route pages and lazy-loaded project sections.
+- `src/components/` - shared UI, scenes, galleries, and project analyses.
+- `src/data/` - portfolio content, project datasets, and image dimensions.
+- `src/assets/project-media/` - published project images grouped by project.
+- `src/assets/documents/` - published downloads grouped by project.
+- `public/` - static files such as favicons and hero media.
+- `scripts/` - image optimization and dimension-generation tools.
+- `docs/` - durable design documentation.
+- `.github/workflows/` - lint, build, and deployment-validation CI.
+- `archive/` - original sources, references, and retired work; index only.
+- `output/playwright/` - current browser QA captures; ignored and grouped by task.
+- `tmp/`, `.playwright-cli/`, `.wrangler/` - temporary tool state; ignored.
+- `dist/`, `node_modules/` - build output and installed dependencies; ignored.
+
+Published Astragalus media is in `src/assets/project-media/astragalus/`; its downloadable slide deck is in `src/assets/documents/astragalus/`. Original sources remain in `archive/source-media/astragalus-project/`.
 
 ## Scripts
 
@@ -38,19 +55,33 @@ python3 -m venv .venv
 .venv/bin/python scripts/generate-image-dimensions.py
 ```
 
-Run `scripts/optimize-images.py` without flags for a dry run; add `--apply` only after reviewing its proposed conversions.
+Run `scripts/optimize-images.py` without flags for a dry run; add `--apply` only after reviewing its proposed conversions. Regenerate `src/data/imageDimensions.js` after changing image assets; do not edit that generated file by hand.
 
-## GitHub Workflow
+## Validation and Deployment
 
 ```sh
 npm run lint
 npm run build
-git status --short
-git add -A -- .github .gitignore README.md archive/README.md docs eslint.config.js index.html package.json package-lock.json public scripts src vite.config.js wrangler.jsonc
-git diff --cached --stat
-git diff --cached
-git commit -m "Update portfolio website"
-git push origin main
+npm run deploy -- --dry-run
+npm run preview
 ```
 
-The explicit staging allowlist keeps local archives, browser-QA output, editor files, build output, and installed dependencies out of commits. Review the staged diff before committing. GitHub Actions repeats the lint and production-build checks on pull requests and pushes to `main`.
+Cloudflare publishes `dist/` using `wrangler.jsonc`. The dry run validates deployment without uploading. GitHub Actions repeats lint, build, and the dry run on pull requests and pushes to `main`.
+
+There is no automated browser-test npm script. Check changed pages at desktop and mobile widths, including navigation, image viewers, and downloads. Keep screenshots under `output/playwright/<project-or-task>/`.
+
+## Git Hygiene
+
+Environment files, Cloudflare state, archives, caches, build output, and QA output are ignored. Example files such as `.env.example` remain eligible for tracking; never put credentials in them.
+
+```sh
+git status --short
+git diff --check
+git diff
+git add -p
+git diff --cached --stat
+```
+
+`git add -p` does not include untracked files. Explicitly add new application components, assets, downloads, or documentation after reviewing `git status`.
+
+</div>

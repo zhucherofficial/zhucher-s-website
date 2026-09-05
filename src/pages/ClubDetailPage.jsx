@@ -3,6 +3,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import gsap from 'gsap'
 import { AssetImage } from '../components/AssetImage'
+import { EvidenceGallery } from '../components/EvidenceGallery'
 import { TargetCursor } from '../components/TargetCursor'
 import { getProjectManifestEntry } from '../data/projectManifest'
 import { getClubById, getProjectById, getServiceById, profile, projects } from '../data/siteData'
@@ -428,17 +429,7 @@ export function ClubDetailPage() {
           <section className="project-case__story-section project-case__archive club-case__gallery" aria-labelledby="club-gallery-title">
             <p className="project-case__section-number">06 / FIELD ARCHIVE</p>
             <h2 id="club-gallery-title">Photos from lectures, builds, and prototypes.</h2>
-            <div className="project-case__media-grid club-case__media-grid">
-              {club.gallery.map((item, index) => (
-                <figure key={item.title}>
-                  <AssetImage src={item.src} alt={item.title} style={{ objectPosition: item.imagePosition }} />
-                  <figcaption>
-                    <strong>{`ARCHIVE_${String(index + 1).padStart(3, '0')} / ${item.title}`}</strong>
-                    <span>{item.caption}</span>
-                  </figcaption>
-                </figure>
-              ))}
-            </div>
+            <EvidenceGallery items={club.gallery} />
           </section>
 
           <section className="project-case__story-section project-case__story-outcomes">

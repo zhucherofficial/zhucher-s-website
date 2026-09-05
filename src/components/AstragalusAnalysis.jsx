@@ -2,44 +2,15 @@ import {
   ArrowRight,
   CheckCircle2,
   FlaskConical,
-  Leaf,
   Microscope,
   Recycle,
-  Sprout,
 } from 'lucide-react'
 import patentDregs from '../assets/project-media/astragalus/patent-dregs-before-after.webp'
 import patentPrimaryCompounds from '../assets/project-media/astragalus/patent-primary-compounds.webp'
-import patentTrametesCulture from '../assets/project-media/astragalus/patent-trametes-culture.webp'
+import ezTeamPhoto from '../assets/project-media/astragalus/ez-ctb-team.webp'
 import './AstragalusAnalysis.css'
-import { AssetImage } from './AssetImage'
-
-const preferredProcess = [
-  {
-    number: '01',
-    label: 'PREPARE',
-    detail: 'Dry residue below 10% moisture, mill to 10-40 mesh, then restore it to 60% moisture.',
-  },
-  {
-    number: '02',
-    label: 'INOCULATE',
-    detail: 'Add a 1% Trametes versicolor seed culture to the prepared Astragalus residue.',
-  },
-  {
-    number: '03',
-    label: 'FERMENT I',
-    detail: 'Hold at 25°C for 5 days under a breathable seal, then sterilise the treated residue.',
-  },
-  {
-    number: '04',
-    label: 'BLEND',
-    detail: 'Combine treated residue, corn meal, and soybean meal at a 2:5:3 mass ratio.',
-  },
-  {
-    number: '05',
-    label: 'FERMENT II',
-    detail: 'Add the three-species culture at 1%, seal, and ferment at 25°C for 7 days.',
-  },
-]
+import { AstragalusPathway } from './AstragalusPathway'
+import { EvidenceGallery } from './EvidenceGallery'
 
 const primaryResults = [
   {
@@ -72,6 +43,16 @@ const feedRows = [
   ['Acid detergent fiber', '19.43', '17.02', '-2.41 pp'],
 ]
 
+const teamPhotos = [{
+  src: ezTeamPhoto,
+  title: 'EZ at China Thinks Big',
+  alt: 'The five members of team EZ standing together in front of their Astragalus residue research poster at China Thinks Big.',
+  caption: 'Our team, EZ, with the Astragalus residue research poster at China Thinks Big.',
+  source: 'EZ / Team photograph',
+  type: 'image',
+  layout: 'wide',
+}]
+
 function SectionHeading({ number, title, children }) {
   return (
     <header className="astragalus-analysis__section-heading">
@@ -86,110 +67,8 @@ function SectionHeading({ number, title, children }) {
 
 function SourceFigure({ src, alt, label, children, className = '' }) {
   return (
-    <figure className={`astragalus-analysis__figure ${className}`}>
-      <div className="astragalus-analysis__figure-media">
-        <AssetImage src={src} alt={alt} />
-      </div>
-      <figcaption>
-        <strong>{label}</strong>
-        <span>{children}</span>
-      </figcaption>
-    </figure>
-  )
-}
-
-function PatentPathway() {
-  return (
-    <div className="astragalus-analysis__patent-map" aria-label="Preferred two-stage fermentation route described in the patent">
-      <header className="astragalus-analysis__patent-map-header">
-        <div>
-          <span>ARCHIVED PATENT / PREFERRED EMBODIMENT</span>
-          <strong>RESIDUE TO FUNCTIONAL FEED</strong>
-        </div>
-        <p>Two biological conversions. One recovered material stream.</p>
-      </header>
-
-      <div className="astragalus-analysis__map-stage">
-        <header>
-          <span>STAGE 01</span>
-          <strong>Unlock residual compounds</strong>
-        </header>
-        <div className="astragalus-analysis__map-nodes">
-          <div className="astragalus-analysis__map-node astragalus-analysis__map-node--residue">
-            <div className="astragalus-analysis__residue-mark" aria-hidden="true"><i /><i /><i /><i /><i /></div>
-            <strong>Astragalus residue</strong>
-            <span>10-40 mesh / 60% H2O</span>
-          </div>
-          <ArrowRight className="astragalus-analysis__map-arrow" aria-hidden="true" />
-          <div className="astragalus-analysis__map-node astragalus-analysis__map-node--culture">
-            <AssetImage src={patentTrametesCulture} alt="Trametes versicolor culture shown in Figure 1 of the patent" />
-            <strong>Trametes seed</strong>
-            <span>1% inoculation</span>
-          </div>
-          <ArrowRight className="astragalus-analysis__map-arrow" aria-hidden="true" />
-          <div className="astragalus-analysis__reactor">
-            <span>PRIMARY</span>
-            <strong>25°C</strong>
-            <b>5 DAYS</b>
-            <i aria-hidden="true" />
-          </div>
-          <ArrowRight className="astragalus-analysis__map-arrow" aria-hidden="true" />
-          <div className="astragalus-analysis__map-output">
-            <Leaf aria-hidden="true" />
-            <strong>Treated residue</strong>
-            <span>Sterilise before blending</span>
-          </div>
-        </div>
-      </div>
-
-      <div className="astragalus-analysis__stage-coupler" aria-hidden="true">
-        <span />
-        <b>COUPLED PROCESS</b>
-        <ArrowRight />
-      </div>
-
-      <div className="astragalus-analysis__map-stage astragalus-analysis__map-stage--secondary">
-        <header>
-          <span>STAGE 02</span>
-          <strong>Build and stabilise the feed</strong>
-        </header>
-        <div className="astragalus-analysis__map-nodes">
-          <div className="astragalus-analysis__blend">
-            <div className="astragalus-analysis__blend-bar" aria-label="Feed blend: 20 percent treated residue, 50 percent corn meal, 30 percent soybean meal">
-              <i className="astragalus-analysis__blend-residue" />
-              <i className="astragalus-analysis__blend-corn" />
-              <i className="astragalus-analysis__blend-soy" />
-            </div>
-            <strong>2 : 5 : 3</strong>
-            <span>Residue / corn / soy</span>
-          </div>
-          <span className="astragalus-analysis__plus" aria-hidden="true">+</span>
-          <div className="astragalus-analysis__consortium">
-            <div aria-hidden="true"><i>LP</i><i>EF</i><i>SC</i></div>
-            <strong>1 : 1 : 1</strong>
-            <span>Three-species culture / 1%</span>
-          </div>
-          <ArrowRight className="astragalus-analysis__map-arrow" aria-hidden="true" />
-          <div className="astragalus-analysis__reactor">
-            <span>SECONDARY</span>
-            <strong>25°C</strong>
-            <b>7 DAYS</b>
-            <i aria-hidden="true" />
-          </div>
-          <ArrowRight className="astragalus-analysis__map-arrow" aria-hidden="true" />
-          <div className="astragalus-analysis__map-output astragalus-analysis__map-output--feed">
-            <Sprout aria-hidden="true" />
-            <strong>Fermented feed</strong>
-            <span>pH 4.13 / 10.62 g/kg acid</span>
-          </div>
-        </div>
-      </div>
-
-      <footer className="astragalus-analysis__patent-window">
-        <span>DISCLOSED WORKING WINDOWS</span>
-        <p><b>PRIMARY</b> 0.5-3% inoculum / 20-30°C / 40-80% moisture / 1-7 d</p>
-        <p><b>SECONDARY</b> 0.5-3% inoculum / 20-30°C / 30-70% moisture / 5-7 d / finish at pH 3-5</p>
-      </footer>
+    <div className={`astragalus-analysis__source-figure ${className}`}>
+      <EvidenceGallery items={[{ src, alt, title: label, caption: children, type: 'image', kind: 'figure', layout: 'wide' }]} />
     </div>
   )
 }
@@ -243,31 +122,29 @@ function FeedTable() {
 export function AstragalusAnalysis() {
   return (
     <section className="astragalus-analysis">
-      <SectionHeading number="03 / PATENT PATHWAY" title="Two biological stages make the waste stream useful again.">
+      <section className="astragalus-analysis__team" aria-labelledby="astragalus-team-title">
+        <header>
+          <p className="project-case__section-number">THE TEAM / CHINA THINKS BIG</p>
+          <div><h3 id="astragalus-team-title">EZ</h3><p>Ken Zhang / Team leader</p></div>
+        </header>
+        <EvidenceGallery items={teamPhotos} />
+      </section>
+
+      <SectionHeading number="03 / STUDY PIPELINE" title="The experiment, from residue to fermented feed">
         <p>
-          The archived patent defines a specific route: Trametes versicolor first releases value from Astragalus
-          extraction residue; a bacterial-yeast consortium then turns that treated material into fermented feed.
-          The diagram marks the preferred embodiment and keeps the wider disclosed process windows separate.
+          The CTB study tested two fungal treatments of Astragalus extraction residue, then used the treated
+          material in a second fermentation. This workflow follows the original project presentation,
+          with the cultures, conditions, comparison groups, and measurements shown at each stage.
         </p>
       </SectionHeading>
 
-      <PatentPathway />
-
-      <ol className="astragalus-analysis__process-notes" aria-label="Preferred process steps">
-        {preferredProcess.map((step, index) => (
-          <li key={step.number}>
-            <span>{step.number}</span>
-            <strong>{step.label}</strong>
-            <p>{step.detail}</p>
-            {index < preferredProcess.length - 1 ? <ArrowRight aria-hidden="true" /> : null}
-          </li>
-        ))}
-      </ol>
+      <AstragalusPathway />
 
       <section className="astragalus-analysis__primary-evidence">
-        <SectionHeading number="04 / PRIMARY EVIDENCE" title="Day five is the compound-release sweet spot.">
+        <SectionHeading number="04 / PATENT EVIDENCE" title="Primary fermentation: compound measurements">
           <p>
-            In the patent embodiment, all three target measurements rose sharply during Trametes fermentation.
+            A separate patent experiment followed Trametes fermentation over 7 days, with day 5 identified as
+            the preferred operating point. These results belong to that experiment, not the 12-day CTB study above.
             Soluble sugar and astragaloside IV peaked on day 5; total flavonoids reached 2.9 times the day-0 level.
           </p>
         </SectionHeading>
@@ -303,11 +180,11 @@ export function AstragalusAnalysis() {
       </section>
 
       <section className="astragalus-analysis__secondary-evidence">
-        <SectionHeading number="05 / SECONDARY EVIDENCE" title="The treated residue changes how the feed ferments.">
+        <SectionHeading number="05 / PATENT EVIDENCE" title="Secondary fermentation: feed quality">
           <p>
-            The experiment compared feed made with Trametes-treated residue against the same formulation using
-            untreated residue. The treated route acidified faster, supported more viable lactic-acid bacteria, and
-            finished with more protein and less detergent fiber.
+            The patent compared feed containing Trametes-treated residue with the same formulation using
+            untreated residue. Its residue, corn meal, and soybean meal ratio was 2:5:3, with a 7-day secondary
+            fermentation. The treated route acidified faster and finished with more protein and less detergent fiber.
           </p>
         </SectionHeading>
 
